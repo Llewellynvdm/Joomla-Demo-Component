@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset
+		name="global_config"
+		label="COM_DEMO_CONFIG_GLOBAL_LABEL"
+		description="COM_DEMO_CONFIG_GLOBAL_DESC">
+		<field
+			name="check_in"
+			type="list"
+			default="0"
+			label="COM_DEMO_CONFIG_CHECK_TIMER_LABEL"
+			description="COM_DEMO_CONFIG_CHECK_TIMER_DESC">
+			<option
+				value="-5 hours">COM_DEMO_CONFIG_CHECK_TIMER_OPTION_ONE</option>
+			<option
+				value="-12 hours">COM_DEMO_CONFIG_CHECK_TIMER_OPTION_TWO</option>
+			<option
+				value="-1 day">COM_DEMO_CONFIG_CHECK_TIMER_OPTION_THREE</option>
+			<option
+				value="-2 day">COM_DEMO_CONFIG_CHECK_TIMER_OPTION_FOUR</option>
+			<option
+				value="-1 week">COM_DEMO_CONFIG_CHECK_TIMER_OPTION_FIVE</option>
+			<option
+				value="0">COM_DEMO_CONFIG_CHECK_TIMER_OPTION_SIX</option>
+		</field>
+		<field type="spacer" name="spacerAuthor" hr="true" />
+		<field
+			name="save_history"
+			type="radio"
+			class="btn-group btn-group-yesno"
+			default="0"
+			label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
+			description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC"
+			>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field
+			name="history_limit"
+			type="text"
+			filter="integer"
+			label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+			description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"
+			default="10"
+		/>
+		<field name="autorTitle"
+			type="spacer"
+			label="COM_DEMO_CONFIG_AUTHOR"
+		/>
+		<field name="autorName"
+			type="text"
+			label="COM_DEMO_CONFIG_AUTHOR_NAME_LABEL"
+			description="COM_DEMO_CONFIG_AUTHOR_NAME_DESC"
+			size="60"
+			default="Llewellyn van der Merwe"
+			readonly="true"
+			class="readonly"
+		/>
+		<field name="autorEmail"
+			type="email"
+			label="COM_DEMO_CONFIG_AUTHOR_EMAIL_LABEL"
+			description="COM_DEMO_CONFIG_AUTHOR_EMAIL_DESC"
+			size="60"
+			default="info@vdm.io"
+			readonly="true"
+			class="readonly"
+		/>
+	</fieldset>
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC">
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			class="inputbox"
+			validate="rules"
+			filter="rules"
+			component="com_demo"
+			section="component"
+		/>
+	</fieldset>
+</config>

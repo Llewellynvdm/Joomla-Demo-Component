@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<access component="com_demo">
+	<section name="component">
+		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
+		<action name="core.options" title="JACTION_OPTIONS" description="JACTION_OPTIONS_COMPONENT_DESC" />
+		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
+		<action name="core.export" title="COM_DEMO_EXPORT_DATA" description="COM_DEMO_EXPORT_DATA_DESC" />
+		<action name="core.import" title="COM_DEMO_IMPORT_DATA" description="COM_DEMO_IMPORT_DATA_DESC" />
+		<action name="core.batch" title="COM_DEMO_USE_BATCH" description="COM_DEMO_USE_BATCH_DESC" />
+		<action name="core.version" title="COM_DEMO_EDIT_VERSIONS" description="COM_DEMO_EDIT_VERSIONS_DESC" />
+		<action name="core.create" title="JACTION_CREATE" description="JACTION_CREATE_COMPONENT_DESC" />
+		<action name="core.delete" title="JACTION_DELETE" description="JACTION_DELETE_COMPONENT_DESC" />
+		<action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />
+		<action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_ACCESS_EDITSTATE_DESC" />
+		<action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
+		<action name="core.edit.created_by" title="COM_DEMO_EDIT_CREATED_BY" description="COM_DEMO_EDIT_CREATED_BY_DESC" />
+		<action name="core.edit.created" title="COM_DEMO_EDIT_CREATED_DATE" description="COM_DEMO_EDIT_CREATED_DATE_DESC" />
+		<action name="help_document.access" title="COM_DEMO_HELP_DOCUMENTS_ACCESS" description="COM_DEMO_HELP_DOCUMENTS_ACCESS_DESC" />
+		<action name="help_document.create" title="COM_DEMO_HELP_DOCUMENTS_CREATE" description="COM_DEMO_HELP_DOCUMENTS_CREATE_DESC" />
+		<action name="help_document.delete" title="COM_DEMO_HELP_DOCUMENTS_DELETE" description="COM_DEMO_HELP_DOCUMENTS_DELETE_DESC" />
+		<action name="help_document.edit" title="COM_DEMO_HELP_DOCUMENTS_EDIT" description="COM_DEMO_HELP_DOCUMENTS_EDIT_DESC" />
+		<action name="help_document.edit.own" title="COM_DEMO_HELP_DOCUMENTS_EDIT_OWN" description="COM_DEMO_HELP_DOCUMENTS_EDIT_OWN_DESC" />
+		<action name="help_document.edit.state" title="COM_DEMO_HELP_DOCUMENTS_EDIT_STATE" description="COM_DEMO_HELP_DOCUMENTS_EDIT_STATE_DESC" />
+		<action name="help_document.version" title="COM_DEMO_HELP_DOCUMENTS_EDIT_VERSION" description="COM_DEMO_HELP_DOCUMENTS_EDIT_VERSION_DESC" />
+		<action name="help_document.export" title="COM_DEMO_HELP_DOCUMENTS_EXPORT" description="COM_DEMO_HELP_DOCUMENTS_EXPORT_DESC" />
+		<action name="help_document.import" title="COM_DEMO_HELP_DOCUMENTS_IMPORT" description="COM_DEMO_HELP_DOCUMENTS_IMPORT_DESC" />
+		<action name="look.version" title="COM_DEMO_LOOKS_EDIT_VERSION" description="COM_DEMO_LOOKS_EDIT_VERSION_DESC" />
+		<action name="look.export" title="COM_DEMO_LOOKS_EXPORT" description="COM_DEMO_LOOKS_EXPORT_DESC" />
+		<action name="look.import" title="COM_DEMO_LOOKS_IMPORT" description="COM_DEMO_LOOKS_IMPORT_DESC" />
+	</section>
+	<section name="look">
+		<action name="look.version" title="COM_DEMO_LOOKS_EDIT_VERSION" description="COM_DEMO_LOOKS_EDIT_VERSION_DESC" />
+	</section>
+	<section name="help_document">
+		<action name="help_document.edit" title="COM_DEMO_HELP_DOCUMENTS_EDIT" description="COM_DEMO_HELP_DOCUMENTS_EDIT_DESC" />
+		<action name="help_document.edit.own" title="COM_DEMO_HELP_DOCUMENTS_EDIT_OWN" description="COM_DEMO_HELP_DOCUMENTS_EDIT_OWN_DESC" />
+		<action name="help_document.edit.state" title="COM_DEMO_HELP_DOCUMENTS_EDIT_STATE" description="COM_DEMO_HELP_DOCUMENTS_EDIT_STATE_DESC" />
+		<action name="help_document.create" title="COM_DEMO_HELP_DOCUMENTS_CREATE" description="COM_DEMO_HELP_DOCUMENTS_CREATE_DESC" />
+		<action name="help_document.delete" title="COM_DEMO_HELP_DOCUMENTS_DELETE" description="COM_DEMO_HELP_DOCUMENTS_DELETE_DESC" />
+		<action name="help_document.access" title="COM_DEMO_HELP_DOCUMENTS_ACCESS" description="COM_DEMO_HELP_DOCUMENTS_ACCESS_DESC" />
+		<action name="help_document.version" title="COM_DEMO_HELP_DOCUMENTS_EDIT_VERSION" description="COM_DEMO_HELP_DOCUMENTS_EDIT_VERSION_DESC" />
+	</section>
+</access>
