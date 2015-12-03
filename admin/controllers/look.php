@@ -54,8 +54,15 @@ class DemoControllerLook extends JControllerForm
 	 * @since   1.6
 	 */
 	protected function allowAdd($data = array())
-	{		// In the absense of better information, revert to the component permissions.
-		return parent::allowAdd($data);
+	{
+		// Access check.
+		$access = JFactory::getUser()->authorise('look.access', 'com_demo');
+		if (!$access)
+		{
+			return false;
+		}
+		// In the absense of better information, revert to the component permissions.
+		return JFactory::getUser()->authorise('look.create', $this->option);
 	}
 
 	/**
@@ -76,13 +83,20 @@ class DemoControllerLook extends JControllerForm
 		$recordId	= (int) isset($data[$key]) ? $data[$key] : 0;
 
 
+		// Access check.
+		$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $recordId) &&  $user->authorise('look.access', 'com_demo'));
+		if (!$access)
+		{
+			return false;
+		}
+
 		if ($recordId)
 		{
 			// The record has been set. Check the record permissions.
-			$permission = $user->authorise('core.edit', 'com_demo.look.' . (int) $recordId);
+			$permission = $user->authorise('look.edit', 'com_demo.look.' . (int) $recordId);
 			if (!$permission && !is_null($permission))
 			{
-				if ($user->authorise('core.edit.own', 'com_demo.look.' . $recordId))
+				if ($user->authorise('look.edit.own', 'com_demo.look.' . $recordId))
 				{
 					// Now test the owner is the user.
 					$ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
@@ -101,7 +115,7 @@ class DemoControllerLook extends JControllerForm
 					// If the owner matches 'me' then allow.
 					if ($ownerId == $user->id)
 					{
-						if ($user->authorise('core.edit.own', 'com_demo'))
+						if ($user->authorise('look.edit.own', 'com_demo'))
 						{
 							return true;
 						}
@@ -111,7 +125,7 @@ class DemoControllerLook extends JControllerForm
 			}
 		}
 		// Since there is no permission, revert to the component permissions.
-		return parent::allowEdit($data, $key);
+		return $user->authorise('look.edit', $this->option);
 	}
 
 	/**

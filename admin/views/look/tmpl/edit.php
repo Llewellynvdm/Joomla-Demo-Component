@@ -101,33 +101,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_CxBsGuj function
+// #jform_name listeners for name_RJYiubJ function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_CxBsGuj = jQuery("#jform_name").val();
-	CxBsGuj(name_CxBsGuj);
+	var name_RJYiubJ = jQuery("#jform_name").val();
+	RJYiubJ(name_RJYiubJ);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_CxBsGuj = jQuery("#jform_name").val();
-	CxBsGuj(name_CxBsGuj);
+	var name_RJYiubJ = jQuery("#jform_name").val();
+	RJYiubJ(name_RJYiubJ);
 
 });
 
-// #jform_add listeners for add_FKWPxIh function
+// #jform_add listeners for add_xEVTobm function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_FKWPxIh = jQuery("#jform_add input[type='radio']:checked").val();
-	FKWPxIh(add_FKWPxIh);
+	var add_xEVTobm = jQuery("#jform_add input[type='radio']:checked").val();
+	xEVTobm(add_xEVTobm);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_FKWPxIh = jQuery("#jform_add input[type='radio']:checked").val();
-	FKWPxIh(add_FKWPxIh);
+	var add_xEVTobm = jQuery("#jform_add input[type='radio']:checked").val();
+	xEVTobm(add_xEVTobm);
 
 });
 

@@ -58,10 +58,10 @@ class DemoViewLooks extends JViewLegacy
 		$this->saveOrder	= $this->listOrder == 'ordering';
                 // get global action permissions
 		$this->canDo		= DemoHelper::getActions('look');
-		$this->canEdit		= $this->canDo->get('core.edit');
-		$this->canState		= $this->canDo->get('core.edit.state');
-		$this->canCreate	= $this->canDo->get('core.create');
-		$this->canDelete	= $this->canDo->get('core.delete');
+		$this->canEdit		= $this->canDo->get('look.edit');
+		$this->canState		= $this->canDo->get('look.edit.state');
+		$this->canCreate	= $this->canDo->get('look.create');
+		$this->canDelete	= $this->canDo->get('look.delete');
 		$this->canBatch	= $this->canDo->get('core.batch');
 
 		// We don't need toolbar in the modal window.

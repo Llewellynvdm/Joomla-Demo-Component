@@ -42,6 +42,9 @@ class DemoModelDemo extends JModelList
 		);
 		// view access array
 		$viewAccess = array(
+			'look.create' => 'look.create',
+			'looks.access' => 'look.access',
+			'look.access' => 'look.access',
 			'looks.submenu' => 'look.submenu',
 			'looks.dashboard_list' => 'look.dashboard_list',
 			'look.dashboard_add' => 'look.dashboard_add',

@@ -112,7 +112,24 @@ class DemoModelLooks extends JModelList
 		$this->checkInNow();
 
 		// load parent items
-		$items = parent::getItems(); 
+		$items = parent::getItems();
+
+		// set values to display correctly.
+		if (DemoHelper::checkArray($items))
+		{
+			// get user object.
+			$user = JFactory::getUser();
+			foreach ($items as $nr => &$item)
+			{
+				$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
+				if (!$access)
+				{
+					unset($items[$nr]);
+					continue;
+				}
+
+			}
+		} 
 
 		// set selection value to a translatable value
 		if (DemoHelper::checkArray($items))
@@ -275,8 +292,17 @@ class DemoModelLooks extends JModelList
 				// set values to display correctly.
 				if (DemoHelper::checkArray($items))
 				{
+					// get user object.
+					$user = JFactory::getUser();
 					foreach ($items as $nr => &$item)
 					{
+						$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
+						if (!$access)
+						{
+							unset($items[$nr]);
+							continue;
+						}
+
 						// unset the values we don't want exported.
 						unset($item->asset_id);
 						unset($item->checked_out);

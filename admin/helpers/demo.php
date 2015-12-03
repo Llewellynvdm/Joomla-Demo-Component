@@ -154,7 +154,10 @@ abstract class DemoHelper
                 $user = JFactory::getUser();
                 // load the submenus to sidebar
                 JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_DASHBOARD'), 'index.php?option=com_demo&view=demo', $submenu == 'demo');
-		JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_LOOKS'), 'index.php?option=com_demo&view=looks', $submenu == 'looks');
+		if ($user->authorise('look.access', 'com_demo') && $user->authorise('look.submenu', 'com_demo'))
+		{
+			JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_LOOKS'), 'index.php?option=com_demo&view=looks', $submenu == 'looks');
+		}
 		if ($user->authorise('help_document.access', 'com_demo') && $user->authorise('help_document.submenu', 'com_demo'))
 		{
 			JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_HELP_DOCUMENTS'), 'index.php?option=com_demo&view=help_documents', $submenu == 'help_documents');

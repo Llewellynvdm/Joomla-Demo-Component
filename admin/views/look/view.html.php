@@ -90,12 +90,12 @@ class DemoViewLook extends JViewLegacy
 		// Built the actions for new and existing records.
 		if ($this->refid || $this->ref)
 		{
-			if ($this->canDo->get('core.create') && $isNew)
+			if ($this->canDo->get('look.create') && $isNew)
 			{
 				// We can create the record.
 				JToolBarHelper::save('look.save', 'JTOOLBAR_SAVE');
 			}
-			elseif ($this->canDo->get('core.edit'))
+			elseif ($this->canDo->get('look.edit'))
 			{
 				// We can save the record.
 				JToolBarHelper::save('look.save', 'JTOOLBAR_SAVE');
@@ -116,7 +116,7 @@ class DemoViewLook extends JViewLegacy
 			if ($isNew)
 			{
 				// For new records, check the create permission.
-				if ($this->canDo->get('core.create'))
+				if ($this->canDo->get('look.create'))
 				{
 					JToolBarHelper::apply('look.apply', 'JTOOLBAR_APPLY');
 					JToolBarHelper::save('look.save', 'JTOOLBAR_SAVE');
@@ -126,24 +126,24 @@ class DemoViewLook extends JViewLegacy
 			}
 			else
 			{
-				if ($this->canDo->get('core.edit'))
+				if ($this->canDo->get('look.edit'))
 				{
 					// We can save the new record
 					JToolBarHelper::apply('look.apply', 'JTOOLBAR_APPLY');
 					JToolBarHelper::save('look.save', 'JTOOLBAR_SAVE');
 					// We can save this record, but check the create permission to see
 					// if we can return to make a new one.
-					if ($this->canDo->get('core.create'))
+					if ($this->canDo->get('look.create'))
 					{
 						JToolBarHelper::custom('look.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 					}
 				}
 				$canVersion = ($this->canDo->get('core.version') && $this->canDo->get('look.version'));
-				if ($this->state->params->get('save_history', 1) && $this->canDo->get('') && $canVersion)
+				if ($this->state->params->get('save_history', 1) && $this->canDo->get('look.edit') && $canVersion)
 				{
 					JToolbarHelper::versions('com_demo.look', $this->item->id);
 				}
-				if ($this->canDo->get('core.create'))
+				if ($this->canDo->get('look.create'))
 				{
 					JToolBarHelper::custom('look.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
 				}

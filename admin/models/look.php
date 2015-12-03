@@ -136,8 +136,8 @@ class DemoModelLook extends JModelAdmin
 
 		// Check for existing item.
 		// Modify the form based on Edit State access controls.
-		if ($id != 0 && (!$user->authorise('core.edit.state', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('core.edit.state', 'com_demo')))
+		if ($id != 0 && (!$user->authorise('look.edit.state', 'com_demo.look.' . (int) $id))
+			|| ($id == 0 && !$user->authorise('look.edit.state', 'com_demo')))
 		{
 			// Disable fields for display.
 			$form->setFieldAttribute('ordering', 'disabled', 'true');
@@ -147,7 +147,8 @@ class DemoModelLook extends JModelAdmin
 			$form->setFieldAttribute('published', 'filter', 'unset');
 		}
 		// Modify the form based on Edit Creaded By access controls.
-		if (!$user->authorise('core.edit.created_by', 'com_demo'))
+		if ($id != 0 && (!$user->authorise('look.edit.created_by', 'com_demo.look.' . (int) $id))
+			|| ($id == 0 && !$user->authorise('look.edit.created_by', 'com_demo')))
 		{
 			// Disable fields for display.
 			$form->setFieldAttribute('created_by', 'disabled', 'true');
@@ -157,12 +158,64 @@ class DemoModelLook extends JModelAdmin
 			$form->setFieldAttribute('created_by', 'filter', 'unset');
 		}
 		// Modify the form based on Edit Creaded Date access controls.
-		if (!$user->authorise('core.edit.created', 'com_demo'))
+		if ($id != 0 && (!$user->authorise('look.edit.created', 'com_demo.look.' . (int) $id))
+			|| ($id == 0 && !$user->authorise('look.edit.created', 'com_demo')))
 		{
 			// Disable fields for display.
 			$form->setFieldAttribute('created', 'disabled', 'true');
 			// Disable fields while saving.
 			$form->setFieldAttribute('created', 'filter', 'unset');
+		}
+		// Modify the form based on Edit Description access controls.
+		if ($id != 0 && (!$user->authorise('look.edit.description', 'com_demo.look.' . (int) $id))
+			|| ($id == 0 && !$user->authorise('look.edit.description', 'com_demo')))
+		{
+			// Disable fields for display.
+			$form->setFieldAttribute('description', 'disabled', 'true');
+			// Disable fields for display.
+			$form->setFieldAttribute('description', 'readonly', 'true');
+			if (!$form->getValue('description'))
+			{
+				// Disable fields while saving.
+				$form->setFieldAttribute('description', 'filter', 'unset');
+				// Disable fields while saving.
+				$form->setFieldAttribute('description', 'required', 'false');
+			}
+		}
+		// Modify the form based on Edit Acronym access controls.
+		if ($id != 0 && (!$user->authorise('look.edit.acronym', 'com_demo.look.' . (int) $id))
+			|| ($id == 0 && !$user->authorise('look.edit.acronym', 'com_demo')))
+		{
+			// Disable fields for display.
+			$form->setFieldAttribute('acronym', 'disabled', 'true');
+			// Disable fields for display.
+			$form->setFieldAttribute('acronym', 'readonly', 'true');
+			if (!$form->getValue('acronym'))
+			{
+				// Disable fields while saving.
+				$form->setFieldAttribute('acronym', 'filter', 'unset');
+				// Disable fields while saving.
+				$form->setFieldAttribute('acronym', 'required', 'false');
+			}
+		}
+		// Modify the form based on Edit Male access controls.
+		if ($id != 0 && (!$user->authorise('look.edit.male', 'com_demo.look.' . (int) $id))
+			|| ($id == 0 && !$user->authorise('look.edit.male', 'com_demo')))
+		{
+			// Disable fields for display.
+			$form->setFieldAttribute('male', 'disabled', 'true');
+			// Disable fields for display.
+			$form->setFieldAttribute('male', 'readonly', 'true');
+			// Disable radio button for display.
+			$class = $form->getFieldAttribute('male', 'class', '');
+			$form->setFieldAttribute('male', 'class', $class.' disabled no-click');
+			if (!$form->getValue('male'))
+			{
+				// Disable fields while saving.
+				$form->setFieldAttribute('male', 'filter', 'unset');
+				// Disable fields while saving.
+				$form->setFieldAttribute('male', 'required', 'false');
+			}
 		}
 
 		return $form;
@@ -198,7 +251,7 @@ class DemoModelLook extends JModelAdmin
 
 			$user = JFactory::getUser();
 			// The record has been set. Check the record permissions.
-			return $user->authorise('core.delete', 'com_demo.look.' . (int) $record->id);
+			return $user->authorise('look.delete', 'com_demo.look.' . (int) $record->id);
 		}
 		return false;
 	}
@@ -220,14 +273,14 @@ class DemoModelLook extends JModelAdmin
 		if ($recordId)
 		{
 			// The record has been set. Check the record permissions.
-			$permission = $user->authorise('core.edit.state', 'com_demo.look.' . (int) $recordId);
+			$permission = $user->authorise('look.edit.state', 'com_demo.look.' . (int) $recordId);
 			if (!$permission && !is_null($permission))
 			{
 				return false;
 			}
 		}
 		// In the absense of better information, revert to the component permissions.
-		return parent::canEditState($record);
+		return $user->authorise('look.edit.state', 'com_demo');
 	}
     
 	/**
@@ -242,8 +295,9 @@ class DemoModelLook extends JModelAdmin
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		// Check specific edit permission then general edit permission.
+		$user = JFactory::getUser();
 
-		return JFactory::getUser()->authorise('core.edit', 'com_demo.look.'. ((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
+		return $user->authorise('look.edit', 'com_demo.look.'. ((int) isset($data[$key]) ? $data[$key] : 0)) or $user->authorise('look.edit',  'com_demo');
 	}
     
 	/**
@@ -492,7 +546,7 @@ class DemoModelLook extends JModelAdmin
 			$this->canDo		= DemoHelper::getActions('look');
 		}
 
-		if (!$this->canDo->get('core.create') || !$this->canDo->get('core.batch'))
+		if (!$this->canDo->get('look.create') && !$this->canDo->get('look.batch'))
 		{
 			return false;
 		}
@@ -507,7 +561,7 @@ class DemoModelLook extends JModelAdmin
 		{
 			$values['published'] = 0;
 		}
-		elseif (isset($values['published']) && !$this->canDo->get('core.edit.state'))
+		elseif (isset($values['published']) && !$this->canDo->get('look.edit.state'))
 		{
 				$values['published'] = 0;
 		}
@@ -524,7 +578,7 @@ class DemoModelLook extends JModelAdmin
 
 			// only allow copy if user may edit this item.
 
-			if (!$this->user->authorise('core.edit', $contexts[$pk]))
+			if (!$this->user->authorise('look.edit', $contexts[$pk]))
 
 			{
 
@@ -641,14 +695,14 @@ class DemoModelLook extends JModelAdmin
 			$this->canDo		= DemoHelper::getActions('look');
 		}
 
-		if (!$this->canDo->get('core.edit') && !$this->canDo->get('core.batch'))
+		if (!$this->canDo->get('look.edit') && !$this->canDo->get('look.batch'))
 		{
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 			return false;
 		}
 
 		// make sure published only updates if user has the permission.
-		if (isset($values['published']) && !$this->canDo->get('core.edit.state'))
+		if (isset($values['published']) && !$this->canDo->get('look.edit.state'))
 		{
 			unset($values['published']);
 		}
@@ -658,7 +712,7 @@ class DemoModelLook extends JModelAdmin
 		// Parent exists so we proceed
 		foreach ($pks as $pk)
 		{
-			if (!$this->user->authorise('core.edit', $contexts[$pk]))
+			if (!$this->user->authorise('look.edit', $contexts[$pk]))
 			{
 				$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 

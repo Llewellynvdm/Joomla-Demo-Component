@@ -1,5 +1,7 @@
 # Demo (1.0.4)
 
+![Demo image] (https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/component-300.jpg "The Demo")
+
 Just a basic demo of the most basic implementations of the [Joomla] (http://www.joomla.org) Component Builder's ability.
 
 # Build Details
@@ -15,13 +17,13 @@ Just a basic demo of the most basic implementations of the [Joomla] (http://www.
 
 ## Build Time
 
-**42 Hours** or **5 Eight Hour Days** (actual time the author saved -
+**43 Hours** or **5 Eight Hour Days** (actual time the author saved -
 due to [Automated Component Builder] (https://www.vdm.io/joomla-component-builder))
 
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **15117**
++ *Line count*: **15263**
 + *File count*: **147**
 + *Folder count*: **50**
 
@@ -33,7 +35,7 @@ due to [Automated Component Builder] (https://www.vdm.io/joomla-component-builde
 > **mapping @4hours** = codingtime / 10;
 > **office @7hours** = codingtime / 6;)
 
-**70 Hours** or **9 Eight Hour Days**
+**71 Hours** or **9 Eight Hour Days**
 (a total of the realistic time frame for this project)
 
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,

@@ -32,7 +32,7 @@ $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 	?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td class="order nowrap center hidden-phone">
-		<?php if ($canDo->get('core.edit.state')): ?>
+		<?php if ($canDo->get('look.edit.state')): ?>
 			<?php
 				if ($this->saveOrder)
 				{
@@ -55,7 +55,7 @@ $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 		<?php endif; ?>
 		</td>
 		<td class="nowrap center">
-		<?php if ($canDo->get('core.edit')): ?>
+		<?php if ($canDo->get('look.edit')): ?>
 				<?php if ($item->checked_out) : ?>
 					<?php if ($canCheckin) : ?>
 						<?php echo JHtml::_('grid.id', $i, $item->id); ?>
@@ -70,7 +70,7 @@ $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 		<?php endif; ?>
 		</td>
 		<td class="nowrap">
-			<?php if ($canDo->get('core.edit')): ?>
+			<?php if ($canDo->get('look.edit')): ?>
 				<div class="name">
 					<a href="<?php echo $edit; ?>&id=<?php echo $item->id; ?>"><?php echo $this->escape($item->name); ?></a>
 					<?php if ($item->checked_out): ?>
@@ -94,7 +94,7 @@ $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 			<?php echo $this->escape($item->website); ?>
 		</td>
 		<td class="center">
-		<?php if ($canDo->get('core.edit.state')) : ?>
+		<?php if ($canDo->get('look.edit.state')) : ?>
 				<?php if ($item->checked_out) : ?>
 					<?php if ($canCheckin) : ?>
 						<?php echo JHtml::_('jgrid.published', $item->published, $i, 'looks.', true, 'cb'); ?>
