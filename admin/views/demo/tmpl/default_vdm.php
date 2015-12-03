@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		default_vdm.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -28,7 +30,7 @@ JHtml::_('bootstrap.loadCss');
 <li><b><?php echo JText::_('COM_DEMO_VERSION'); ?>:</b> <?php echo $manifest->version; ?></li>
 <li><b><?php echo JText::_('COM_DEMO_DATE'); ?>:</b> <?php echo $manifest->creationDate; ?></li>
 <li><b><?php echo JText::_('COM_DEMO_AUTHOR'); ?>:</b> <a href="mailto:<?php echo $manifest->authorEmail; ?>"><?php echo $manifest->author; ?></a></li>
-<li><b><?php echo JText::_('COM_DEMO_WEBSITE'); ?>:</b> <a href="https://<?php echo $manifest->authorUrl; ?>" target="_balnk"><?php echo $manifest->authorUrl; ?></a></li>
+<li><b><?php echo JText::_('COM_DEMO_WEBSITE'); ?>:</b> <a href="<?php echo $manifest->authorUrl; ?>" target="_blank"><?php echo $manifest->authorUrl; ?></a></li>
 <li><b><?php echo JText::_('COM_DEMO_LICENSE'); ?>:</b> <?php echo $manifest->license; ?></li>
 <li><b><?php echo $manifest->copyright; ?></b></li>
 </ul>

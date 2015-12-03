@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		view.html.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -35,34 +37,34 @@ class DemoViewLook extends JViewLegacy
 	{
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
-        {
+                {
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
-		};
+		}
 
 		// Assign the variables
 		$this->form 		= $this->get('Form');
 		$this->item 		= $this->get('Item');
 		$this->script 		= $this->get('Script');
 		$this->state		= $this->get('State');
-        // get action permissions
+                // get action permissions
 		$this->canDo		= DemoHelper::getActions('look',$this->item);
 		// get input
 		$jinput = JFactory::getApplication()->input;
 		$this->ref 		= $jinput->get('ref', 0, 'word');
-		$this->refid 	= $jinput->get('refid', 0, 'int');
-		$this->referral = '';
+		$this->refid            = $jinput->get('refid', 0, 'int');
+		$this->referral         = '';
 		if ($this->refid)
-        {
-        	// return to the item that refered to this item
-        	$this->referral = '&ref='.(string)$this->ref.'&refid='.(int)$this->refid;
-        }
-        elseif($this->ref)
-        {
-        	// return to the list view that refered to this item
-        	$this->referral = '&ref='.(string)$this->ref;
-        }
-		
+                {
+                        // return to the item that refered to this item
+                        $this->referral = '&ref='.(string)$this->ref.'&refid='.(int)$this->refid;
+                }
+                elseif($this->ref)
+                {
+                        // return to the list view that refered to this item
+                        $this->referral = '&ref='.(string)$this->ref;
+                }
+
 		// Set the toolbar
 		$this->addToolBar();
 
@@ -136,7 +138,8 @@ class DemoViewLook extends JViewLegacy
 						JToolBarHelper::custom('look.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 					}
 				}
-				if ($this->state->params->get('save_history', 1) && $this->canDo->get(''))
+				$canVersion = ($this->canDo->get('core.version') && $this->canDo->get('look.version'));
+				if ($this->state->params->get('save_history', 1) && $this->canDo->get('') && $canVersion)
 				{
 					JToolbarHelper::versions('com_demo.look', $this->item->id);
 				}
@@ -155,8 +158,8 @@ class DemoViewLook extends JViewLegacy
 			JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
 		}
 	}
-    
-    /**
+
+        /**
 	 * Escapes a value for output in a view script.
 	 *
 	 * @param   mixed  $var  The output to escape.
@@ -170,7 +173,7 @@ class DemoViewLook extends JViewLegacy
     		// use the helper htmlEscape method instead and shorten the string
 			return DemoHelper::htmlEscape($var, $this->_charset, true, 30);
 		}
-    	// use the helper htmlEscape method instead.
+                // use the helper htmlEscape method instead.
 		return DemoHelper::htmlEscape($var, $this->_charset);
 	}
 

@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		looks.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -32,7 +34,7 @@ class DemoControllerLooks extends JControllerAdmin
 	 * Proxy for getModel.
 	 * @since	2.5
 	 */
-	public function getModel($name = 'Look', $prefix = 'DemoModel')
+	public function getModel($name = 'Look', $prefix = 'DemoModel', $config = array())
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		
@@ -85,7 +87,7 @@ class DemoControllerLooks extends JControllerAdmin
 			if (DemoHelper::checkObject($headers))
 			{
 				// Load headers to session.
-				$session =& JFactory::getSession();
+				$session = JFactory::getSession();
 				$headers = json_encode($headers);
 				$session->set('look_VDM_IMPORTHEADERS', $headers);
 				$session->set('backto_VDM_IMPORT', 'looks');
@@ -100,5 +102,5 @@ class DemoControllerLooks extends JControllerAdmin
 		$message = JText::_('COM_DEMO_IMPORT_FAILED');
 		$this->setRedirect(JRoute::_('index.php?option=com_demo&view=looks', false), $message, 'error');
 		return;
-	}
+	} 
 }

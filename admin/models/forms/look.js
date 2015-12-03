@@ -2,7 +2,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.js
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -16,23 +18,23 @@
 /------------------------------------------------------------------------------------------------------*/
 
 // Some Global Values
-jform_jiUxEbzAKh_required = false;
+jform_FKWPxIhXqG_required = false;
 
 // Initial Script
 jQuery(document).ready(function()
 {
-	var name_ABgmXJb = jQuery("#jform_name").val();
-	ABgmXJb(name_ABgmXJb);
+	var name_CxBsGuj = jQuery("#jform_name").val();
+	CxBsGuj(name_CxBsGuj);
 
-	var add_jiUxEbz = jQuery("#jform_add input[type='radio']:checked").val();
-	jiUxEbz(add_jiUxEbz);
+	var add_FKWPxIh = jQuery("#jform_add input[type='radio']:checked").val();
+	FKWPxIh(add_FKWPxIh);
 });
 
-// the ABgmXJb function
-function ABgmXJb(name_ABgmXJb)
+// the CxBsGuj function
+function CxBsGuj(name_CxBsGuj)
 {
 	// set the function logic
-	if (isSet(name_ABgmXJb))
+	if (isSet(name_CxBsGuj))
 	{
 		jQuery('#jform_alias').closest('.control-group').show();
 		jQuery('#jform_description').closest('.control-group').show();
@@ -44,37 +46,35 @@ function ABgmXJb(name_ABgmXJb)
 	}
 }
 
-// the jiUxEbz function
-function jiUxEbz(add_jiUxEbz)
+// the FKWPxIh function
+function FKWPxIh(add_FKWPxIh)
 {
 	// set the function logic
-	if (add_jiUxEbz == 1)
+	if (add_FKWPxIh == 1)
 	{
 		jQuery('#jform_acronym').closest('.control-group').show();
-		if (jform_jiUxEbzAKh_required)
+		if (jform_FKWPxIhXqG_required)
 		{
 			updateFieldRequired('acronym',0);
 			jQuery('#jform_acronym').prop('required','required');
 			jQuery('#jform_acronym').attr('aria-required',true);
 			jQuery('#jform_acronym').addClass('required');
-			jform_jiUxEbzAKh_required = false;
+			jform_FKWPxIhXqG_required = false;
 		}
 
-		jQuery('#jform_6').closest('.control-group').show();
 		jQuery('#jform_website').closest('.control-group').show();
 	}
 	else
 	{
 		jQuery('#jform_acronym').closest('.control-group').hide();
-		if (!jform_jiUxEbzAKh_required)
+		if (!jform_FKWPxIhXqG_required)
 		{
 			updateFieldRequired('acronym',1);
 			jQuery('#jform_acronym').removeAttr('required');
 			jQuery('#jform_acronym').removeAttr('aria-required');
 			jQuery('#jform_acronym').removeClass('required');
-			jform_jiUxEbzAKh_required = true;
+			jform_FKWPxIhXqG_required = true;
 		}
-		jQuery('#jform_6').closest('.control-group').hide();
 		jQuery('#jform_website').closest('.control-group').hide();
 	}
 }

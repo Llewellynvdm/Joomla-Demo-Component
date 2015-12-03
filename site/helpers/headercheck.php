@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		headercheck.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -35,7 +37,7 @@ class HeaderCheck
 			}
 		}
 		
-		$document 	=& JFactory::getDocument();
+		$document 	= JFactory::getDocument();
 		$head_data 	= $document->getHeadData();
 		foreach (array_keys($head_data['scripts']) as $script)
 		{
@@ -62,7 +64,7 @@ class HeaderCheck
 			}
 		}
 		
-		$document 	=& JFactory::getDocument();
+		$document 	= JFactory::getDocument();
 		$head_data 	= $document->getHeadData();
 		
 		foreach (array_keys($head_data['styleSheets']) as $script)

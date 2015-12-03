@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -35,14 +37,14 @@ class DemoControllerLook extends JControllerForm
 	 * @note   Replaces _task.
 	 */
 	protected $task;
-    
+
 	public function __construct($config = array())
 	{
 		$this->view_list = 'Looks'; // safeguard for setting the return view listing to the main view.
 		parent::__construct($config);
 	}
-    
-    /**
+
+        /**
 	 * Method override to check if you can add a new record.
 	 *
 	 * @param   array  $data  An array of input data.
@@ -52,8 +54,7 @@ class DemoControllerLook extends JControllerForm
 	 * @since   1.6
 	 */
 	protected function allowAdd($data = array())
-	{
-		// In the absense of better information, revert to the component permissions.
+	{		// In the absense of better information, revert to the component permissions.
 		return parent::allowAdd($data);
 	}
 
@@ -73,6 +74,7 @@ class DemoControllerLook extends JControllerForm
 		$user		= JFactory::getUser();
 		// get record id.
 		$recordId	= (int) isset($data[$key]) ? $data[$key] : 0;
+
 
 		if ($recordId)
 		{
@@ -111,7 +113,7 @@ class DemoControllerLook extends JControllerForm
 		// Since there is no permission, revert to the component permissions.
 		return parent::allowEdit($data, $key);
 	}
-	
+
 	/**
 	 * Gets the URL arguments to append to an item redirect.
 	 *
@@ -126,23 +128,23 @@ class DemoControllerLook extends JControllerForm
 	{
 		$tmpl   = $this->input->get('tmpl');
 		$layout = $this->input->get('layout', 'edit', 'string');
-		
+
 		$ref 	= $this->input->get('ref', 0, 'string');
 		$refid 	= $this->input->get('refid', 0, 'int');
-        
+
 		// Setup redirect info.
-		
+
 		$append = '';
-		
+
 		if ($refid)
-        {
+                {
 			$append .= '&ref='.(string)$ref.'&refid='.(int)$refid;
 		}
-        elseif ($ref)
-        {
+                elseif ($ref)
+                {
 			$append .= '&ref='.(string)$ref;
-        }
-        
+                }
+
 		if ($tmpl)
 		{
 			$append .= '&tmpl=' . $tmpl;
@@ -197,15 +199,15 @@ class DemoControllerLook extends JControllerForm
 		// get the referal details
 		$this->ref 		= $this->input->get('ref', 0, 'word');
 		$this->refid 	= $this->input->get('refid', 0, 'int');
-		
+
 		$cancel = parent::cancel($key);
-        
+
 		if ($cancel)
-		{           
+		{
 			if ($this->refid)
 			{
 				$redirect = '&view='.(string)$this->ref.'&layout=edit&id='.(int)$this->refid;
-	
+
 				// Redirect to the item screen.
 				$this->setRedirect(
 					JRoute::_(
@@ -216,7 +218,7 @@ class DemoControllerLook extends JControllerForm
 			elseif ($this->ref)
 			{
 				$redirect = '&view='.(string)$this->ref;
-	
+
 				// Redirect to the list screen.
 				$this->setRedirect(
 					JRoute::_(
@@ -252,15 +254,15 @@ class DemoControllerLook extends JControllerForm
 		// get the referal details
 		$this->ref 		= $this->input->get('ref', 0, 'word');
 		$this->refid 	= $this->input->get('refid', 0, 'int');
-        
-        if ($this->ref || $this->refid)
-        {
-        	// to make sure the item is checkedin on redirect
-        	$this->task = 'save';
-        }
-        
+
+                if ($this->ref || $this->refid)
+                {
+                        // to make sure the item is checkedin on redirect
+                        $this->task = 'save';
+                }
+
 		$saved = parent::save($key, $urlVar);
-                
+
 		if ($this->refid && $saved)
 		{
 			$redirect = '&view='.(string)$this->ref.'&layout=edit&id='.(int)$this->refid;
@@ -289,12 +291,12 @@ class DemoControllerLook extends JControllerForm
 	/**
 	 * Function that allows child controller access to model data
 	 * after the data has been saved.
-	 * 
+	 *
 	 * @param   JModel  &$model     The data model object.
 	 * @param   array   $validData  The validated data.
-	 * 
+	 *
 	 * @return  void
-	 * 
+	 *
 	 * @since   11.1
 	 */
 	protected function postSaveHook(JModelLegacy &$model, $validData = array())

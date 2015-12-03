@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		help_documents.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -83,7 +85,7 @@ class DemoModelHelp_documents extends JModelList
 		$access = $this->getUserStateFromRequest($this->context . '.filter.access', 'filter_access', 0, 'int');
 		$this->setState('filter.access', $access);
         
-        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
 		$published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
@@ -105,7 +107,7 @@ class DemoModelHelp_documents extends JModelList
 	 * @return  mixed  An array of data items on success, false on failure.
 	 */
 	public function getItems()
-	{
+	{ 
 		// check in items
 		$this->checkInNow();
 
@@ -119,9 +121,8 @@ class DemoModelHelp_documents extends JModelList
 			$user = JFactory::getUser();
 			foreach ($items as $nr => &$item)
 			{
-				$access = $user->authorise('help_document.access', 'com_demo.help_document.' . (int) $item->id);
-				$accessAdmin = $user->authorise('help_document.access', 'com_demo');
-				if ((!$access && !is_null($access)) || (!$accessAdmin && !is_null($accessAdmin)))
+				$access = ($user->authorise('help_document.access', 'com_demo.help_document.' . (int) $item->id) && $user->authorise('help_document.access', 'com_demo'));
+				if (!$access)
 				{
 					unset($items[$nr]);
 					continue;
@@ -184,7 +185,7 @@ class DemoModelHelp_documents extends JModelList
 				3 => 'COM_DEMO_HELP_DOCUMENT_URL'
 			);
 			// Now check if value is found in this array
-			if (DemoHelper::checkString($typeArray[$value]))
+			if (isset($typeArray[$value]) && DemoHelper::checkString($typeArray[$value]))
 			{
 				return $typeArray[$value];
 			}
@@ -197,7 +198,7 @@ class DemoModelHelp_documents extends JModelList
 				2 => 'COM_DEMO_HELP_DOCUMENT_SITE'
 			);
 			// Now check if value is found in this array
-			if (DemoHelper::checkString($locationArray[$value]))
+			if (isset($locationArray[$value]) && DemoHelper::checkString($locationArray[$value]))
 			{
 				return $locationArray[$value];
 			}
@@ -244,7 +245,7 @@ class DemoModelHelp_documents extends JModelList
 			$query->where('a.access = ' . (int) $access);
 		}
 		// Implement View Level Access
-		if (!$user->authorise('core.admin'))
+		if (!$user->authorise('core.options', 'com_demo'))
 		{
 			$groups = implode(',', $user->getAuthorisedViewLevels());
 			$query->where('a.access IN (' . $groups . ')');
@@ -319,7 +320,7 @@ class DemoModelHelp_documents extends JModelList
 			$query->from($db->quoteName('#__demo_help_document', 'a'));
 			$query->where('a.id IN (' . implode(',',$pks) . ')');
 			// Implement View Level Access
-			if (!$user->authorise('core.admin'))
+			if (!$user->authorise('core.options', 'com_demo'))
 			{
 				$groups = implode(',', $user->getAuthorisedViewLevels());
 				$query->where('a.access IN (' . $groups . ')');
@@ -342,9 +343,8 @@ class DemoModelHelp_documents extends JModelList
 					$user = JFactory::getUser();
 					foreach ($items as $nr => &$item)
 					{
-						$access = $user->authorise('help_document.access', 'com_demo.help_document.' . (int) $item->id);
-						$accessAdmin = $user->authorise('help_document.access', 'com_demo');
-						if ((!$access && !is_null($access)) || (!$accessAdmin && !is_null($accessAdmin)))
+						$access = ($user->authorise('help_document.access', 'com_demo.help_document.' . (int) $item->id) && $user->authorise('help_document.access', 'com_demo'));
+						if (!$access)
 						{
 							unset($items[$nr]);
 							continue;
@@ -393,7 +393,7 @@ class DemoModelHelp_documents extends JModelList
 			return $headers;
 		}
 		return false;
-	}
+	} 
 	
 	/**
 	 * Method to get a store id based on model configuration state.
@@ -443,12 +443,12 @@ class DemoModelHelp_documents extends JModelList
 			$db->execute();
 			if ($db->getNumRows())
 			{
-					// Get Yesterdays date
-				$date =& JFactory::getDate()->modify($time)->toSql();
+				// Get Yesterdays date
+				$date = JFactory::getDate()->modify($time)->toSql();
 				// reset query
 				$query = $db->getQuery(true);
 
-			// Fields to update.
+				// Fields to update.
 				$fields = array(
 					$db->quoteName('checked_out_time') . '=\'0000-00-00 00:00:00\'',
 					$db->quoteName('checked_out') . '=0'
@@ -461,7 +461,7 @@ class DemoModelHelp_documents extends JModelList
 				);
 
 				// Check table
-				$query->update(('#__demo_help_document'))->set($fields)->where($conditions); 
+				$query->update($db->quoteName('#__demo_help_document'))->set($fields)->where($conditions); 
 
 				$db->setQuery($query);
 

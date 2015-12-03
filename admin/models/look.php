@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -59,7 +61,7 @@ class DemoModelLook extends JModelAdmin
 		return JTable::getInstance($type, $prefix, $config);
 	}
     
-    /**
+	/**
 	 * Method to get a single record.
 	 *
 	 * @param   integer  $pk  The id of the primary key.
@@ -96,7 +98,7 @@ class DemoModelLook extends JModelAdmin
 		}
 
 		return $item;
-	}
+	} 
 
 	/**
 	 * Method to get the record form.
@@ -109,8 +111,7 @@ class DemoModelLook extends JModelAdmin
 	 * @since   1.6
 	 */
 	public function getForm($data = array(), $loadData = true)
-	{
-		// Get the form.
+	{		// Get the form.
 		$form = $this->loadForm('com_demo.look', 'look', array('control' => 'jform', 'load_data' => $loadData));
 
 		if (empty($form))
@@ -241,10 +242,11 @@ class DemoModelLook extends JModelAdmin
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		// Check specific edit permission then general edit permission.
+
 		return JFactory::getUser()->authorise('core.edit', 'com_demo.look.'. ((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
 	}
     
-    /**
+	/**
 	 * Prepare and sanitise the table data prior to saving.
 	 *
 	 * @param   JTable  $table  A JTable object.
@@ -289,17 +291,17 @@ class DemoModelLook extends JModelAdmin
 				$table->ordering = $max + 1;
 			}
 		}
-        else
-        {
+		else
+		{
 			$table->modified = $date->toSql();
 			$table->modified_by = $user->id;
-        }
+		}
         
 		if (!empty($table->id))
 		{
-            // Increment the items version number.
-            $table->version++;
-        }
+			// Increment the items version number.
+			$table->version++;
+		}
 	}
 
 	/**
@@ -315,9 +317,9 @@ class DemoModelLook extends JModelAdmin
 		$data = JFactory::getApplication()->getUserState('com_demo.edit.look.data', array());
 
 		if (empty($data))
-        {
+		{
 			$data = $this->getItem();
-		};
+		}
 
 		return $data;
 	}
@@ -396,21 +398,26 @@ class DemoModelLook extends JModelAdmin
 		if (empty($pks))
 		{
 			$this->setError(JText::_('JGLOBAL_NO_ITEM_SELECTED'));
-
 			return false;
 		}
 
 		$done = false;
 
 		// Set some needed variables.
-		$this->user				= JFactory::getUser();
+		$this->user			= JFactory::getUser();
 		$this->table			= $this->getTable();
-		$this->tableClassName	= get_class($this->table);
+		$this->tableClassName		= get_class($this->table);
 		$this->contentType		= new JUcmType;
-		$this->type				= $this->contentType->getTypeByTable($this->tableClassName);
-        $this->canDo			= DemoHelper::getActions('look');
+		$this->type			= $this->contentType->getTypeByTable($this->tableClassName);
+		$this->canDo			= DemoHelper::getActions('look');
 		$this->batchSet			= true;
 
+		if (!$this->canDo->get('core.batch'))
+		{
+			$this->setError(JText::_('JLIB_APPLICATION_ERROR_INSUFFICIENT_BATCH_INFORMATION'));
+			return false;
+		}
+        
 		if ($this->type == false)
 		{
 			$type = new JUcmType;
@@ -477,15 +484,15 @@ class DemoModelLook extends JModelAdmin
 		if (empty($this->batchSet))
 		{
 			// Set some needed variables.
-			$this->user 			= JFactory::getUser();
-			$this->table 			= $this->getTable();
+			$this->user 		= JFactory::getUser();
+			$this->table 		= $this->getTable();
 			$this->tableClassName	= get_class($this->table);
-			$this->contentType		= new JUcmType;
-			$this->type				= $this->contentType->getTypeByTable($this->tableClassName);
-			$this->canDo			= DemoHelper::getActions('look');
+			$this->contentType	= new JUcmType;
+			$this->type		= $this->contentType->getTypeByTable($this->tableClassName);
+			$this->canDo		= DemoHelper::getActions('look');
 		}
 
-		if (!$this->canDo->get('core.create'))
+		if (!$this->canDo->get('core.create') || !$this->canDo->get('core.batch'))
 		{
 			return false;
 		}
@@ -514,6 +521,20 @@ class DemoModelLook extends JModelAdmin
 			$pk = array_shift($pks);
 
 			$this->table->reset();
+
+			// only allow copy if user may edit this item.
+
+			if (!$this->user->authorise('core.edit', $contexts[$pk]))
+
+			{
+
+				// Not fatal error
+
+				$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_BATCH_MOVE_ROW_NOT_FOUND', $pk));
+
+				continue;
+
+			}
 
 			// Check that the row actually exists
 			if (!$this->table->load($pk))
@@ -612,15 +633,15 @@ class DemoModelLook extends JModelAdmin
 		if (empty($this->batchSet))
 		{
 			// Set some needed variables.
-			$this->user			= JFactory::getUser();
-			$this->table				= $this->getTable();
+			$this->user		= JFactory::getUser();
+			$this->table		= $this->getTable();
 			$this->tableClassName	= get_class($this->table);
-			$this->contentType		= new JUcmType;
-			$this->type				= $this->contentType->getTypeByTable($this->tableClassName);
-			$this->canDo			= DemoHelper::getActions('look');
+			$this->contentType	= new JUcmType;
+			$this->type		= $this->contentType->getTypeByTable($this->tableClassName);
+			$this->canDo		= DemoHelper::getActions('look');
 		}
 
-		if (!$this->canDo->get('core.edit'))
+		if (!$this->canDo->get('core.edit') && !$this->canDo->get('core.batch'))
 		{
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 			return false;
@@ -662,12 +683,17 @@ class DemoModelLook extends JModelAdmin
 				}
 			}
 
-			// insert all set values
+			// insert all set values.
 			if (DemoHelper::checkArray($values))
 			{
 				foreach ($values as $key => $value)
 				{
-					if (strlen($value) > 0 && isset($this->table->$key))
+					// Do special action for access.
+					if ('access' == $key && strlen($value) > 0)
+					{
+						$this->table->$key = $value;
+					}
+					elseif (strlen($value) > 0 && isset($this->table->$key))
 					{
 						$this->table->$key = $value;
 					}
@@ -714,15 +740,15 @@ class DemoModelLook extends JModelAdmin
 	 */
 	public function save($data)
 	{
-    	$input	= JFactory::getApplication()->input;
-    	$filter	= JFilterInput::getInstance();
+		$input	= JFactory::getApplication()->input;
+		$filter	= JFilterInput::getInstance();
         
-        // set the metadata to the Item Data
+		// set the metadata to the Item Data
 		if (isset($data['metadata']) && isset($data['metadata']['author']))
 		{
 			$data['metadata']['author'] = $filter->clean($data['metadata']['author'], 'TRIM');
             
-            $metadata = new JRegistry;
+			$metadata = new JRegistry;
 			$metadata->loadArray($data['metadata']);
 			$data['metadata'] = (string) $metadata;
 		} 

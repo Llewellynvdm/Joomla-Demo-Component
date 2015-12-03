@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		help_document.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -59,7 +61,7 @@ class DemoModelHelp_document extends JModelAdmin
 		return JTable::getInstance($type, $prefix, $config);
 	}
     
-    /**
+	/**
 	 * Method to get a single record.
 	 *
 	 * @param   integer  $pk  The id of the primary key.
@@ -90,10 +92,8 @@ class DemoModelHelp_document extends JModelAdmin
 
 			if (!empty($item->groups))
 			{
-				// Convert the groups field to an array.
-				$groups = new Registry;
-				$groups->loadString($item->groups);
-				$item->groups = $groups->toArray();
+				// JSON Decode groups.
+				$item->groups = json_decode($item->groups,true);
 			}
 			
 			if (!empty($item->id))
@@ -104,7 +104,7 @@ class DemoModelHelp_document extends JModelAdmin
 		}
 
 		return $item;
-	}
+	} 
 
 	/**
 	 * Method to get the record form.
@@ -117,8 +117,7 @@ class DemoModelHelp_document extends JModelAdmin
 	 * @since   1.6
 	 */
 	public function getForm($data = array(), $loadData = true)
-	{
-		// Get the form.
+	{		// Get the form.
 		$form = $this->loadForm('com_demo.help_document', 'help_document', array('control' => 'jform', 'load_data' => $loadData));
 
 		if (empty($form))
@@ -250,10 +249,11 @@ class DemoModelHelp_document extends JModelAdmin
 	{
 		// Check specific edit permission then general edit permission.
 		$user = JFactory::getUser();
+
 		return $user->authorise('help_document.edit', 'com_demo.help_document.'. ((int) isset($data[$key]) ? $data[$key] : 0)) or $user->authorise('help_document.edit',  'com_demo');
 	}
     
-    /**
+	/**
 	 * Prepare and sanitise the table data prior to saving.
 	 *
 	 * @param   JTable  $table  A JTable object.
@@ -298,17 +298,17 @@ class DemoModelHelp_document extends JModelAdmin
 				$table->ordering = $max + 1;
 			}
 		}
-        else
-        {
+		else
+		{
 			$table->modified = $date->toSql();
 			$table->modified_by = $user->id;
-        }
+		}
         
 		if (!empty($table->id))
 		{
-            // Increment the items version number.
-            $table->version++;
-        }
+			// Increment the items version number.
+			$table->version++;
+		}
 	}
 
 	/**
@@ -324,9 +324,9 @@ class DemoModelHelp_document extends JModelAdmin
 		$data = JFactory::getApplication()->getUserState('com_demo.edit.help_document.data', array());
 
 		if (empty($data))
-        {
+		{
 			$data = $this->getItem();
-		};
+		}
 
 		return $data;
 	}
@@ -405,21 +405,26 @@ class DemoModelHelp_document extends JModelAdmin
 		if (empty($pks))
 		{
 			$this->setError(JText::_('JGLOBAL_NO_ITEM_SELECTED'));
-
 			return false;
 		}
 
 		$done = false;
 
 		// Set some needed variables.
-		$this->user				= JFactory::getUser();
+		$this->user			= JFactory::getUser();
 		$this->table			= $this->getTable();
-		$this->tableClassName	= get_class($this->table);
+		$this->tableClassName		= get_class($this->table);
 		$this->contentType		= new JUcmType;
-		$this->type				= $this->contentType->getTypeByTable($this->tableClassName);
-        $this->canDo			= DemoHelper::getActions('help_document');
+		$this->type			= $this->contentType->getTypeByTable($this->tableClassName);
+		$this->canDo			= DemoHelper::getActions('help_document');
 		$this->batchSet			= true;
 
+		if (!$this->canDo->get('core.batch'))
+		{
+			$this->setError(JText::_('JLIB_APPLICATION_ERROR_INSUFFICIENT_BATCH_INFORMATION'));
+			return false;
+		}
+        
 		if ($this->type == false)
 		{
 			$type = new JUcmType;
@@ -486,15 +491,15 @@ class DemoModelHelp_document extends JModelAdmin
 		if (empty($this->batchSet))
 		{
 			// Set some needed variables.
-			$this->user 			= JFactory::getUser();
-			$this->table 			= $this->getTable();
+			$this->user 		= JFactory::getUser();
+			$this->table 		= $this->getTable();
 			$this->tableClassName	= get_class($this->table);
-			$this->contentType		= new JUcmType;
-			$this->type				= $this->contentType->getTypeByTable($this->tableClassName);
-			$this->canDo			= DemoHelper::getActions('help_document');
+			$this->contentType	= new JUcmType;
+			$this->type		= $this->contentType->getTypeByTable($this->tableClassName);
+			$this->canDo		= DemoHelper::getActions('help_document');
 		}
 
-		if (!$this->canDo->get('help_document.create'))
+		if (!$this->canDo->get('help_document.create') && !$this->canDo->get('help_document.batch'))
 		{
 			return false;
 		}
@@ -523,6 +528,20 @@ class DemoModelHelp_document extends JModelAdmin
 			$pk = array_shift($pks);
 
 			$this->table->reset();
+
+			// only allow copy if user may edit this item.
+
+			if (!$this->user->authorise('help_document.edit', $contexts[$pk]))
+
+			{
+
+				// Not fatal error
+
+				$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_BATCH_MOVE_ROW_NOT_FOUND', $pk));
+
+				continue;
+
+			}
 
 			// Check that the row actually exists
 			if (!$this->table->load($pk))
@@ -621,15 +640,15 @@ class DemoModelHelp_document extends JModelAdmin
 		if (empty($this->batchSet))
 		{
 			// Set some needed variables.
-			$this->user			= JFactory::getUser();
-			$this->table				= $this->getTable();
+			$this->user		= JFactory::getUser();
+			$this->table		= $this->getTable();
 			$this->tableClassName	= get_class($this->table);
-			$this->contentType		= new JUcmType;
-			$this->type				= $this->contentType->getTypeByTable($this->tableClassName);
-			$this->canDo			= DemoHelper::getActions('help_document');
+			$this->contentType	= new JUcmType;
+			$this->type		= $this->contentType->getTypeByTable($this->tableClassName);
+			$this->canDo		= DemoHelper::getActions('help_document');
 		}
 
-		if (!$this->canDo->get('help_document.edit'))
+		if (!$this->canDo->get('help_document.edit') && !$this->canDo->get('help_document.batch'))
 		{
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 			return false;
@@ -671,12 +690,17 @@ class DemoModelHelp_document extends JModelAdmin
 				}
 			}
 
-			// insert all set values
+			// insert all set values.
 			if (DemoHelper::checkArray($values))
 			{
 				foreach ($values as $key => $value)
 				{
-					if (strlen($value) > 0 && isset($this->table->$key))
+					// Do special action for access.
+					if ('access' == $key && strlen($value) > 0)
+					{
+						$this->table->$key = $value;
+					}
+					elseif (strlen($value) > 0 && isset($this->table->$key))
 					{
 						$this->table->$key = $value;
 					}
@@ -723,30 +747,23 @@ class DemoModelHelp_document extends JModelAdmin
 	 */
 	public function save($data)
 	{
-    	$input	= JFactory::getApplication()->input;
-    	$filter	= JFilterInput::getInstance();
+		$input	= JFactory::getApplication()->input;
+		$filter	= JFilterInput::getInstance();
         
-        // set the metadata to the Item Data
+		// set the metadata to the Item Data
 		if (isset($data['metadata']) && isset($data['metadata']['author']))
 		{
 			$data['metadata']['author'] = $filter->clean($data['metadata']['author'], 'TRIM');
             
-            $metadata = new JRegistry;
+			$metadata = new JRegistry;
 			$metadata->loadArray($data['metadata']);
 			$data['metadata'] = (string) $metadata;
 		} 
 
-		// Set the groups items to data.
-		if (isset($data['groups']) && is_array($data['groups']))
+		// Set the groups string to JSON string.
+		if (isset($data['groups']))
 		{
-			$groups = new JRegistry;
-			$groups->loadArray($data['groups']);
-			$data['groups'] = (string) $groups;
-		}
-		elseif (!isset($data['groups']))
-		{
-			// Set the empty  items to data
-			$data['groups'] = '';
+			$data['groups'] = (string) json_encode($data['groups']);
 		}
         
 		// Set the Params Items to data

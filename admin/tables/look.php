@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -47,13 +49,13 @@ class DemoTableLook extends JTable
 		parent::__construct('#__demo_look', 'id', $db);
 
 		// Adding History Options
-		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look'));
+		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look')); 
 	}	
  
 	public function bind($array, $ignore = '')
 	{
     
-    	if (isset($array['params']) && is_array($array['params']))
+		if (isset($array['params']) && is_array($array['params']))
 		{
 			$registry = new JRegistry;
 			$registry->loadArray($array['params']);
@@ -69,14 +71,14 @@ class DemoTableLook extends JTable
         
 		// Bind the rules. 
 		if (isset($array['rules']) && is_array($array['rules']))
-        { 
+		{ 
 			$rules = new JAccessRules($array['rules']); 
 			$this->setRules($rules); 
 		}
 		return parent::bind($array, $ignore);
 	}
     
-    /**
+	/**
 	 * Overload the store method for the Look table.
 	 *
 	 * @param   boolean	Toggle whether null values should be updated.
@@ -108,33 +110,33 @@ class DemoTableLook extends JTable
 			}
 		}
 		
-        if (isset($this->alias))
-        {
-            // Verify that the alias is unique
-            $table = JTable::getInstance('look', 'DemoTable');
-    
-            if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0))
-            {
-                $this->setError(JText::_('COM_DEMO_LOOK_ERROR_UNIQUE_ALIAS'));
-                return false;
-            }
-        }
+		if (isset($this->alias))
+		{
+			// Verify that the alias is unique
+			$table = JTable::getInstance('look', 'DemoTable');
+
+			if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0))
+			{
+				$this->setError(JText::_('COM_DEMO_LOOK_ERROR_UNIQUE_ALIAS'));
+				return false;
+			}
+		}
 		
-        if (isset($this->url))
-        {
-            // Convert IDN urls to punycode
-            $this->url = JStringPunycode::urlToPunycode($this->url);
-        }
-        if (isset($this->website))
-        {
-            // Convert IDN urls to punycode
-            $this->website = JStringPunycode::urlToPunycode($this->website);
-        }
+		if (isset($this->url))
+		{
+			// Convert IDN urls to punycode
+			$this->url = JStringPunycode::urlToPunycode($this->url);
+		}
+		if (isset($this->website))
+		{
+			// Convert IDN urls to punycode
+			$this->website = JStringPunycode::urlToPunycode($this->website);
+		}
 
 		return parent::store($updateNulls);
 	}
     
-    /**
+	/**
 	 * Overloaded check method to ensure data integrity.
 	 *
 	 * @return  boolean  True on success.
@@ -146,7 +148,7 @@ class DemoTableLook extends JTable
 			// Generate a valid alias
 			$this->generateAlias();
             
-            $table = JTable::getInstance('look', 'demoTable');
+			$table = JTable::getInstance('look', 'demoTable');
 
 			while ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0))
 			{
@@ -192,14 +194,14 @@ class DemoTableLook extends JTable
 			$this->metadesc = JString::str_ireplace($bad_characters, "", $this->metadesc);
 		}
 
-        // If we don't have any access rules set at this point just use an empty JAccessRules class
-        if (!$this->getRules())
-        {
-            $rules = $this->getDefaultAssetValues('com_demo');
-            $this->setRules($rules);
-        }
+		// If we don't have any access rules set at this point just use an empty JAccessRules class
+		if (!$this->getRules())
+		{
+			$rules = $this->getDefaultAssetValues('com_demo.look.'.$this->id);
+			$this->setRules($rules);
+		}
         
-        // Set ordering
+		// Set ordering
 		if ($this->published < 0)
 		{
 			// Set ordering to 0 if state is archived or trashed
@@ -216,7 +218,7 @@ class DemoTableLook extends JTable
 	 *
 	 * @return  JAccessRules  The JAccessRules object for the asset
 	 */
-	protected function getDefaultAssetValues($component)
+	protected function getDefaultAssetValues($component, $try = true)
 	{
 		// Need to find the asset id by the name of the component.
 		$db = JFactory::getDbo();
@@ -225,9 +227,54 @@ class DemoTableLook extends JTable
 			->from($db->quoteName('#__assets'))
 			->where($db->quoteName('name') . ' = ' . $db->quote($component));
 		$db->setQuery($query);
-		$assetId = (int) $db->loadResult();
+		$db->execute();
+		if ($db->loadRowList())
+		{
+			// asset alread set so use saved rules
+			$assetId = (int) $db->loadResult();
+			return JAccess::getAssetRules($assetId);
+		}
+		// try again
+		elseif ($try)
+		{
+			$try = explode('.',$component);
+			$result =  $this->getDefaultAssetValues($try[0], false);
+			if ($result instanceof JAccessRules)
+			{
+				if (isset($try[1]))
+				{
+					$_result = (string) $result;
+					$_result = json_decode($_result);
+					foreach ($_result as $name => &$rule)
+					{
+						$v = explode('.', $name);
+						if ($try[1] !== $v[0])
+						{
+							// remove since it is not part of this view
+							unset($_result->$name);
+						}
+						else
+						{
+							// clear the value since we inherit
+							$rule = array();
+						}
+					}
+					// check if there are any view values remaining
+					if (count($_result))
+					{
+						$_result = json_encode($_result);
+						$_result = array($_result);
+						// Instantiate and return the JAccessRules object for the asset rules.
+						$rules = new JAccessRules;
+						$rules->mergeCollection($_result);
 
-		return JAccess::getAssetRules($assetId);
+						return $rules;
+					}
+				}
+				return $result;
+			}
+		}
+		return JAccess::getAssetRules(0);
 	}
 
 	/**
@@ -252,7 +299,11 @@ class DemoTableLook extends JTable
 	 */
 	protected function _getAssetTitle()
 	{
-		return $this->title;
+		if (isset($this->title))
+		{
+			return $this->title;
+		}
+		return '';
 	}
 
 	/**
@@ -261,7 +312,7 @@ class DemoTableLook extends JTable
 	 * @return	int
 	 * @since	2.5
 	 */
-	protected function _getAssetParentId($table = null, $id = null)
+	protected function _getAssetParentId(JTable $table = NULL, $id = NULL) 
 	{
 		$asset = JTable::getInstance('Asset');
 		$asset->loadByName('com_demo');

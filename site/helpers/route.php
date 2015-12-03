@@ -3,9 +3,11 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
-	@subpackage		router.php
+	@subpackage		route.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
 	@copyright		Copyright (C) 2015. All Rights Reserved
 	@license		GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
@@ -40,9 +42,9 @@ abstract class DemoHelperRoute
 	 *
 	 * @since   1.5
 	 */
-	public static function getCategoryRoute($catid, $language = 0)
+	public static function getCategoryRoute_keep_for_later($catid, $language = 0)
 	{
-    	if ($catid instanceof JCategoryNode)
+		if ($catid instanceof JCategoryNode)
 		{
 			$id = $catid->id;			
 			$category = $catid;			 
@@ -73,9 +75,9 @@ abstract class DemoHelperRoute
 			{
 				$db		= JFactory::getDbo();
 				$query	= $db->getQuery(true)
-				->select('a.sef AS sef')
-				->select('a.lang_code AS lang_code')
-				->from('#__languages AS a');
+					->select('a.sef AS sef')
+					->select('a.lang_code AS lang_code')
+					->from('#__languages AS a');
 	
 				$db->setQuery($query);
 				$langs = $db->loadObjectList();
@@ -113,62 +115,60 @@ abstract class DemoHelperRoute
 				}
 			}
 		}
-		
 		return $link;
 	}	
 	
-	protected static function _findItem($needles = null, $identifier = 'id')
+	protected static function _findItem($needles = null,$type = null)
 	{
-		$app		= JFactory::getApplication();
-		$menus		= $app->getMenu('site');
-		
-		$language	= isset($needles['language']) ? $needles['language'] : '*';
+		$app      = JFactory::getApplication();
+		$menus    = $app->getMenu('site');
+		$language = isset($needles['language']) ? $needles['language'] : '*';
 
 		// Prepare the reverse lookup array.
 		if (!isset(self::$lookup[$language]))
 		{
 			self::$lookup[$language] = array();
 
-			$component	= JComponentHelper::getComponent('com_demo');
+			$component  = JComponentHelper::getComponent('com_demo');
 
 			$attributes = array('component_id');
-			$values = array($component->id);
+			$values     = array($component->id);
 
 			if ($language != '*')
 			{
 				$attributes[] = 'language';
-				$values[] = array($needles['language'], '*');
+				$values[]     = array($needles['language'], '*');
 			}
 
 			$items = $menus->getItems($attributes, $values);
-			
+
 			foreach ($items as $item)
 			{
 				if (isset($item->query) && isset($item->query['view']))
 				{
 					$view = $item->query['view'];
+
 					if (!isset(self::$lookup[$language][$view]))
 					{
 						self::$lookup[$language][$view] = array();
 					}
-					if (isset($item->query[$identifier]))
-					{
 
-						// here it will become a bit tricky
-						// language != * can override existing entries
-						// language == * cannot override existing entries
-						if (!isset(self::$lookup[$language][$view][$item->query[$identifier]]) || $item->language != '*')
+					if (isset($item->query['id']))
+					{
+						/**
+						 * Here it will become a bit tricky
+						 * language != * can override existing entries
+						 * language == * cannot override existing entries
+						 */
+						if (!isset(self::$lookup[$language][$view][$item->query['id']]) || $item->language != '*')
 						{
-							if($item->query[$identifier] != 'all') {
-								self::$lookup[$language][$view][$item->query[$identifier]] = $item->id;
-							}
+							self::$lookup[$language][$view][$item->query['id']] = $item->id;
 						}
 					}
 				}
 			}
 		}
-		
-		
+
 		if ($needles)
 		{
 			foreach ($needles as $view => $ids)
@@ -179,23 +179,36 @@ abstract class DemoHelperRoute
 					{
 						if (isset(self::$lookup[$language][$view][(int) $id]))
 						{
-							if ($id != 'all') {
-								return self::$lookup[$language][$view][(int) $id];
-							}
+							return self::$lookup[$language][$view][(int) $id];
 						}
 					}
 				}
 			}
 		}
+		
+		if ($type)
+		{
+			// Check if the global menu item has been set.
+			$params = JComponentHelper::getParams('com_demo');
+			if ($item = $params->get($type.'_menu', 0))
+			{
+				return $item;
+			}
+		}
 
+		// Check if the active menuitem matches the requested language
 		$active = $menus->getActive();
-		if ($active && ($active->language == '*' || !JLanguageMultilang::isEnabled()))
+
+		if ($active
+			&& $active->component == 'com_demo'
+			&& ($language == '*' || in_array($active->language, array('*', $language)) || !JLanguageMultilang::isEnabled()))
 		{
 			return $active->id;
 		}
 
-		// if not found, return language specific home link
+		// If not found, return language specific home link
 		$default = $menus->getDefault($language);
+
 		return !empty($default->id) ? $default->id : null;
 	}
 }

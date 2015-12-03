@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		script.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -244,11 +246,11 @@ class com_demoInstallerScript
 		}
 
 		// little notice as after service, in case of bad experience with component.
-        echo '<h2>Did something go wrong? Are you disappointed?</h2>
-            <p>Please let me know at <a href="mailto:info@vdm.io">info@vdm.io</a>.
-            <br />We at Vast Development Method are committed to building extensions that performs proficiently! You can help us, really!
-            <br />Send me your thoughts on improvements that is needed, trust me, I will be very grateful!
-            <br />Visit us at <a href="https://www.vdm.io/" target="_blank">https://www.vdm.io/</a> today!</p>';
+		echo '<h2>Did something go wrong? Are you disappointed?</h2>
+		<p>Please let me know at <a href="mailto:info@vdm.io">info@vdm.io</a>.
+		<br />We at Vast Development Method are committed to building extensions that performs proficiently! You can help us, really!
+		<br />Send me your thoughts on improvements that is needed, trust me, I will be very grateful!
+		<br />Visit us at <a href="https://www.vdm.io/" target="_blank">https://www.vdm.io/</a> today!</p>';
 	}
 
 	/**
@@ -269,13 +271,14 @@ class com_demoInstallerScript
 	function preflight($type, $parent)
 	{
 		if ($type == 'uninstall')
-        {        	
+		{        	
 			return true;
 		}
 		
 		$app = JFactory::getApplication();
 		$jversion = new JVersion();
-		if (!$jversion->isCompatible('3.4.1')) {
+		if (!$jversion->isCompatible('3.4.1'))
+		{
 			$app->enqueueMessage('Please upgrade to at least Joomla! 3.4.1 before continuing!', 'error');
 			return false;
 		}
@@ -288,9 +291,9 @@ class com_demoInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
-		//set the default component settings
+		// set the default component settings
 		if ($type == 'install')
-        {
+		{
 
 			// Get The Database object
 
@@ -337,6 +340,17 @@ class com_demoInstallerScript
 			$query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
 			$db->setQuery($query);
 			$allDone = $db->execute();
-        }
+			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
+				<img src="components/com_demo/assets/images/component-300.jpg"/>
+				</a>';
+		}
+		// do any updates needed
+		if ($type == 'update')
+		{
+			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
+				<img src="components/com_demo/assets/images/component-300.jpg"/>
+				</a>
+				<h3>Upgrade to Version (1.0.4) Was Successful!</h3>';
+		}
 	}
 }

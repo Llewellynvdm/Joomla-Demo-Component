@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		view.html.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -26,13 +28,13 @@ jimport('joomla.application.component.view');
  * Demo Import View
  */
 class DemoViewImport extends JViewLegacy
-{ 
+{
 	protected $headerList;
 	protected $hasPackage = false;
 	protected $headers;
 	protected $hasHeader = 0;
 	protected $dataType;
-	
+
 	public function display($tpl = null)
 	{
 		if ($this->getLayout() !== 'modal')
@@ -40,31 +42,31 @@ class DemoViewImport extends JViewLegacy
 			// Include helper submenu
 			DemoHelper::addSubmenu('import');
 		}
-		
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))){
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
-		};
-		
+		}
+
 		$paths = new stdClass;
 		$paths->first = '';
 		$state = $this->get('state');
 
 		$this->paths = &$paths;
 		$this->state = &$state;
-        // get global action permissions
+                // get global action permissions
 		$this->canDo = DemoHelper::getActions('import');
-		 
+
 		// We don't need toolbar in the modal window.
 		if ($this->getLayout() !== 'modal')
 		{
 			$this->addToolbar();
 			$this->sidebar = JHtmlSidebar::render();
 		}
-        
+
 		// get the session object
-		$session =& JFactory::getSession();
+		$session = JFactory::getSession();
 		// check if it has package
 		$this->hasPackage 	= $session->get('hasPackage', false);
 		$this->dataType 	= $session->get('dataType', false);
@@ -75,7 +77,7 @@ class DemoViewImport extends JViewLegacy
 			// clear the data type
 			$session->clear('dataType');
 		}
-        
+
 		// Display the template
 		parent::display($tpl);
 	}
@@ -83,21 +85,21 @@ class DemoViewImport extends JViewLegacy
 	/**
 	 * Setting the toolbar
 	 */
-	protected function addToolBar() 
-	{			
+	protected function addToolBar()
+	{
 		JToolBarHelper::title(JText::_('COM_DEMO_IMPORT_TITLE'), 'upload');
 		JHtmlSidebar::setAction('index.php?option=com_demo&view=import');
-        	
+
 		if ($this->canDo->get('core.admin') || $this->canDo->get('core.options'))
 		{
 			JToolBarHelper::preferences('com_demo');
 		}
 
 		// set help url for this view if found
-        $help_url = DemoHelper::getHelpUrl('import');
-        if (DemoHelper::checkString($help_url))
-        {
-			JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
-        }		
+                $help_url = DemoHelper::getHelpUrl('import');
+                if (DemoHelper::checkString($help_url))
+                {
+                       JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
+                }
 	}
 }

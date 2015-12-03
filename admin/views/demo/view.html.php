@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		view.html.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -31,17 +33,17 @@ class DemoViewDemo extends JViewLegacy
 	 * View display method
 	 * @return void
 	 */
-	function display($tpl = null) 
+	function display($tpl = null)
 	{
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
-        {
+                {
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		};
 		// Assign data to the view
 		$this->icons			= $this->get('Icons');
-		$this->contributors		= $this->get('Contributors');
+		$this->contributors		= DemoHelper::getContributors();
 
 		// Set the toolbar
 		$this->addToolBar();
@@ -56,23 +58,22 @@ class DemoViewDemo extends JViewLegacy
 	/**
 	 * Setting the toolbar
 	 */
-	protected function addToolBar() 
+	protected function addToolBar()
 	{
 		$canDo = DemoHelper::getActions('demo');
 		JToolBarHelper::title(JText::_('COM_DEMO_DASHBOARD'), 'grid-2');
-		
-		if ($canDo->get('core.admin') || $canDo->get('core.options'))
-        {
-			JToolBarHelper::divider();
-			JToolBarHelper::preferences('com_demo');
-		};
-		
-        // set help url for this view if found
-        $help_url = DemoHelper::getHelpUrl('demo');
-        if (DemoHelper::checkString($help_url))
-        {
+
+                // set help url for this view if found
+                $help_url = DemoHelper::getHelpUrl('demo');
+                if (DemoHelper::checkString($help_url))
+                {
 			JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
-        }
+                }
+
+		if ($canDo->get('core.admin') || $canDo->get('core.options'))
+                {
+			JToolBarHelper::preferences('com_demo');
+		}
 	}
 
 	/**
@@ -81,12 +82,12 @@ class DemoViewDemo extends JViewLegacy
 	 *
 	 * @return void
 	 */
-	protected function setDocument() 
+	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		
+
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_demo/assets/css/dashboard.css");
-		
+
 		$document->setTitle(JText::_('COM_DEMO_DASHBOARD'));
 	}
 }

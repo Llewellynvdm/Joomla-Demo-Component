@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -99,33 +101,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_ABgmXJb function
+// #jform_name listeners for name_CxBsGuj function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_ABgmXJb = jQuery("#jform_name").val();
-	ABgmXJb(name_ABgmXJb);
+	var name_CxBsGuj = jQuery("#jform_name").val();
+	CxBsGuj(name_CxBsGuj);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_ABgmXJb = jQuery("#jform_name").val();
-	ABgmXJb(name_ABgmXJb);
+	var name_CxBsGuj = jQuery("#jform_name").val();
+	CxBsGuj(name_CxBsGuj);
 
 });
 
-// #jform_add listeners for add_jiUxEbz function
+// #jform_add listeners for add_FKWPxIh function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_jiUxEbz = jQuery("#jform_add input[type='radio']:checked").val();
-	jiUxEbz(add_jiUxEbz);
+	var add_FKWPxIh = jQuery("#jform_add input[type='radio']:checked").val();
+	FKWPxIh(add_FKWPxIh);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_jiUxEbz = jQuery("#jform_add input[type='radio']:checked").val();
-	jiUxEbz(add_jiUxEbz);
+	var add_FKWPxIh = jQuery("#jform_add input[type='radio']:checked").val();
+	FKWPxIh(add_FKWPxIh);
 
 });
 

@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -21,10 +23,12 @@ defined('_JEXEC') or die('Restricted access');
 
 // Set the component css/js
 $document = JFactory::getDocument();
-$document->addStyleSheet('components/com_demo/assets/css/component.css');
+$document->addStyleSheet('components/com_demo/assets/css/site.css');
+$document->addScript('components/com_demo/assets/js/site.js');
 
-// Require helper file
+// Require helper files
 JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php');
+JLoader::register('DemoHelperRoute', dirname(__FILE__) . '/helpers/route.php'); ###SITE_GLOBAL_EVENT###
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

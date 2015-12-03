@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -30,17 +32,17 @@ JLoader::registerPrefix('J', JPATH_PLATFORM . '/cms');
 // Load joomla libraries without overwrite
 JLoader::registerPrefix('J', JPATH_PLATFORM . '/joomla',false);
 
-// require helper files
-JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php');
-JLoader::register('JHtmlBatch_', dirname(__FILE__) . '/helpers/html/batch_.php');
-
-// import joomla controller library
-jimport('joomla.application.component.controller');
-
 // Add CSS file for all pages
 $document = JFactory::getDocument();
 $document->addStyleSheet('components/com_demo/assets/css/admin.css');
 $document->addScript('components/com_demo/assets/js/admin.js');
+
+// require helper files
+JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php');
+JLoader::register('JHtmlBatch_', dirname(__FILE__) . '/helpers/html/batch_.php'); 
+
+// import joomla controller library
+jimport('joomla.application.component.controller');
 
 // Get an instance of the controller prefixed by Demo
 $controller = JControllerLegacy::getInstance('Demo');

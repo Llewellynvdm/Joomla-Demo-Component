@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		import.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -65,10 +67,10 @@ class DemoModelImport extends JModelLegacy
 		// Recall the 'Import from Directory' path.
 		$path = $app->getUserStateFromRequest($this->_context . '.import_directory', 'import_directory', $app->get('tmp_path'));
 		$this->setState('import.directory', $path);
-        // set uploading values
-        $this->use_streams = false;
-        $this->allow_unsafe = false;
-        $this->safeFileOptions = array();
+		// set uploading values
+		$this->use_streams = false;
+		$this->allow_unsafe = false;
+		$this->safeFileOptions = array();
 		parent::populateState();
 	}
 
@@ -82,7 +84,7 @@ class DemoModelImport extends JModelLegacy
 	{
 		$this->setState('action', 'import');
 		$app 		= JFactory::getApplication();
-		$session 	=& JFactory::getSession();
+		$session 	= JFactory::getSession();
 		$package 	= null;
 		$continue	= false;
 		// get import type
@@ -137,7 +139,7 @@ class DemoModelImport extends JModelLegacy
 			return false;
 		}
 		
-        // first link data to table headers
+		// first link data to table headers
 		if(!$continue){
 			$package	= json_encode($package);
 			$session->set('package', $package);
@@ -153,11 +155,11 @@ class DemoModelImport extends JModelLegacy
 			// There was an error importing the package
 			$msg = JText::_('COM_DEMO_IMPORT_ERROR');
 			$back = $session->get('backto_VDM_IMPORT', NULL);
-            if ($back)
-            {
-            	$app->setUserState('com_demo.redirect_url', 'index.php?option=com_demo&view='.$back);
-            	$session->clear('backto_VDM_IMPORT');
-            }
+			if ($back)
+			{
+				$app->setUserState('com_demo.redirect_url', 'index.php?option=com_demo&view='.$back);
+				$session->clear('backto_VDM_IMPORT');
+			}
 			$result = false;
 		}
 		else
@@ -165,11 +167,11 @@ class DemoModelImport extends JModelLegacy
 			// Package imported sucessfully
 			$msg = JText::sprintf('COM_DEMO_IMPORT_SUCCESS', $package['packagename']);
 			$back = $session->get('backto_VDM_IMPORT', NULL);
-            if ($back)
-            {
-            	$app->setUserState('com_demo.redirect_url', 'index.php?option=com_demo&view='.$back);
-            	$session->clear('backto_VDM_IMPORT');
-            }
+			if ($back)
+			{
+			    $app->setUserState('com_demo.redirect_url', 'index.php?option=com_demo&view='.$back);
+			    $session->clear('backto_VDM_IMPORT');
+			}
 			$result = true;
 		}
 
@@ -226,7 +228,7 @@ class DemoModelImport extends JModelLegacy
 		// Was the package downloaded?
 		if (!$p_file)
 		{
-			$session =& JFactory::getSession();
+			$session = JFactory::getSession();
 			$session->clear('package');
 			$session->clear('dataType');
 			$session->clear('hasPackage');
@@ -359,10 +361,10 @@ class DemoModelImport extends JModelLegacy
 		$check['packagename']	= $archivename;
 		
 		// set directory
-		$check['dir'] 			= $config->get('tmp_path'). '/' .$archivename;
+		$check['dir']		= $config->get('tmp_path'). '/' .$archivename;
 		
 		// set type
-		$check['type'] 			= $this->getType;
+		$check['type']		= $this->getType;
 		
 		return $check;
 	}
@@ -383,9 +385,12 @@ class DemoModelImport extends JModelLegacy
 		$package	= $config->get('tmp_path'). '/' .$package;
 
 		// Is the package file a valid file?
-		if (is_file($package)) {
+		if (is_file($package))
+		{
 			JFile::delete($package);
-		} elseif (is_file(JPath::clean($package))) {
+		}
+		elseif (is_file(JPath::clean($package)))
+		{
 			// It might also be just a base filename
 			JFile::delete(JPath::clean($package));
 		}
@@ -404,14 +409,15 @@ class DemoModelImport extends JModelLegacy
 		if (DemoHelper::checkArray($target_headers))
 		{
 			// make sure the file is loaded		
-        	JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
+			JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
 			$jinput = JFactory::getApplication()->input;
 			foreach($target_headers as $header)
 			{
 				$data['target_headers'][$header] = $jinput->getString($header, null);
 			}
 			// set the data
-			if(isset($package['dir'])){
+			if(isset($package['dir']))
+			{
 				$inputFileType = PHPExcel_IOFactory::identify($package['dir']);
 				$excelReader = PHPExcel_IOFactory::createReader($inputFileType);
 				$excelReader->setReadDataOnly(true);
@@ -438,10 +444,10 @@ class DemoModelImport extends JModelLegacy
 		// import the data if there is any
 		if(DemoHelper::checkArray($data['array']))
 		{
-        	// get user object
-			$user  			= JFactory::getUser();
+			// get user object
+			$user  		= JFactory::getUser();
 			// remove header if it has headers
-			$id_key 		= $data['target_headers']['id'];
+			$id_key 	= $data['target_headers']['id'];
 			$published_key 	= $data['target_headers']['published'];
 			$ordering_key 	= $data['target_headers']['ordering'];
 			// get the first array set
@@ -462,11 +468,12 @@ class DemoModelImport extends JModelLegacy
 				$db = JFactory::getDbo();
 				// set some defaults
 				$todayDate		= JFactory::getDate()->toSql();
-                 // get global action permissions
-                $canDo			= DemoHelper::getActions($table);
-                $canEdit		= $canDo->get('core.edit');
-                $canState		= $canDo->get('core.edit.state');
-                $canCreate		= $canDo->get('core.create');
+				// get global action permissions
+				$canDo			= DemoHelper::getActions($table);
+				$canEdit		= $canDo->get('core.edit');
+				$canState		= $canDo->get('core.edit.state');
+				$canCreate		= $canDo->get('core.create');
+				$hasAlias		= $this->getAliasesUsed($table);
 				// prosses the data
 				foreach($data['array'] as $row)
 				{
@@ -497,29 +504,29 @@ class DemoModelImport extends JModelLegacy
 						// Fields to update.
 						foreach($row as $key => $cell)
 						{
-                        	// ignore column
-                            if ($target[$key] == 'IGNORE')
-                            {
-								continue;
-                            }
-							// update modified
-							if ($target[$key] == 'modified_by')
+							// ignore column
+							if ('IGNORE' == $target[$key])
 							{
 								continue;
 							}
 							// update modified
-							if ($target[$key] == 'modified')
+							if ('modified_by' == $target[$key])
+							{
+								continue;
+							}
+							// update modified
+							if ('modified' == $target[$key])
 							{
 								continue;
 							}
 							// update version
-							if ($target[$key] == 'version')
+							if ('version' == $target[$key])
 							{
 								$cell = (int) $version + 1;
 								$version = true;
 							}
-							// verfy publish autority
-							if ($target[$key] == 'published' && !$canState)
+							// verify publish authority
+							if ('published' == $target[$key] && !$canState)
 							{
 								continue;
 							}
@@ -538,7 +545,7 @@ class DemoModelImport extends JModelLegacy
 								$fields[] = $db->quoteName($target[$key]) . " = ''";
 							}
 						}
-						// load the defautls
+						// load the defaults
 						$fields[]	= $db->quoteName('modified_by') . ' = ' . $db->quote($user->id);
 						$fields[]	= $db->quoteName('modified') . ' = ' . $db->quote($todayDate);
 						if (!$version)
@@ -551,10 +558,8 @@ class DemoModelImport extends JModelLegacy
 						);
 						 
 						$query->update($db->quoteName('#__demo_'.$table))->set($fields)->where($conditions);
-						 
 						$db->setQuery($query);
-						 
-						$db->query();
+						$db->execute();
 					}
 					elseif ($canCreate)
 					{
@@ -567,33 +572,38 @@ class DemoModelImport extends JModelLegacy
 						// Insert columns. Insert values.
 						foreach($row as $key => $cell)
 						{
-                        	// ignore column
-                            if ($target[$key] == 'IGNORE')
-                            {
+							// ignore column
+							if ('IGNORE' == $target[$key])
+							{
 								continue;
-                            }
+							}
 							// remove id
-							if ($target[$key] == 'id')
+							if ('id' == $target[$key])
 							{
 								continue;
 							}
 							// update created
-							if ($target[$key] == 'created_by')
+							if ('created_by' == $target[$key])
 							{
 								continue;
 							}
 							// update created
-							if ($target[$key] == 'created')
+							if ('created' == $target[$key])
 							{
 								continue;
+							}
+							// Make sure the alias is incremented
+							if ('alias' == $target[$key])
+							{
+								$cell = $this->getAlias($cell,$table);
 							}
 							// update version
-							if ($target[$key] == 'version')
+							if ('version' == $target[$key])
 							{
 								$cell = 1;
 								$version = true;
 							}
-                            // set to insert array
+							// set to insert array
 							if(in_array($key, $data['target_headers']) && is_numeric($cell))
 							{
 								$columns[] 	= $target[$key];
@@ -628,15 +638,86 @@ class DemoModelImport extends JModelLegacy
 							->values(implode(',', $values));
 						// Set the query using our newly populated query object and execute it.
 						$db->setQuery($query);
-						$db->query();
+						$done = $db->execute();
+						if ($done)
+						{
+							$aId = $db->insertid();
+							// make sure the access of asset is set
+							DemoHelper::setAsset($aId,$table);
+						}
 					}
-                    else
-                    {
+					else
+					{
 						return false;
-                    }
+					}
 				}
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	protected function getAlias($name,$type = false)
+	{
+		// sanitize the name to an alias
+		if (JFactory::getConfig()->get('unicodeslugs') == 1)
+		{
+			$alias = JFilterOutput::stringURLUnicodeSlug($name);
+		}
+		else
+		{
+			$alias = JFilterOutput::stringURLSafe($name);
+		}
+		// must be a uniqe alias
+		if ($type)
+		{
+			return $this->getUniqe($alias,'alias',$type);
+		}
+		return $alias;
+	}
+	
+	/**
+	 * Method to generate a uniqe value.
+	 *
+	 * @param   string  $field name.
+	 * @param   string  $value data.
+	 * @param   string  $type table.
+	 *
+	 * @return  string  New value.
+	 */
+	protected function getUniqe($value,$field,$type)
+	{
+		// insure the filed is always uniqe
+		while (isset($this->uniqeValueArray[$type][$field][$value]))
+		{
+			$value = JString::increment($value, 'dash');
+		}
+		$this->uniqeValueArray[$type][$field][$value] = $value;
+		return $value;
+	}
+	
+	protected function getAliasesUsed($table)
+	{
+		// Get a db connection.
+		$db = JFactory::getDbo();
+		// first we check if there is a alias column
+		$columns = $db->getTableColumns('#__demo_'.$table);
+		if(isset($columns['alias'])){
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('alias')));
+			$query->from($db->quoteName('#__demo_'.$table));
+			$db->setQuery($query);
+			$db->execute();
+			if ($db->getNumRows())
+			{
+				$aliases = $db->loadColumn();
+				foreach($aliases as $alias)
+				{
+					$this->uniqeValueArray[$table]['alias'][$alias] = $alias;
+				}
+			}
+			return true;
 		}
 		return false;
 	}

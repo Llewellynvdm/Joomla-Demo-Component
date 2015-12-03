@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
 	<name>COM_DEMO</name>
-	<creationDate>24th August, 2015</creationDate>
+	<creationDate>5th August, 2015</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>info@vdm.io</authorEmail>
 	<authorUrl>https://www.vdm.io/</authorUrl>
 	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<description><![CDATA[
-		<h1>Demo (v.1.0.3)</h1>
+		<h1>Demo (v.1.0.4)</h1>
 		<div style="clear: both;"></div>
-		<p></p>
+		<p>Just a basic demo of the most basic implementations of the [Joomla] (http://www.joomla.org) Component Builder's ability.</p>
 		<p>Created by <a href="https://www.vdm.io/" target="_blank">Llewellyn van der Merwe</a>
 	]]></description>
 
@@ -31,12 +31,12 @@
 
 	<!-- Runs on install/uninstall/update; New in Joomla 2.5 -->
 	<scriptfile>script.php</scriptfile>
-	
+
 	<media destination="com_demo" folder="media">
 		<filename>index.html</filename>
 		<folder>js</folder>
 		<folder>css</folder>
-		<folder>images</folder>###EXSTRA_MEDIA_FOLDERS###
+		<folder>images</folder>
 	</media>
 
 	<!-- Update Schema; New in Joomla 2.5 -->
@@ -53,6 +53,7 @@
 		<filename>demo.php</filename>
 		<folder>assets</folder>
 		<folder>helpers</folder>
+		<folder>controllers</folder>
 		<folder>models</folder>
 		<folder>views</folder>
 		<folder>layouts</folder>
@@ -62,7 +63,7 @@
 		<language tag="en-GB">language/en-GB/en-GB.com_demo.ini</language>
 		<language tag="en-GB">language/en-GB/en-GB.com_demo.sys.ini</language>
 	</languages>
-	
+
 	<administration>
 		<menu>COM_DEMO_MENU</menu>
 		<submenu>

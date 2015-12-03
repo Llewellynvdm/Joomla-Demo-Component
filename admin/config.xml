@@ -43,6 +43,7 @@
 			description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"
 			default="10"
 		/>
+		<field type="spacer" name="spacerHistory" hr="true" />
 		<field name="autorTitle"
 			type="spacer"
 			label="COM_DEMO_CONFIG_AUTHOR"

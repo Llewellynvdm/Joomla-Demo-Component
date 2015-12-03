@@ -43,7 +43,7 @@ class DemoControllerHelp extends JControllerLegacy
 		// Check Token!
 		$token 		= JSession::getFormToken();
 		$call_token	= $jinput->get('token', 0, 'ALNUM');
-		if($user->id != 0 && $token == $call_token){
+		if($token == $call_token){
 			$task = $this->getTask();
 			switch($task){
 				case 'getText':
@@ -62,7 +62,7 @@ class DemoControllerHelp extends JControllerLegacy
                                                 // stop execution gracefully
                                                 jexit();
 					}
-						catch(Exception $e)
+					catch(Exception $e)
 					{
                                                 // stop execution gracefully
 						jexit();
@@ -79,12 +79,13 @@ class DemoControllerHelp extends JControllerLegacy
 
         protected function getHelpDocumentText($id)
 	{
-		$db		= JFactory::getDbo();
+		$db	= JFactory::getDbo();
 		$query	= $db->getQuery(true);
 		$query->select(array('a.title','a.content'));
 		$query->from('#__demo_help_document AS a');
 		$query->where('a.id = '.(int) $id);
 		$query->where('a.published = 1');
+		$query->where('a.location = 2');
 		$db->setQuery($query);
 		$db->execute();
 		if($db->getNumRows())

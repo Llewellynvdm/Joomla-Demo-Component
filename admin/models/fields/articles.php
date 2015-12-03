@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		articles.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -33,7 +35,51 @@ class JFormFieldArticles extends JFormFieldList
 	 *
 	 * @var		string
 	 */
-	public $type = 'articles';
+	public $type = 'articles'; 
+	/**
+	 * Override to add new button
+	 *
+	 * @return  string  The field input markup.
+	 *
+	 * @since   3.2
+	 */
+	protected function getInput()
+	{
+		// see if we should add buttons
+		$setButton = $this->getAttribute('button');
+		// get html
+		$html = parent::getInput();
+		// if true set button
+		if ($setButton === 'true')
+		{
+			$user = JFactory::getUser();
+			// only add if user allowed to create article
+			if ($user->authorise('core.create', 'com_demo'))
+			{
+				// get the input from url
+				$jinput = JFactory::getApplication()->input;
+				// get the view name & id
+				$values = $jinput->getArray(array(
+					'id' => 'int',
+					'view' => 'word'
+				));
+				// check if new item
+				$ref = '';
+				if (!is_null($values['id']) && strlen($values['view']))
+				{
+					// only load referal if not new item.
+					$ref = '&amp;ref=' . $values['view'] . '&amp;refid=' . $values['id'];
+				}
+				// build the button
+				$button = '<a class="btn btn-small btn-success"
+					href="index.php?option=com_demo&amp;view=article&amp;layout=edit'.$ref.'" >
+					<span class="icon-new icon-white"></span>' . JText::_('COM_DEMO_NEW') . '</a>';
+				// return the button attached to input field
+				return $html . $button;
+			}
+		}
+		return $html;
+	}
 
 	/**
 	 * Method to get a list of options for a list input.

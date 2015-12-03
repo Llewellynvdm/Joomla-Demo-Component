@@ -3,7 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.3 - 24th August, 2015
+	@version		1.0.4
+	@build			3rd December, 2015
+	@created		5th August, 2015
 	@package		Demo
 	@subpackage		help_documents.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -32,7 +34,7 @@ class DemoControllerHelp_documents extends JControllerAdmin
 	 * Proxy for getModel.
 	 * @since	2.5
 	 */
-	public function getModel($name = 'Help_document', $prefix = 'DemoModel')
+	public function getModel($name = 'Help_document', $prefix = 'DemoModel', $config = array())
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		
@@ -85,7 +87,7 @@ class DemoControllerHelp_documents extends JControllerAdmin
 			if (DemoHelper::checkObject($headers))
 			{
 				// Load headers to session.
-				$session =& JFactory::getSession();
+				$session = JFactory::getSession();
 				$headers = json_encode($headers);
 				$session->set('help_document_VDM_IMPORTHEADERS', $headers);
 				$session->set('backto_VDM_IMPORT', 'help_documents');
@@ -100,5 +102,5 @@ class DemoControllerHelp_documents extends JControllerAdmin
 		$message = JText::_('COM_DEMO_IMPORT_FAILED');
 		$this->setRedirect(JRoute::_('index.php?option=com_demo&view=help_documents', false), $message, 'error');
 		return;
-	}
+	} 
 }
