@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		help.php

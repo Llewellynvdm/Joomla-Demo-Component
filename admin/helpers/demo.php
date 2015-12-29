@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -299,7 +299,7 @@ abstract class DemoHelper
 		// make sure the file is loaded		
 		JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
 		// get session object
-$session 	= JFactory::getSession();
+		$session 	= JFactory::getSession();
 		$package	= $session->get('package', null);
 		$package	= json_decode($package, true);
 		// set the headers
@@ -309,7 +309,7 @@ $session 	= JFactory::getSession();
 			$excelReader = PHPExcel_IOFactory::createReader($inputFileType);
 			$excelReader->setReadDataOnly(true);
 			$excelObj = $excelReader->load($package['dir']);
-$headers = array();
+			$headers = array();
 			foreach ($excelObj->getActiveSheet()->getRowIterator() as $row)
 			{
 				if($row->getRowIndex() == 1)

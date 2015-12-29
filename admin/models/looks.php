@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		looks.php
@@ -224,7 +224,7 @@ class DemoModelLooks extends JModelList
 			else
 			{
 				$search = $db->quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.name LIKE '.$search.' OR a.description LIKE '.$search.' OR a.add LIKE '.$search.' OR a.acronym LIKE '.$search.' OR a.website LIKE '.$search.')');
+				$query->where('(a.name LIKE '.$search.' OR a.description LIKE '.$search.' OR a.add LIKE '.$search.' OR a.acronym LIKE '.$search.' OR a.website LIKE '.$search.' OR a.alias LIKE '.$search.')');
 			}
 		}
 

@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.php
@@ -424,6 +424,25 @@ class DemoModelLook extends JModelAdmin
 	protected function getUniqeFields()
 	{
 		return array('acronym');
+	}
+	
+	/**
+	 * Method to delete one or more records.
+	 *
+	 * @param   array  &$pks  An array of record primary keys.
+	 *
+	 * @return  boolean  True if successful, false if an error occurs.
+	 *
+	 * @since   12.2
+	 */
+	public function delete(&$pks)
+	{
+		if (!parent::delete($pks))
+		{
+			return false;
+		}
+		
+		return true;
 	}
     
 	/**

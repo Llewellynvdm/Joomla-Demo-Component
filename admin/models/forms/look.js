@@ -2,8 +2,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.js
@@ -18,23 +18,23 @@
 /------------------------------------------------------------------------------------------------------*/
 
 // Some Global Values
-jform_xEVTobmbza_required = false;
+jform_eUNYKfuCQx_required = false;
 
 // Initial Script
 jQuery(document).ready(function()
 {
-	var name_RJYiubJ = jQuery("#jform_name").val();
-	RJYiubJ(name_RJYiubJ);
+	var name_LPOIjWF = jQuery("#jform_name").val();
+	LPOIjWF(name_LPOIjWF);
 
-	var add_xEVTobm = jQuery("#jform_add input[type='radio']:checked").val();
-	xEVTobm(add_xEVTobm);
+	var add_eUNYKfu = jQuery("#jform_add input[type='radio']:checked").val();
+	eUNYKfu(add_eUNYKfu);
 });
 
-// the RJYiubJ function
-function RJYiubJ(name_RJYiubJ)
+// the LPOIjWF function
+function LPOIjWF(name_LPOIjWF)
 {
 	// set the function logic
-	if (isSet(name_RJYiubJ))
+	if (isSet(name_LPOIjWF))
 	{
 		jQuery('#jform_alias').closest('.control-group').show();
 		jQuery('#jform_description').closest('.control-group').show();
@@ -46,20 +46,20 @@ function RJYiubJ(name_RJYiubJ)
 	}
 }
 
-// the xEVTobm function
-function xEVTobm(add_xEVTobm)
+// the eUNYKfu function
+function eUNYKfu(add_eUNYKfu)
 {
 	// set the function logic
-	if (add_xEVTobm == 1)
+	if (add_eUNYKfu == 1)
 	{
 		jQuery('#jform_acronym').closest('.control-group').show();
-		if (jform_xEVTobmbza_required)
+		if (jform_eUNYKfuCQx_required)
 		{
 			updateFieldRequired('acronym',0);
 			jQuery('#jform_acronym').prop('required','required');
 			jQuery('#jform_acronym').attr('aria-required',true);
 			jQuery('#jform_acronym').addClass('required');
-			jform_xEVTobmbza_required = false;
+			jform_eUNYKfuCQx_required = false;
 		}
 
 		jQuery('#jform_website').closest('.control-group').show();
@@ -67,13 +67,13 @@ function xEVTobm(add_xEVTobm)
 	else
 	{
 		jQuery('#jform_acronym').closest('.control-group').hide();
-		if (!jform_xEVTobmbza_required)
+		if (!jform_eUNYKfuCQx_required)
 		{
 			updateFieldRequired('acronym',1);
 			jQuery('#jform_acronym').removeAttr('required');
 			jQuery('#jform_acronym').removeAttr('aria-required');
 			jQuery('#jform_acronym').removeClass('required');
-			jform_xEVTobmbza_required = true;
+			jform_eUNYKfuCQx_required = true;
 		}
 		jQuery('#jform_website').closest('.control-group').hide();
 	}

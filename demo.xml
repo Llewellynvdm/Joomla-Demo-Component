@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
 	<name>COM_DEMO</name>
-	<creationDate>5th August, 2015</creationDate>
+	<creationDate>29th December, 2015</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>info@vdm.io</authorEmail>
 	<authorUrl>https://www.vdm.io/</authorUrl>
 	<copyright>Copyright (C) 2015. All Rights Reserved</copyright>
 	<license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<description><![CDATA[
-		<h1>Demo (v.1.0.4)</h1>
+		<h1>Demo (v.1.0.5)</h1>
 		<div style="clear: both;"></div>
 		<p>Just a basic demo of the most basic implementations of the [Joomla] (http://www.joomla.org) Component Builder's ability.</p>
-		<p>Created by <a href="https://www.vdm.io/" target="_blank">Llewellyn van der Merwe</a>
+		<p>Created by <a href="https://www.vdm.io/" target="_blank">Llewellyn van der Merwe</a><br /><small>Development started 5th August, 2015</small></p>
 	]]></description>
 
 	<!-- Runs on install; New in Joomla 1.5 -->
@@ -93,4 +93,7 @@
 		</languages>
 
 	</administration>
+	<updateservers>
+		<server type="extension" enabled="1" element="com_demo" name="Demo">https://www.vdm.io/updates/demo_update_server.xml</server>
+	</updateservers>
 </extension>

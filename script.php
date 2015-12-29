@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		script.php
@@ -350,7 +350,7 @@ class com_demoInstallerScript
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/component-300.jpg"/>
 				</a>
-				<h3>Upgrade to Version (1.0.4) Was Successful!</h3>';
+				<h3>Upgrade to Version 1.0.5 Was Successful! Let us know if anything is not working as expected.</h3>';
 		}
 	}
 }

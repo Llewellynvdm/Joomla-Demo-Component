@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
@@ -95,93 +95,93 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_location listeners for location_gvgNtFm function
+// #jform_location listeners for location_qNsMhBK function
 jQuery('#jform_location').on('keyup',function()
 {
-	var location_gvgNtFm = jQuery("#jform_location input[type='radio']:checked").val();
-	gvgNtFm(location_gvgNtFm);
+	var location_qNsMhBK = jQuery("#jform_location input[type='radio']:checked").val();
+	qNsMhBK(location_qNsMhBK);
 
 });
 jQuery('#adminForm').on('change', '#jform_location',function (e)
 {
 	e.preventDefault();
-	var location_gvgNtFm = jQuery("#jform_location input[type='radio']:checked").val();
-	gvgNtFm(location_gvgNtFm);
+	var location_qNsMhBK = jQuery("#jform_location input[type='radio']:checked").val();
+	qNsMhBK(location_qNsMhBK);
 
 });
 
-// #jform_location listeners for location_GxWLKer function
+// #jform_location listeners for location_gFpJuTv function
 jQuery('#jform_location').on('keyup',function()
 {
-	var location_GxWLKer = jQuery("#jform_location input[type='radio']:checked").val();
-	GxWLKer(location_GxWLKer);
+	var location_gFpJuTv = jQuery("#jform_location input[type='radio']:checked").val();
+	gFpJuTv(location_gFpJuTv);
 
 });
 jQuery('#adminForm').on('change', '#jform_location',function (e)
 {
 	e.preventDefault();
-	var location_GxWLKer = jQuery("#jform_location input[type='radio']:checked").val();
-	GxWLKer(location_GxWLKer);
+	var location_gFpJuTv = jQuery("#jform_location input[type='radio']:checked").val();
+	gFpJuTv(location_gFpJuTv);
 
 });
 
-// #jform_type listeners for type_CLxRiyF function
+// #jform_type listeners for type_hCmROoy function
 jQuery('#jform_type').on('keyup',function()
 {
-	var type_CLxRiyF = jQuery("#jform_type").val();
-	CLxRiyF(type_CLxRiyF);
+	var type_hCmROoy = jQuery("#jform_type").val();
+	hCmROoy(type_hCmROoy);
 
 });
 jQuery('#adminForm').on('change', '#jform_type',function (e)
 {
 	e.preventDefault();
-	var type_CLxRiyF = jQuery("#jform_type").val();
-	CLxRiyF(type_CLxRiyF);
+	var type_hCmROoy = jQuery("#jform_type").val();
+	hCmROoy(type_hCmROoy);
 
 });
 
-// #jform_type listeners for type_zgwHidM function
+// #jform_type listeners for type_SPnilgy function
 jQuery('#jform_type').on('keyup',function()
 {
-	var type_zgwHidM = jQuery("#jform_type").val();
-	zgwHidM(type_zgwHidM);
+	var type_SPnilgy = jQuery("#jform_type").val();
+	SPnilgy(type_SPnilgy);
 
 });
 jQuery('#adminForm').on('change', '#jform_type',function (e)
 {
 	e.preventDefault();
-	var type_zgwHidM = jQuery("#jform_type").val();
-	zgwHidM(type_zgwHidM);
+	var type_SPnilgy = jQuery("#jform_type").val();
+	SPnilgy(type_SPnilgy);
 
 });
 
-// #jform_type listeners for type_dapwGJs function
+// #jform_type listeners for type_qYufgfp function
 jQuery('#jform_type').on('keyup',function()
 {
-	var type_dapwGJs = jQuery("#jform_type").val();
-	dapwGJs(type_dapwGJs);
+	var type_qYufgfp = jQuery("#jform_type").val();
+	qYufgfp(type_qYufgfp);
 
 });
 jQuery('#adminForm').on('change', '#jform_type',function (e)
 {
 	e.preventDefault();
-	var type_dapwGJs = jQuery("#jform_type").val();
-	dapwGJs(type_dapwGJs);
+	var type_qYufgfp = jQuery("#jform_type").val();
+	qYufgfp(type_qYufgfp);
 
 });
 
-// #jform_target listeners for target_KfchXiE function
+// #jform_target listeners for target_pMRKFEU function
 jQuery('#jform_target').on('keyup',function()
 {
-	var target_KfchXiE = jQuery("#jform_target input[type='radio']:checked").val();
-	KfchXiE(target_KfchXiE);
+	var target_pMRKFEU = jQuery("#jform_target input[type='radio']:checked").val();
+	pMRKFEU(target_pMRKFEU);
 
 });
 jQuery('#adminForm').on('change', '#jform_target',function (e)
 {
 	e.preventDefault();
-	var target_KfchXiE = jQuery("#jform_target input[type='radio']:checked").val();
-	KfchXiE(target_KfchXiE);
+	var target_pMRKFEU = jQuery("#jform_target input[type='radio']:checked").val();
+	pMRKFEU(target_pMRKFEU);
 
 });
 

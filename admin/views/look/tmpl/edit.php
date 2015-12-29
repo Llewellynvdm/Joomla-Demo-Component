@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.4
-	@build			3rd December, 2015
+	@version		1.0.5
+	@build			29th December, 2015
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
@@ -101,33 +101,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_RJYiubJ function
+// #jform_name listeners for name_LPOIjWF function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_RJYiubJ = jQuery("#jform_name").val();
-	RJYiubJ(name_RJYiubJ);
+	var name_LPOIjWF = jQuery("#jform_name").val();
+	LPOIjWF(name_LPOIjWF);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_RJYiubJ = jQuery("#jform_name").val();
-	RJYiubJ(name_RJYiubJ);
+	var name_LPOIjWF = jQuery("#jform_name").val();
+	LPOIjWF(name_LPOIjWF);
 
 });
 
-// #jform_add listeners for add_xEVTobm function
+// #jform_add listeners for add_eUNYKfu function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_xEVTobm = jQuery("#jform_add input[type='radio']:checked").val();
-	xEVTobm(add_xEVTobm);
+	var add_eUNYKfu = jQuery("#jform_add input[type='radio']:checked").val();
+	eUNYKfu(add_eUNYKfu);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_xEVTobm = jQuery("#jform_add input[type='radio']:checked").val();
-	xEVTobm(add_xEVTobm);
+	var add_eUNYKfu = jQuery("#jform_add input[type='radio']:checked").val();
+	eUNYKfu(add_eUNYKfu);
 
 });
 
