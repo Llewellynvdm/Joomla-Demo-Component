@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			29th December, 2015
+	@build			6th January, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -37,7 +37,8 @@ jimport('joomla.application.component.controller');
 $controller = JControllerLegacy::getInstance('Demo');
 
 // Perform the request task
-$controller->execute(JRequest::getCmd('task'));
+$jinput = JFactory::getApplication()->input;
+$controller->execute($jinput->get('task', null, 'CMD'));
 
 // Redirect if set by the controller
 $controller->redirect();

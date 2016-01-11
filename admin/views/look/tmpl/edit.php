@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			29th December, 2015
+	@build			6th January, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
@@ -101,33 +101,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_LPOIjWF function
+// #jform_name listeners for name_AqrIpkD function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_LPOIjWF = jQuery("#jform_name").val();
-	LPOIjWF(name_LPOIjWF);
+	var name_AqrIpkD = jQuery("#jform_name").val();
+	AqrIpkD(name_AqrIpkD);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_LPOIjWF = jQuery("#jform_name").val();
-	LPOIjWF(name_LPOIjWF);
+	var name_AqrIpkD = jQuery("#jform_name").val();
+	AqrIpkD(name_AqrIpkD);
 
 });
 
-// #jform_add listeners for add_eUNYKfu function
+// #jform_add listeners for add_VLLamwh function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_eUNYKfu = jQuery("#jform_add input[type='radio']:checked").val();
-	eUNYKfu(add_eUNYKfu);
+	var add_VLLamwh = jQuery("#jform_add input[type='radio']:checked").val();
+	VLLamwh(add_VLLamwh);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_eUNYKfu = jQuery("#jform_add input[type='radio']:checked").val();
-	eUNYKfu(add_eUNYKfu);
+	var add_VLLamwh = jQuery("#jform_add input[type='radio']:checked").val();
+	VLLamwh(add_VLLamwh);
 
 });
 

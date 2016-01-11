@@ -3,7 +3,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			29th December, 2015
+	@build			6th January, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.js
@@ -18,23 +18,23 @@
 /------------------------------------------------------------------------------------------------------*/
 
 // Some Global Values
-jform_eUNYKfuCQx_required = false;
+jform_VLLamwheAX_required = false;
 
 // Initial Script
 jQuery(document).ready(function()
 {
-	var name_LPOIjWF = jQuery("#jform_name").val();
-	LPOIjWF(name_LPOIjWF);
+	var name_AqrIpkD = jQuery("#jform_name").val();
+	AqrIpkD(name_AqrIpkD);
 
-	var add_eUNYKfu = jQuery("#jform_add input[type='radio']:checked").val();
-	eUNYKfu(add_eUNYKfu);
+	var add_VLLamwh = jQuery("#jform_add input[type='radio']:checked").val();
+	VLLamwh(add_VLLamwh);
 });
 
-// the LPOIjWF function
-function LPOIjWF(name_LPOIjWF)
+// the AqrIpkD function
+function AqrIpkD(name_AqrIpkD)
 {
 	// set the function logic
-	if (isSet(name_LPOIjWF))
+	if (isSet(name_AqrIpkD))
 	{
 		jQuery('#jform_alias').closest('.control-group').show();
 		jQuery('#jform_description').closest('.control-group').show();
@@ -46,20 +46,20 @@ function LPOIjWF(name_LPOIjWF)
 	}
 }
 
-// the eUNYKfu function
-function eUNYKfu(add_eUNYKfu)
+// the VLLamwh function
+function VLLamwh(add_VLLamwh)
 {
 	// set the function logic
-	if (add_eUNYKfu == 1)
+	if (add_VLLamwh == 1)
 	{
 		jQuery('#jform_acronym').closest('.control-group').show();
-		if (jform_eUNYKfuCQx_required)
+		if (jform_VLLamwheAX_required)
 		{
 			updateFieldRequired('acronym',0);
 			jQuery('#jform_acronym').prop('required','required');
 			jQuery('#jform_acronym').attr('aria-required',true);
 			jQuery('#jform_acronym').addClass('required');
-			jform_eUNYKfuCQx_required = false;
+			jform_VLLamwheAX_required = false;
 		}
 
 		jQuery('#jform_website').closest('.control-group').show();
@@ -67,13 +67,13 @@ function eUNYKfu(add_eUNYKfu)
 	else
 	{
 		jQuery('#jform_acronym').closest('.control-group').hide();
-		if (!jform_eUNYKfuCQx_required)
+		if (!jform_VLLamwheAX_required)
 		{
 			updateFieldRequired('acronym',1);
 			jQuery('#jform_acronym').removeAttr('required');
 			jQuery('#jform_acronym').removeAttr('aria-required');
 			jQuery('#jform_acronym').removeClass('required');
-			jform_eUNYKfuCQx_required = true;
+			jform_VLLamwheAX_required = true;
 		}
 		jQuery('#jform_website').closest('.control-group').hide();
 	}
