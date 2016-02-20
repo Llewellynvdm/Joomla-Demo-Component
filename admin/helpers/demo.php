@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			6th January, 2016
+	@build			20th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -493,7 +493,7 @@ abstract class DemoHelper
 		foreach ($actions as $action)
                 {
 			// set to use component default
-			$allow = true;
+			$fallback= true;
 			if (self::checkObject($record) && isset($record->id) && $record->id > 0 && !in_array($action->name,$componentActions))
 			{
 				// The record has been set. Check the record permissions.
@@ -509,13 +509,13 @@ abstract class DemoHelper
 							{
 								$result->set($action->name, true);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 							else
 							{
 								$result->set($action->name, false);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 						}
 						elseif ($user->authorise($view.'edit.own', 'com_demo.'.$view.'.' . (int) $record->id))
@@ -525,13 +525,13 @@ abstract class DemoHelper
 							{
 								$result->set($action->name, true);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 							else
 							{
 								$result->set($action->name, false);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 						}
 						elseif ($user->authorise('core.edit.own', 'com_demo'))
@@ -541,13 +541,13 @@ abstract class DemoHelper
 							{
 								$result->set($action->name, true);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 							else
 							{
 								$result->set($action->name, false);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 						}
 						elseif ($user->authorise($view.'edit.own', 'com_demo'))
@@ -557,13 +557,13 @@ abstract class DemoHelper
 							{
 								$result->set($action->name, true);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 							else
 							{
 								$result->set($action->name, false);
 								// set not to use component default
-								$allow = false;
+								$fallback= false;
 							}
 						}
 					}
@@ -593,13 +593,13 @@ abstract class DemoHelper
 								{
 									$result->set($action->name, true);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 								else
 								{
 									$result->set($action->name, false);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 							}
 							elseif ($user->authorise($view.'edit.own', 'com_demo.'.$views.'.category.' . (int) $record->catid))
@@ -609,13 +609,13 @@ abstract class DemoHelper
 								{
 									$result->set($action->name, true);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 								else
 								{
 									$result->set($action->name, false);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 							}
 							elseif ($user->authorise('core.edit.own', 'com_demo'))
@@ -625,13 +625,13 @@ abstract class DemoHelper
 								{
 									$result->set($action->name, true);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 								else
 								{
 									$result->set($action->name, false);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 							}
 							elseif ($user->authorise($view.'edit.own', 'com_demo'))
@@ -641,21 +641,21 @@ abstract class DemoHelper
 								{
 									$result->set($action->name, true);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 								else
 								{
 									$result->set($action->name, false);
 									// set not to use component default
-									$allow = false;
+									$fallback= false;
 								}
 							}
 						}
 					}
 				}
 			}
-			// if allowed then fall back on component global settings
-			if ($allow)
+			// if allowed then fallback on component global settings
+			if ($fallback)
 			{
 				$result->set($action->name, $user->authorise($action->name, 'com_demo'));
 			}

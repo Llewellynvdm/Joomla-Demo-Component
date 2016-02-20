@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			6th January, 2016
+	@build			20th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		script.php
@@ -296,7 +296,6 @@ class com_demoInstallerScript
 		{
 
 			// Get The Database object
-
 			$db = JFactory::getDbo();
 
 			// Create the look content type object.
@@ -308,8 +307,8 @@ class com_demoInstallerScript
 			$look->router = 'DemoHelperRoute::getLookRoute';
 			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
 
-			// Insert the object into the content types table.
-			$lookInserted = $db->insertObject('#__content_types', $look);
+			// Set the object into the content types table.
+			$look_Inserted = $db->insertObject('#__content_types', $look);
 
 			// Create the help_document content type object.
 			$help_document = new stdClass();
@@ -320,8 +319,8 @@ class com_demoInstallerScript
 			$help_document->router = 'DemoHelperRoute::getHelp_documentRoute';
 			$help_document->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/help_document.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","type","location","target","article","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "article","targetTable": "#__content","targetColumn": "id","displayColumn": "title"}]}';
 
-			// Insert the object into the content types table.
-			$help_documentInserted = $db->insertObject('#__content_types', $help_document);
+			// Set the object into the content types table.
+			$help_document_Inserted = $db->insertObject('#__content_types', $help_document);
 
 
 			// Install the global extenstion params.
@@ -334,19 +333,82 @@ class com_demoInstallerScript
 
 			// Condition.
 			$conditions = array(
-				$db->quoteName('element') . ' = ' . $db->quote('com_demo')
+				$db->quoteName('element') . ' = ' . $db->quote('com_')
 			);
 
 			$query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
 			$db->setQuery($query);
 			$allDone = $db->execute();
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
-				<img src="components/com_demo/assets/images/component-300.jpg"/>
+				<img src="components/com_/assets/images/component-300.jpg"/>
 				</a>';
 		}
 		// do any updates needed
 		if ($type == 'update')
 		{
+
+			// Get The Database object
+			$db = JFactory::getDbo();
+
+			// Create the look content type object.
+			$look = new stdClass();
+			$look->type_title = 'Demo Look';
+			$look->type_alias = 'com_demo.look';
+			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
+			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","add":"add","acronym":"acronym","website":"website","alias":"alias","not_required":"not_required"}}';
+			$look->router = 'DemoHelperRoute::getLookRoute';
+			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
+
+			// Check if look type is already in content_type DB.
+			$look_id = null;
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('type_id')));
+			$query->from($db->quoteName('#__content_types'));
+			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($look->type_alias));
+			$db->setQuery($query);
+			$db->execute();
+
+			// Set the object into the content types table.
+			if ($db->getNumRows())
+			{
+				$look->type_id = $db->loadResult();
+				$look_Updated = $db->updateObject('#__content_types', $look, 'type_id');
+			}
+			else
+			{
+				$look_Inserted = $db->insertObject('#__content_types', $look);
+			}
+
+			// Create the help_document content type object.
+			$help_document = new stdClass();
+			$help_document->type_title = 'Demo Help_document';
+			$help_document->type_alias = 'com_demo.help_document';
+			$help_document->table = '{"special": {"dbtable": "#__demo_help_document","key": "id","type": "Help_document","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
+			$help_document->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "title","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "content","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"title":"title","type":"type","groups":"groups","location":"location","admin_view":"admin_view","site_view":"site_view","target":"target","content":"content","alias":"alias","article":"article","url":"url","not_required":"not_required"}}';
+			$help_document->router = 'DemoHelperRoute::getHelp_documentRoute';
+			$help_document->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/help_document.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","type","location","target","article","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "article","targetTable": "#__content","targetColumn": "id","displayColumn": "title"}]}';
+
+			// Check if help_document type is already in content_type DB.
+			$help_document_id = null;
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('type_id')));
+			$query->from($db->quoteName('#__content_types'));
+			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($help_document->type_alias));
+			$db->setQuery($query);
+			$db->execute();
+
+			// Set the object into the content types table.
+			if ($db->getNumRows())
+			{
+				$help_document->type_id = $db->loadResult();
+				$help_document_Updated = $db->updateObject('#__content_types', $help_document, 'type_id');
+			}
+			else
+			{
+				$help_document_Inserted = $db->insertObject('#__content_types', $help_document);
+			}
+
+
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/component-300.jpg"/>
 				</a>

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			6th January, 2016
+	@build			20th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
@@ -57,6 +57,7 @@ $componentParams = JComponentHelper::getParams('com_demo');
 		</div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
 
+	<?php if ($this->canDo->get('look.delete') || $this->canDo->get('look.edit.created_by') || $this->canDo->get('look.edit.state') || $this->canDo->get('look.edit.created')) : ?>
 	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'publishing', JText::_('COM_DEMO_LOOK_PUBLISHING', true)); ?>
 		<div class="row-fluid form-horizontal-desktop">
 			<div class="span6">
@@ -67,6 +68,7 @@ $componentParams = JComponentHelper::getParams('com_demo');
 			</div>
 		</div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
+	<?php endif; ?>
 
 	<?php if ($this->canDo->get('core.admin')) : ?>
 	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'permissions', JText::_('COM_DEMO_LOOK_PERMISSION', true)); ?>
@@ -101,33 +103,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_AqrIpkD function
+// #jform_name listeners for name_mgQJHOz function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_AqrIpkD = jQuery("#jform_name").val();
-	AqrIpkD(name_AqrIpkD);
+	var name_mgQJHOz = jQuery("#jform_name").val();
+	mgQJHOz(name_mgQJHOz);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_AqrIpkD = jQuery("#jform_name").val();
-	AqrIpkD(name_AqrIpkD);
+	var name_mgQJHOz = jQuery("#jform_name").val();
+	mgQJHOz(name_mgQJHOz);
 
 });
 
-// #jform_add listeners for add_VLLamwh function
+// #jform_add listeners for add_SJxiaTC function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_VLLamwh = jQuery("#jform_add input[type='radio']:checked").val();
-	VLLamwh(add_VLLamwh);
+	var add_SJxiaTC = jQuery("#jform_add input[type='radio']:checked").val();
+	SJxiaTC(add_SJxiaTC);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_VLLamwh = jQuery("#jform_add input[type='radio']:checked").val();
-	VLLamwh(add_VLLamwh);
+	var add_SJxiaTC = jQuery("#jform_add input[type='radio']:checked").val();
+	SJxiaTC(add_SJxiaTC);
 
 });
 

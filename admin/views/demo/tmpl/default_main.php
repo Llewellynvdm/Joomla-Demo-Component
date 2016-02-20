@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			6th January, 2016
+	@build			20th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		default_main.php
@@ -26,7 +26,7 @@ defined('_JEXEC') or die('Restricted access');
 	<?php foreach($this->icons['main'] as $icon): ?>
         <div class="dashboard-wraper">
            <div class="dashboard-content"> 
-                <a class="icon hasTip" href="<?php echo $icon->url; ?>">
+                <a class="icon" href="<?php echo $icon->url; ?>">
                     <img alt="<?php echo $icon->alt; ?>" src="components/com_demo/assets/images/icons/<?php  echo $icon->image; ?>">
                     <span class="dashboard-title"><?php echo JText::_($icon->name); ?></span>
                 </a>

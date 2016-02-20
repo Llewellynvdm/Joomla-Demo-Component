@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			6th January, 2016
+	@build			20th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		look.php
@@ -146,6 +146,12 @@ class DemoModelLook extends JModelAdmin
 			$form->setFieldAttribute('ordering', 'filter', 'unset');
 			$form->setFieldAttribute('published', 'filter', 'unset');
 		}
+		// If this is a new item insure the greated by is set.
+		if (0 == $id)
+		{
+			// Set the created_by to this user
+			$form->setValue('created_by', null, $user->id);
+		}
 		// Modify the form based on Edit Creaded By access controls.
 		if ($id != 0 && (!$user->authorise('look.edit.created_by', 'com_demo.look.' . (int) $id))
 			|| ($id == 0 && !$user->authorise('look.edit.created_by', 'com_demo')))
@@ -215,6 +221,19 @@ class DemoModelLook extends JModelAdmin
 				$form->setFieldAttribute('male', 'filter', 'unset');
 				// Disable fields while saving.
 				$form->setFieldAttribute('male', 'required', 'false');
+			}
+		}
+		// Only load these values if no id is found
+		if (0 == $id)
+		{
+			// Set redirected field name
+			$redirectedField = $jinput->get('ref', null, 'STRING');
+			// Set redirected field value
+			$redirectedValue = $jinput->get('refid', 0, 'INT');
+			if (0 != $redirectedValue && $redirectedField)
+			{
+				// Now set the local-redirected field default value
+				$form->setValue($redirectedField, null, $redirectedValue);
 			}
 		}
 
@@ -328,7 +347,7 @@ class DemoModelLook extends JModelAdmin
 		{
 			$table->created = $date->toSql();
 			// set the user
-			if ($table->created_by == 0)
+			if ($table->created_by == 0 || empty($table->created_by))
 			{
 				$table->created_by = $user->id;
 			}
