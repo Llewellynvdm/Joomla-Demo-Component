@@ -103,33 +103,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_RVGpnBy function
+// #jform_name listeners for name_YAQbHhE function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_RVGpnBy = jQuery("#jform_name").val();
-	RVGpnBy(name_RVGpnBy);
+	var name_YAQbHhE = jQuery("#jform_name").val();
+	YAQbHhE(name_YAQbHhE);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_RVGpnBy = jQuery("#jform_name").val();
-	RVGpnBy(name_RVGpnBy);
+	var name_YAQbHhE = jQuery("#jform_name").val();
+	YAQbHhE(name_YAQbHhE);
 
 });
 
-// #jform_add listeners for add_guPoHoa function
+// #jform_add listeners for add_MCYBPZB function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_guPoHoa = jQuery("#jform_add input[type='radio']:checked").val();
-	guPoHoa(add_guPoHoa);
+	var add_MCYBPZB = jQuery("#jform_add input[type='radio']:checked").val();
+	MCYBPZB(add_MCYBPZB);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_guPoHoa = jQuery("#jform_add input[type='radio']:checked").val();
-	guPoHoa(add_guPoHoa);
+	var add_MCYBPZB = jQuery("#jform_add input[type='radio']:checked").val();
+	MCYBPZB(add_MCYBPZB);
 
 });
 
