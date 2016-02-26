@@ -103,33 +103,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_DPMkarz function
+// #jform_name listeners for name_AxdqOTc function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_DPMkarz = jQuery("#jform_name").val();
-	DPMkarz(name_DPMkarz);
+	var name_AxdqOTc = jQuery("#jform_name").val();
+	AxdqOTc(name_AxdqOTc);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_DPMkarz = jQuery("#jform_name").val();
-	DPMkarz(name_DPMkarz);
+	var name_AxdqOTc = jQuery("#jform_name").val();
+	AxdqOTc(name_AxdqOTc);
 
 });
 
-// #jform_add listeners for add_kRTvpkr function
+// #jform_add listeners for add_IJPcusU function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_kRTvpkr = jQuery("#jform_add input[type='radio']:checked").val();
-	kRTvpkr(add_kRTvpkr);
+	var add_IJPcusU = jQuery("#jform_add input[type='radio']:checked").val();
+	IJPcusU(add_IJPcusU);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_kRTvpkr = jQuery("#jform_add input[type='radio']:checked").val();
-	kRTvpkr(add_kRTvpkr);
+	var add_IJPcusU = jQuery("#jform_add input[type='radio']:checked").val();
+	IJPcusU(add_IJPcusU);
 
 });
 

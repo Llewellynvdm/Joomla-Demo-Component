@@ -151,7 +151,7 @@ class DemoModelLooks extends JModelList
 	*
 	* @return translatable string
 	*/
-	public function selectionTranslation($value,$name)
+	protected function selectionTranslation($value,$name)
 	{
 		// Array of add language strings
 		if ($name == 'add')
@@ -378,7 +378,7 @@ class DemoModelLooks extends JModelList
 	* @return  a bool
 	*
 	*/
-	public function checkInNow()
+	protected function checkInNow()
 	{
 		// Get set check in time
 		$time = JComponentHelper::getParams('com_demo')->get('check_in');
