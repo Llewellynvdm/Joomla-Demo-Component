@@ -291,7 +291,7 @@ class DemoViewLooks extends JViewLegacy
 		);
 	} 
 
-	public function getTheAddSelections()
+	protected function getTheAddSelections()
 	{
 		// Get a db connection.
 		$db = JFactory::getDbo();
@@ -327,7 +327,7 @@ class DemoViewLooks extends JViewLegacy
 		return false;
 	}
 
-	public function getTheAcronymSelections()
+	protected function getTheAcronymSelections()
 	{
 		// Get a db connection.
 		$db = JFactory::getDbo();

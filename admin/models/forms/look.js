@@ -18,23 +18,23 @@
 /------------------------------------------------------------------------------------------------------*/
 
 // Some Global Values
-jform_IJPcusUjqK_required = false;
+jform_vvvvvvwvvv_required = false;
 
 // Initial Script
 jQuery(document).ready(function()
 {
-	var name_AxdqOTc = jQuery("#jform_name").val();
-	AxdqOTc(name_AxdqOTc);
+	var name_vvvvvvv = jQuery("#jform_name").val();
+	vvvvvvv(name_vvvvvvv);
 
-	var add_IJPcusU = jQuery("#jform_add input[type='radio']:checked").val();
-	IJPcusU(add_IJPcusU);
+	var add_vvvvvvw = jQuery("#jform_add input[type='radio']:checked").val();
+	vvvvvvw(add_vvvvvvw);
 });
 
-// the AxdqOTc function
-function AxdqOTc(name_AxdqOTc)
+// the vvvvvvv function
+function vvvvvvv(name_vvvvvvv)
 {
 	// set the function logic
-	if (isSet(name_AxdqOTc))
+	if (isSet(name_vvvvvvv))
 	{
 		jQuery('#jform_alias').closest('.control-group').show();
 		jQuery('#jform_description').closest('.control-group').show();
@@ -46,20 +46,20 @@ function AxdqOTc(name_AxdqOTc)
 	}
 }
 
-// the IJPcusU function
-function IJPcusU(add_IJPcusU)
+// the vvvvvvw function
+function vvvvvvw(add_vvvvvvw)
 {
 	// set the function logic
-	if (add_IJPcusU == 1)
+	if (add_vvvvvvw == 1)
 	{
 		jQuery('#jform_acronym').closest('.control-group').show();
-		if (jform_IJPcusUjqK_required)
+		if (jform_vvvvvvwvvv_required)
 		{
 			updateFieldRequired('acronym',0);
 			jQuery('#jform_acronym').prop('required','required');
 			jQuery('#jform_acronym').attr('aria-required',true);
 			jQuery('#jform_acronym').addClass('required');
-			jform_IJPcusUjqK_required = false;
+			jform_vvvvvvwvvv_required = false;
 		}
 
 		jQuery('#jform_website').closest('.control-group').show();
@@ -67,13 +67,13 @@ function IJPcusU(add_IJPcusU)
 	else
 	{
 		jQuery('#jform_acronym').closest('.control-group').hide();
-		if (!jform_IJPcusUjqK_required)
+		if (!jform_vvvvvvwvvv_required)
 		{
 			updateFieldRequired('acronym',1);
 			jQuery('#jform_acronym').removeAttr('required');
 			jQuery('#jform_acronym').removeAttr('aria-required');
 			jQuery('#jform_acronym').removeClass('required');
-			jform_IJPcusUjqK_required = true;
+			jform_vvvvvvwvvv_required = true;
 		}
 		jQuery('#jform_website').closest('.control-group').hide();
 	}

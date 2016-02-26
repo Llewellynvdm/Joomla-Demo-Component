@@ -173,7 +173,7 @@ class DemoModelHelp_documents extends JModelList
 	*
 	* @return translatable string
 	*/
-	protected function selectionTranslation($value,$name)
+	public function selectionTranslation($value,$name)
 	{
 		// Array of type language strings
 		if ($name == 'type')
