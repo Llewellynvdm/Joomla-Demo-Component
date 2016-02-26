@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			21st February, 2016
+	@build			26th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		articles.php
@@ -43,7 +43,7 @@ class JFormFieldArticles extends JFormFieldList
 	 *
 	 * @since   3.2
 	 */
-	protected function getInput()
+	public function getInput()
 	{
 		// see if we should add buttons
 		$setButton = $this->getAttribute('button');

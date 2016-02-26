@@ -10,7 +10,7 @@ Just a basic demo of the most basic implementations of the [Joomla] (http://www.
 + *Author*: [Llewellyn van der Merwe] (mailto:info@vdm.io)
 + *Name*: [Demo] (https://www.vdm.io/)
 + *First Build*: 5th August, 2015
-+ *Last Build*: 21st February, 2016
++ *Last Build*: 26th February, 2016
 + *Version*: 1.0.5
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html

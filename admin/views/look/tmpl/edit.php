@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			21st February, 2016
+	@build			26th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
@@ -103,33 +103,33 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_YAQbHhE function
+// #jform_name listeners for name_DPMkarz function
 jQuery('#jform_name').on('keyup',function()
 {
-	var name_YAQbHhE = jQuery("#jform_name").val();
-	YAQbHhE(name_YAQbHhE);
+	var name_DPMkarz = jQuery("#jform_name").val();
+	DPMkarz(name_DPMkarz);
 
 });
 jQuery('#adminForm').on('change', '#jform_name',function (e)
 {
 	e.preventDefault();
-	var name_YAQbHhE = jQuery("#jform_name").val();
-	YAQbHhE(name_YAQbHhE);
+	var name_DPMkarz = jQuery("#jform_name").val();
+	DPMkarz(name_DPMkarz);
 
 });
 
-// #jform_add listeners for add_MCYBPZB function
+// #jform_add listeners for add_kRTvpkr function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_MCYBPZB = jQuery("#jform_add input[type='radio']:checked").val();
-	MCYBPZB(add_MCYBPZB);
+	var add_kRTvpkr = jQuery("#jform_add input[type='radio']:checked").val();
+	kRTvpkr(add_kRTvpkr);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_MCYBPZB = jQuery("#jform_add input[type='radio']:checked").val();
-	MCYBPZB(add_MCYBPZB);
+	var add_kRTvpkr = jQuery("#jform_add input[type='radio']:checked").val();
+	kRTvpkr(add_kRTvpkr);
 
 });
 

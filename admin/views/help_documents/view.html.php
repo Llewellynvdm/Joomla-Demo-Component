@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			21st February, 2016
+	@build			26th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		view.html.php
@@ -335,7 +335,7 @@ class DemoViewHelp_documents extends JViewLegacy
 		);
 	} 
 
-	protected function getTheTypeSelections()
+	public function getTheTypeSelections()
 	{
 		// Get a db connection.
 		$db = JFactory::getDbo();
@@ -371,7 +371,7 @@ class DemoViewHelp_documents extends JViewLegacy
 		return false;
 	}
 
-	protected function getTheLocationSelections()
+	public function getTheLocationSelections()
 	{
 		// Get a db connection.
 		$db = JFactory::getDbo();
@@ -407,7 +407,7 @@ class DemoViewHelp_documents extends JViewLegacy
 		return false;
 	}
 
-	protected function getTheAdmin_viewSelections()
+	public function getTheAdmin_viewSelections()
 	{
 		// Get a db connection.
 		$db = JFactory::getDbo();
@@ -439,7 +439,7 @@ class DemoViewHelp_documents extends JViewLegacy
 		return false;
 	}
 
-	protected function getTheSite_viewSelections()
+	public function getTheSite_viewSelections()
 	{
 		// Get a db connection.
 		$db = JFactory::getDbo();

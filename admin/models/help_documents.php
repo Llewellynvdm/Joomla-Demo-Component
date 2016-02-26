@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			21st February, 2016
+	@build			26th February, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		help_documents.php
@@ -425,7 +425,7 @@ class DemoModelHelp_documents extends JModelList
 	* @return  a bool
 	*
 	*/
-	protected function checkInNow()
+	public function checkInNow()
 	{
 		// Get set check in time
 		$time = JComponentHelper::getParams('com_demo')->get('check_in');
