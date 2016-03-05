@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			26th February, 2016
+	@build			5th March, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		script.php
@@ -333,14 +333,14 @@ class com_demoInstallerScript
 
 			// Condition.
 			$conditions = array(
-				$db->quoteName('element') . ' = ' . $db->quote('com_')
+				$db->quoteName('element') . ' = ' . $db->quote('com_demo')
 			);
 
 			$query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
 			$db->setQuery($query);
 			$allDone = $db->execute();
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
-				<img src="components/com_/assets/images/component-300.jpg"/>
+				<img src="components/com_demo/assets/images/component-300.jpg"/>
 				</a>';
 		}
 		// do any updates needed
