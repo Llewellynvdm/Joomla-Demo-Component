@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			5th March, 2016
+	@build			10th March, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -587,6 +587,16 @@ abstract class DemoHelper
 			}
 		}
 		return $result;
+	}
+	
+	public static function checkJson($string)
+	{
+		if (self::checkString($string))
+		{
+			json_decode($string);
+			return (json_last_error() === JSON_ERROR_NONE);
+		}
+		return false;
 	}
 
 	public static function checkObject($object)

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			5th March, 2016
+	@build			10th March, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		import.php
@@ -503,7 +503,6 @@ class DemoModelImport extends JModelLegacy
 						// reset all buckets
 						$query 		= $db->getQuery(true);
 						$fields 	= array();
-						$version	= false;
 						// Fields to update.
 						foreach($row as $key => $cell)
 						{
@@ -526,7 +525,6 @@ class DemoModelImport extends JModelLegacy
 							if ('version' == $target[$key])
 							{
 								$cell = (int) $version + 1;
-								$version = true;
 							}
 							// verify publish authority
 							if ('published' == $target[$key] && !$canState)
@@ -551,10 +549,6 @@ class DemoModelImport extends JModelLegacy
 						// load the defaults
 						$fields[]	= $db->quoteName('modified_by') . ' = ' . $db->quote($user->id);
 						$fields[]	= $db->quoteName('modified') . ' = ' . $db->quote($todayDate);
-						if (!$version)
-						{
-							$fields[] = $db->quoteName('version') . " = " . (int) $version + 1;
-						}
 						// Conditions for which records should be updated.
 						$conditions = array(
 							$db->quoteName('id') . ' = ' . $id
