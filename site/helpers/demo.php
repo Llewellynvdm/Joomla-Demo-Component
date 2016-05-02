@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			20th March, 2016
+	@build			2nd May, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -396,6 +396,45 @@ abstract class DemoHelper
 		}
 		return false;
 	} 
+
+	public static function isPublished($id,$type)
+	{
+		if ($type == 'raw')
+                {
+			$type = 'item';
+		}
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select(array('a.published'));
+		$query->from('#__demo_'.$type.' AS a');
+		$query->where('a.id = '. (int) $id);
+		$query->where('a.published = 1');
+		$db->setQuery($query);
+		$db->execute();
+		$found = $db->getNumRows();
+		if($found)
+                {
+			return true;
+		}
+		return false;
+	}
+
+	public static function getGroupName($id)
+	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+		$query->select(array('a.title'));
+		$query->from('#__usergroups AS a');
+		$query->where('a.id = '. (int) $id);
+		$db->setQuery($query);
+		$db->execute();
+		$found = $db->getNumRows();
+		if($found)
+                {
+			return $db->loadResult();
+		}
+		return $id;
+	}
 	
 	/**
 	*	Get the actions permissions
@@ -857,7 +896,7 @@ abstract class DemoHelper
 					$w .= ' ';
 					if($r < 100)
 					{
-						$word .= 'and ';
+						$w .= 'and ';
 					}
 					$w .= self::numberToString($r);
 				}

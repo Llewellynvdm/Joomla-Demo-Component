@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			20th March, 2016
+	@build			2nd May, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		view.html.php
@@ -189,7 +189,7 @@ class DemoViewLook extends JViewLegacy
 		$document->setTitle(JText::_($isNew ? 'COM_DEMO_LOOK_NEW' : 'COM_DEMO_LOOK_EDIT'));
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_demo/assets/css/look.css"); 
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "administrator/components/com_demo/views/look/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_demo/views/look/submitbutton.js"); 
 		JText::script('view not acceptable. Error');
 	}
 }

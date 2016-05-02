@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			20th March, 2016
+	@build			2nd May, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		view.html.php
@@ -189,7 +189,7 @@ class DemoViewHelp_document extends JViewLegacy
 		$document->setTitle(JText::_($isNew ? 'COM_DEMO_HELP_DOCUMENT_NEW' : 'COM_DEMO_HELP_DOCUMENT_EDIT'));
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_demo/assets/css/help_document.css"); 
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "administrator/components/com_demo/views/help_document/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_demo/views/help_document/submitbutton.js"); 
 		JText::script('view not acceptable. Error');
 	}
 }

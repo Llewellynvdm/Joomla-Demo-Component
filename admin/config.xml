@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 	<fieldset
+		addrulepath="/administrator/components/com_demo/models/rules"
+		addfieldpath="/administrator/components/com_demo/models/fields"
 		name="global_config"
 		label="COM_DEMO_CONFIG_GLOBAL_LABEL"
 		description="COM_DEMO_CONFIG_GLOBAL_DESC">

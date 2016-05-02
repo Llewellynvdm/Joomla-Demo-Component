@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			20th March, 2016
+	@build			2nd May, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -38,7 +38,7 @@ $document->addStyleSheet('components/com_demo/assets/css/admin.css');
 $document->addScript('components/com_demo/assets/js/admin.js');
 
 // require helper files
-JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php');
+JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php'); 
 JLoader::register('JHtmlBatch_', dirname(__FILE__) . '/helpers/html/batch_.php'); 
 
 // import joomla controller library
