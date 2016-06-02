@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			2nd May, 2016
+	@build			2nd June, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		import.php
@@ -47,7 +47,7 @@ class DemoModelImport extends JModelLegacy
 	 * Import Settings
 	 */
 	protected $getType 	= NULL;
-	protected $dataType = NULL;
+	protected $dataType	= NULL;
 	
 	/**
 	 * Method to auto-populate the model state.

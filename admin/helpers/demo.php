@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			2nd May, 2016
+	@build			2nd June, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -296,18 +296,27 @@ abstract class DemoHelper
 	*/
 	public static function getFileHeaders($dataType)
 	{		
-		// make sure the file is loaded		
+		// make sure these files are loaded		
 		JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
+		JLoader::import('ChunkReadFilter', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/PHPExcel/Reader');
 		// get session object
-		$session 	= JFactory::getSession();
+		$session	= JFactory::getSession();
 		$package	= $session->get('package', null);
 		$package	= json_decode($package, true);
 		// set the headers
 		if(isset($package['dir']))
 		{
+			$chunkFilter = new PHPExcel_Reader_chunkReadFilter();
+			// only load first three rows
+			$chunkFilter->setRows(2,1);
+			// identify the file type
 			$inputFileType = PHPExcel_IOFactory::identify($package['dir']);
+			// create the reader for this file type
 			$excelReader = PHPExcel_IOFactory::createReader($inputFileType);
+			// load the limiting filter
+			$excelReader->setReadFilter($chunkFilter);
 			$excelReader->setReadDataOnly(true);
+			// load the rows (only first three)
 			$excelObj = $excelReader->load($package['dir']);
 			$headers = array();
 			foreach ($excelObj->getActiveSheet()->getRowIterator() as $row)
@@ -403,31 +412,33 @@ abstract class DemoHelper
 		return false;
 	}
 
-	public static function jsonToString($value, $sperator = ", ")
+	public static function jsonToString($value, $sperator = ", ", $table = null)
 	{
                 // check if string is JSON
                 $result = json_decode($value, true);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                // is JSON
+                if (json_last_error() === JSON_ERROR_NONE)
+		{
+			// is JSON
 			if (self::checkArray($result))
 			{
-				$value = '';
-				$counter = 0;
-				foreach ($result as $string)
+				if (self::checkString($table))
 				{
-					if ($counter)
+					$names = array();
+					foreach ($result as $val)
 					{
-						$value .= $sperator.$string;
+						if ($name = self::getVar($table, $val, 'id', 'name'))
+						{
+							$names[] = $name;
+						}
 					}
-					else
+					if (self::checkArray($names))
 					{
-						$value .= $string;
-					}
-					$counter++;
+						return (string) implode($sperator,$names);
+					}	
 				}
-				return $value;
+				return (string) implode($sperator,$result);
 			}
-                        return json_decode($value);
+                        return (string) json_decode($value);
                 }
                 return $value;
         }

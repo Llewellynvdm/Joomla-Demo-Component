@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
 	<name>COM_DEMO</name>
-	<creationDate>2nd May, 2016</creationDate>
+	<creationDate>2nd June, 2016</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>info@vdm.io</authorEmail>
 	<authorUrl>https://www.vdm.io/</authorUrl>

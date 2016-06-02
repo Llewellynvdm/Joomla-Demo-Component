@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			2nd May, 2016
+	@build			2nd June, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		edit.php
@@ -28,7 +28,7 @@ JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
 $componentParams = JComponentHelper::getParams('com_demo');
 ?>
-
+<div id="demo_loader">
 <form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='.(int) $this->item->id.$this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
 	<?php echo JLayoutHelper::render('look.details_above', $this); ?><div class="form-horizontal">
@@ -100,6 +100,7 @@ $componentParams = JComponentHelper::getParams('com_demo');
 <div class="clearfix"></div>
 <?php echo JLayoutHelper::render('look.details_under', $this); ?>
 </form>
+</div>
 
 <script type="text/javascript">
 

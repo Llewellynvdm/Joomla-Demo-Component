@@ -81,3 +81,9 @@ CREATE TABLE IF NOT EXISTS `#__demo_help_document` (
 	KEY `idx_article` (`article`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+
+
+--
+-- Always insure this column is large enough for all the access control values.
+--
+ALTER TABLE `#__assets` CHANGE `rules` `rules` MEDIUMTEXT NOT NULL COMMENT 'JSON encoded access control.';
