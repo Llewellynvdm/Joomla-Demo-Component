@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			2nd June, 2016
+	@build			24th June, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		default_batch_footer.php
@@ -23,7 +23,7 @@ defined('_JEXEC') or die('Restricted access');
 
 ?>
 <!-- clear the batch values if cancel -->
-<button class="btn" type="button" onclick="###BATCH_ONCLICK_CANCEL_SCRIPT###" data-dismiss="modal">
+<button class="btn" type="button" onclick="" data-dismiss="modal">
 	<?php echo JText::_('JCANCEL'); ?>
 </button>
 <!-- post the batch values if process -->

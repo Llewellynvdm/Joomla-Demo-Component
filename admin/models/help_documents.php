@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			2nd June, 2016
+	@build			24th June, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		help_documents.php
@@ -307,6 +307,8 @@ class DemoModelHelp_documents extends JModelList
 		// setup the query
 		if (DemoHelper::checkArray($pks))
 		{
+			// Set a value to know this is exporting method.
+			$_export = true;
 			// Get the user object.
 			$user = JFactory::getUser();
 			// Create a new query object.

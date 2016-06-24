@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			2nd June, 2016
+	@build			24th June, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -352,9 +352,15 @@ abstract class DemoHelper
 		$db = JFactory::getDbo();
 		// Create a new query object.
 		$query = $db->getQuery(true);
-
 		$query->select($db->quoteName(array($what)));
-		$query->from($db->quoteName('#__'.$main.'_'.$table));
+		if (empty($table))
+		{
+			$query->from($db->quoteName('#__'.$main));
+		}
+		else
+		{
+			$query->from($db->quoteName('#__'.$main.'_'.$table));
+		}
 		if (is_numeric($where))
 		{
 			$query->where($db->quoteName($whereString) . ' '.$operator.' '.(int) $where);
