@@ -23,7 +23,7 @@ due to [Automated Component Builder] (https://www.vdm.io/joomla-component-builde
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **16858**
++ *Line count*: **16864**
 + *File count*: **152**
 + *Folder count*: **50**
 
@@ -45,3 +45,9 @@ Project duration: **2 weeks** or **0.4 months**
 
 > This **component** was build with a Joomla [Automated Component Builder] (https://www.vdm.io/joomla-component-builder).
 > Developed by [Llewellyn van der Merwe] (mailto:joomla@vdm.io)
+
+## Donations
+
+ If you want to support this project, please consider donating:
+ * PayPal: pay@vdm.io
+ * Bitcoin: 3H35PYwikEosvcjxHXGPLS1GufZ4b4iFu3
