@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			24th June, 2016
+	@build			13th July, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -736,7 +736,7 @@ abstract class DemoHelper
 
 			if (!$asset->check() || !$asset->store())
 			{
-				JError::raiseWarning(500, $asset->getError());
+				JFactory::getApplication()->enqueueMessage($asset->getError(), 'warning');
 				return false;
 			}
 			else

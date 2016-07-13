@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			24th June, 2016
+	@build			13th July, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		import.php
@@ -193,7 +193,8 @@ class DemoModelImport extends JModelLegacy
 	protected function _getPackageFromUpload()
 	{		
 		// Get the uploaded file information
-		$input    = JFactory::getApplication()->input;
+		$app	= JFactory::getApplication();
+		$input	= $app->input;
 
 		// Do not change the filter type 'raw'. We need this to let files containing PHP code to upload. See JInputFiles::get.
 		$userfile = $input->files->get('import_package', null, 'raw');
@@ -201,21 +202,21 @@ class DemoModelImport extends JModelLegacy
 		// Make sure that file uploads are enabled in php
 		if (!(bool) ini_get('file_uploads'))
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_WARNIMPORTFILE'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_WARNIMPORTFILE'), 'warning');
 			return false;
 		}
 
 		// If there is no uploaded file, we have a problem...
 		if (!is_array($userfile))
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_NO_FILE_SELECTED'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_NO_FILE_SELECTED'), 'warning');
 			return false;
 		}
 
 		// Check if there was a problem uploading the file.
 		if ($userfile['error'] || $userfile['size'] < 1)
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_WARNIMPORTUPLOADERROR'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_WARNIMPORTUPLOADERROR'), 'warning');
 			return false;
 		}
 
@@ -253,7 +254,8 @@ class DemoModelImport extends JModelLegacy
 	 */
 	protected function _getPackageFromFolder()
 	{
-		$input = JFactory::getApplication()->input;
+		$app	= JFactory::getApplication();
+		$input	= $app->input;
 
 		// Get the path to the package to import
 		$p_dir = $input->getString('import_directory');
@@ -261,7 +263,7 @@ class DemoModelImport extends JModelLegacy
 		// Did you give us a valid path?
 		if (!file_exists($p_dir))
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_PLEASE_ENTER_A_PACKAGE_DIRECTORY'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_PLEASE_ENTER_A_PACKAGE_DIRECTORY'), 'warning');
 			return false;
 		}
 
@@ -271,7 +273,7 @@ class DemoModelImport extends JModelLegacy
 		// Did you give us a valid package?
 		if (!$type)
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_PATH_DOES_NOT_HAVE_A_VALID_PACKAGE'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_PATH_DOES_NOT_HAVE_A_VALID_PACKAGE'), 'warning');
 		}
 		
 		// check the extention
@@ -282,7 +284,7 @@ class DemoModelImport extends JModelLegacy
 			break;
 			
 			default:
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_DOES_NOT_HAVE_A_VALID_FILE_TYPE'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_DOES_NOT_HAVE_A_VALID_FILE_TYPE'), 'warning');
 			return false;
 			break;
 		}
@@ -302,15 +304,16 @@ class DemoModelImport extends JModelLegacy
 	 */
 	protected function _getPackageFromUrl()
 	{
-		$input = JFactory::getApplication()->input;
-
+		$app	= JFactory::getApplication();
+		$input	= $app->input;
+		
 		// Get the URL of the package to import
 		$url = $input->getString('import_url');
 
 		// Did you give us a URL?
 		if (!$url)
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_ENTER_A_URL'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_ENTER_A_URL'), 'warning');
 			return false;
 		}
 
@@ -320,7 +323,7 @@ class DemoModelImport extends JModelLegacy
 		// Was the package downloaded?
 		if (!$p_file)
 		{
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_INVALID_URL'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_INVALID_URL'), 'warning');
 			return false;
 		}
 
@@ -341,6 +344,7 @@ class DemoModelImport extends JModelLegacy
 	 */
 	protected function check($archivename)
 	{
+		$app	= JFactory::getApplication();
 		// Clean the name
 		$archivename = JPath::clean($archivename);
 		
@@ -354,7 +358,7 @@ class DemoModelImport extends JModelLegacy
 			default:
 			// Cleanup the import files
 			$this->remove($archivename);
-			JError::raiseWarning('', JText::_('COM_DEMO_IMPORT_MSG_DOES_NOT_HAVE_A_VALID_FILE_TYPE'));
+			$app->enqueueMessage(JText::_('COM_DEMO_IMPORT_MSG_DOES_NOT_HAVE_A_VALID_FILE_TYPE'), 'warning');
 			return false;
 			break;
 		}	

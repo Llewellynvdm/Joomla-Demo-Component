@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			24th June, 2016
+	@build			13th July, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		default.php
@@ -24,6 +24,7 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('jquery.framework');
 JHtml::_('bootstrap.tooltip');
 JHtml::_('script', 'system/core.js', false, true);
+JHtml::_('behavior.keepalive');
 ?>
 <script type="text/javascript">
 <?php if ($this->hasPackage && DemoHelper::checkArray($this->headerList)) : ?>

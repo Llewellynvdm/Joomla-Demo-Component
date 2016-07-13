@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		1.0.5
-	@build			24th June, 2016
+	@build			13th July, 2016
 	@created		5th August, 2015
 	@package		Demo
 	@subpackage		demo.php
@@ -24,7 +24,7 @@ defined('_JEXEC') or die('Restricted access');
 // Access check.
 if (!JFactory::getUser()->authorise('core.manage', 'com_demo'))
 {
-	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+	return JError::raiseWaring(404, JText::_('JERROR_ALERTNOAUTHOR'));
 };
 
 // Load cms libraries
