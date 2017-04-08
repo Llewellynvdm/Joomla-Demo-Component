@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -32,7 +32,6 @@ class com_demoInstallerScript
 {
 	/**
 	 * method to install the component
-	 *
 	 *
 	 * @return void
 	 */
@@ -140,92 +139,6 @@ class com_demoInstallerScript
 			}
 		}
 
-		// Create a new query object.
-		$query = $db->getQuery(true);
-		// Select id from content type table
-		$query->select($db->quoteName('type_id'));
-		$query->from($db->quoteName('#__content_types'));
-		// Where Help_document alias is found
-		$query->where( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.help_document') );
-		$db->setQuery($query);
-		// Execute query to see if alias is found
-		$db->execute();
-		$help_document_found = $db->getNumRows();
-		// Now check if there were any rows
-		if ($help_document_found)
-		{
-			// Since there are load the needed  help_document type ids
-			$help_document_ids = $db->loadColumn();
-			// Remove Help_document from the content type table
-			$help_document_condition = array( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.help_document') );
-			// Create a new query object.
-			$query = $db->getQuery(true);
-			$query->delete($db->quoteName('#__content_types'));
-			$query->where($help_document_condition);
-			$db->setQuery($query);
-			// Execute the query to remove Help_document items
-			$help_document_done = $db->execute();
-			if ($help_document_done);
-			{
-				// If succesfully remove Help_document add queued success message.
-				$app->enqueueMessage(JText::_('The (com_demo.help_document) type alias was removed from the <b>#__content_type</b> table'));
-			}
-
-			// Remove Help_document items from the contentitem tag map table
-			$help_document_condition = array( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.help_document') );
-			// Create a new query object.
-			$query = $db->getQuery(true);
-			$query->delete($db->quoteName('#__contentitem_tag_map'));
-			$query->where($help_document_condition);
-			$db->setQuery($query);
-			// Execute the query to remove Help_document items
-			$help_document_done = $db->execute();
-			if ($help_document_done);
-			{
-				// If succesfully remove Help_document add queued success message.
-				$app->enqueueMessage(JText::_('The (com_demo.help_document) type alias was removed from the <b>#__contentitem_tag_map</b> table'));
-			}
-
-			// Remove Help_document items from the ucm content table
-			$help_document_condition = array( $db->quoteName('core_type_alias') . ' = ' . $db->quote('com_demo.help_document') );
-			// Create a new query object.
-			$query = $db->getQuery(true);
-			$query->delete($db->quoteName('#__ucm_content'));
-			$query->where($help_document_condition);
-			$db->setQuery($query);
-			// Execute the query to remove Help_document items
-			$help_document_done = $db->execute();
-			if ($help_document_done);
-			{
-				// If succesfully remove Help_document add queued success message.
-				$app->enqueueMessage(JText::_('The (com_demo.help_document) type alias was removed from the <b>#__ucm_content</b> table'));
-			}
-
-			// Make sure that all the Help_document items are cleared from DB
-			foreach ($help_document_ids as $help_document_id)
-			{
-				// Remove Help_document items from the ucm base table
-				$help_document_condition = array( $db->quoteName('ucm_type_id') . ' = ' . $help_document_id);
-				// Create a new query object.
-				$query = $db->getQuery(true);
-				$query->delete($db->quoteName('#__ucm_base'));
-				$query->where($help_document_condition);
-				$db->setQuery($query);
-				// Execute the query to remove Help_document items
-				$db->execute();
-
-				// Remove Help_document items from the ucm history table
-				$help_document_condition = array( $db->quoteName('ucm_type_id') . ' = ' . $help_document_id);
-				// Create a new query object.
-				$query = $db->getQuery(true);
-				$query->delete($db->quoteName('#__ucm_history'));
-				$query->where($help_document_condition);
-				$db->setQuery($query);
-				// Execute the query to remove Help_document items
-				$db->execute();
-			}
-		}
-
 		// If All related items was removed queued success message.
 		$app->enqueueMessage(JText::_('All related items was removed from the <b>#__ucm_base</b> table'));
 		$app->enqueueMessage(JText::_('All related items was removed from the <b>#__ucm_history</b> table'));
@@ -238,8 +151,8 @@ class com_demoInstallerScript
 		$query->delete($db->quoteName('#__assets'));
 		$query->where($demo_condition);
 		$db->setQuery($query);
-		$help_document_done = $db->execute();
-		if ($help_document_done);
+		$look_done = $db->execute();
+		if ($look_done);
 		{
 			// If succesfully remove demo add queued success message.
 			$app->enqueueMessage(JText::_('All related items was removed from the <b>#__assets</b> table'));
@@ -270,17 +183,27 @@ class com_demoInstallerScript
 	 */
 	function preflight($type, $parent)
 	{
+		// get application
+		$app = JFactory::getApplication();
+		// is redundant ...hmmm
 		if ($type == 'uninstall')
-		{        	
+		{
 			return true;
 		}
-		
-		$app = JFactory::getApplication();
+		// the default for both install and update
 		$jversion = new JVersion();
-		if (!$jversion->isCompatible('3.4.1'))
+		if (!$jversion->isCompatible('3.6.0'))
 		{
-			$app->enqueueMessage('Please upgrade to at least Joomla! 3.4.1 before continuing!', 'error');
+			$app->enqueueMessage('Please upgrade to at least Joomla! 3.6.0 before continuing!', 'error');
 			return false;
+		}
+		// do any updates needed
+		if ($type == 'update')
+		{
+		}
+		// do any install needed
+		if ($type == 'install')
+		{
 		}
 	}
 
@@ -303,24 +226,12 @@ class com_demoInstallerScript
 			$look->type_title = 'Demo Look';
 			$look->type_alias = 'com_demo.look';
 			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","add":"add","acronym":"acronym","website":"website","alias":"alias","not_required":"not_required"}}';
+			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","alias":"alias","dateofbirth":"dateofbirth","website":"website","mobile_phone":"mobile_phone","add":"add","image":"image","email":"email","not_required":"not_required"}}';
 			$look->router = 'DemoHelperRoute::getLookRoute';
 			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
 
 			// Set the object into the content types table.
 			$look_Inserted = $db->insertObject('#__content_types', $look);
-
-			// Create the help_document content type object.
-			$help_document = new stdClass();
-			$help_document->type_title = 'Demo Help_document';
-			$help_document->type_alias = 'com_demo.help_document';
-			$help_document->table = '{"special": {"dbtable": "#__demo_help_document","key": "id","type": "Help_document","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$help_document->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "title","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "content","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"title":"title","type":"type","groups":"groups","location":"location","admin_view":"admin_view","site_view":"site_view","target":"target","content":"content","alias":"alias","article":"article","url":"url","not_required":"not_required"}}';
-			$help_document->router = 'DemoHelperRoute::getHelp_documentRoute';
-			$help_document->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/help_document.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","type","location","target","article","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "article","targetTable": "#__content","targetColumn": "id","displayColumn": "title"}]}';
-
-			// Set the object into the content types table.
-			$help_document_Inserted = $db->insertObject('#__content_types', $help_document);
 
 
 			// Install the global extenstion params.
@@ -328,7 +239,7 @@ class com_demoInstallerScript
 
 			// Field to update.
 			$fields = array(
-				$db->quoteName('params') . ' = ' . $db->quote('{"autorName":"Llewellyn van der Merwe","autorEmail":"info@vdm.io","check_in":"-1 day","save_history":"1","history_limit":"10"}'),
+				$db->quoteName('params') . ' = ' . $db->quote('{"autorName":"Llewellyn van der Merwe","autorEmail":"info@vdm.io","check_in":"-1 day","save_history":"1","history_limit":"10","uikit_load":"1","uikit_min":"","uikit_style":""}'),
 			);
 
 			// Condition.
@@ -339,6 +250,10 @@ class com_demoInstallerScript
 			$query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
 			$db->setQuery($query);
 			$allDone = $db->execute();
+
+		// Get Application object
+		$app = JFactory::getApplication();
+		$app->enqueueMessage('First set the components global settings and permissions in the <b>Options</b> area, or the front-end of the component will not work as expected. <br />Please note that each view on the front-end has access and permissions, so if you would like the public to access those views they must be given the access and permission.', 'Info');
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/component-300.jpg"/>
 				</a>';
@@ -355,7 +270,7 @@ class com_demoInstallerScript
 			$look->type_title = 'Demo Look';
 			$look->type_alias = 'com_demo.look';
 			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","add":"add","acronym":"acronym","website":"website","alias":"alias","not_required":"not_required"}}';
+			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","alias":"alias","dateofbirth":"dateofbirth","website":"website","mobile_phone":"mobile_phone","add":"add","image":"image","email":"email","not_required":"not_required"}}';
 			$look->router = 'DemoHelperRoute::getLookRoute';
 			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
 
@@ -379,40 +294,11 @@ class com_demoInstallerScript
 				$look_Inserted = $db->insertObject('#__content_types', $look);
 			}
 
-			// Create the help_document content type object.
-			$help_document = new stdClass();
-			$help_document->type_title = 'Demo Help_document';
-			$help_document->type_alias = 'com_demo.help_document';
-			$help_document->table = '{"special": {"dbtable": "#__demo_help_document","key": "id","type": "Help_document","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$help_document->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "title","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "content","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"title":"title","type":"type","groups":"groups","location":"location","admin_view":"admin_view","site_view":"site_view","target":"target","content":"content","alias":"alias","article":"article","url":"url","not_required":"not_required"}}';
-			$help_document->router = 'DemoHelperRoute::getHelp_documentRoute';
-			$help_document->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/help_document.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","type","location","target","article","not_required"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "article","targetTable": "#__content","targetColumn": "id","displayColumn": "title"}]}';
-
-			// Check if help_document type is already in content_type DB.
-			$help_document_id = null;
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('type_id')));
-			$query->from($db->quoteName('#__content_types'));
-			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($help_document->type_alias));
-			$db->setQuery($query);
-			$db->execute();
-
-			// Set the object into the content types table.
-			if ($db->getNumRows())
-			{
-				$help_document->type_id = $db->loadResult();
-				$help_document_Updated = $db->updateObject('#__content_types', $help_document, 'type_id');
-			}
-			else
-			{
-				$help_document_Inserted = $db->insertObject('#__content_types', $help_document);
-			}
-
 
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/component-300.jpg"/>
 				</a>
-				<h3>Upgrade to Version 1.0.5 Was Successful! Let us know if anything is not working as expected.</h3>';
+				<h3>Upgrade to Version 2.0.0 Was Successful! Let us know if anything is not working as expected.</h3>';
 		}
 	}
 }

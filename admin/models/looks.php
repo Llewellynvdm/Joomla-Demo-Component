@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -40,10 +40,7 @@ class DemoModelLooks extends JModelList
 				'a.created_by','created_by',
 				'a.modified_by','modified_by',
 				'a.name','name',
-				'a.description','description',
-				'a.add','add',
-				'a.acronym','acronym',
-				'a.website','website'
+				'a.description','description'
 			);
 		}
 
@@ -69,15 +66,6 @@ class DemoModelLooks extends JModelList
 
 		$description = $this->getUserStateFromRequest($this->context . '.filter.description', 'filter_description');
 		$this->setState('filter.description', $description);
-
-		$add = $this->getUserStateFromRequest($this->context . '.filter.add', 'filter_add');
-		$this->setState('filter.add', $add);
-
-		$acronym = $this->getUserStateFromRequest($this->context . '.filter.acronym', 'filter_acronym');
-		$this->setState('filter.acronym', $acronym);
-
-		$website = $this->getUserStateFromRequest($this->context . '.filter.website', 'filter_website');
-		$this->setState('filter.website', $website);
         
 		$sorting = $this->getUserStateFromRequest($this->context . '.filter.sorting', 'filter_sorting', 0, 'int');
 		$this->setState('filter.sorting', $sorting);
@@ -129,44 +117,10 @@ class DemoModelLooks extends JModelList
 				}
 
 			}
-		} 
-
-		// set selection value to a translatable value
-		if (DemoHelper::checkArray($items))
-		{
-			foreach ($items as $nr => &$item)
-			{
-				// convert add
-				$item->add = $this->selectionTranslation($item->add, 'add');
-			}
-		}
-
+		}  
         
 		// return items
 		return $items;
-	}
-
-	/**
-	* Method to convert selection values to translatable string.
-	*
-	* @return translatable string
-	*/
-	public function selectionTranslation($value,$name)
-	{
-		// Array of add language strings
-		if ($name == 'add')
-		{
-			$addArray = array(
-				1 => 'COM_DEMO_LOOK_YES',
-				0 => 'COM_DEMO_LOOK_NO'
-			);
-			// Now check if value is found in this array
-			if (isset($addArray[$value]) && DemoHelper::checkString($addArray[$value]))
-			{
-				return $addArray[$value];
-			}
-		}
-		return $value;
 	}
 	
 	/**
@@ -223,21 +177,11 @@ class DemoModelLooks extends JModelList
 			}
 			else
 			{
-				$search = $db->quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.name LIKE '.$search.' OR a.description LIKE '.$search.' OR a.add LIKE '.$search.' OR a.acronym LIKE '.$search.' OR a.website LIKE '.$search.' OR a.alias LIKE '.$search.')');
+				$search = $db->quote('%' . $db->escape($search) . '%');
+				$query->where('(a.name LIKE '.$search.' OR a.description LIKE '.$search.' OR a.alias LIKE '.$search.' OR a.add LIKE '.$search.')');
 			}
 		}
 
-		// Filter by Add.
-		if ($add = $this->getState('filter.add'))
-		{
-			$query->where('a.add = ' . $db->quote($db->escape($add, true)));
-		}
-		// Filter by Acronym.
-		if ($acronym = $this->getState('filter.acronym'))
-		{
-			$query->where('a.acronym = ' . $db->quote($db->escape($acronym, true)));
-		}
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'a.id');
@@ -367,9 +311,6 @@ class DemoModelLooks extends JModelList
 		$id .= ':' . $this->getState('filter.modified_by');
 		$id .= ':' . $this->getState('filter.name');
 		$id .= ':' . $this->getState('filter.description');
-		$id .= ':' . $this->getState('filter.add');
-		$id .= ':' . $this->getState('filter.acronym');
-		$id .= ':' . $this->getState('filter.website');
 
 		return parent::getStoreId($id);
 	}

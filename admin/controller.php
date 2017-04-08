@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		controller.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -83,8 +83,7 @@ class DemoController extends JControllerLegacy
                 if (DemoHelper::checkString($view))
                 {
                         $views = array(
-				'look' => 'looks',
-				'help_document' => 'help_documents'
+				'look' => 'looks'
                                 );
                         // check if this is a list view
                         if (in_array($view,$views))

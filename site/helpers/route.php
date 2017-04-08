@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		route.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -31,6 +31,88 @@ jimport('joomla.application.categories');
 abstract class DemoHelperRoute
 {
 	protected static $lookup;
+
+	/**
+	* @param int The route of the Looks
+	*/
+	public static function getLooksRoute($id = 0, $catid = 0)
+	{
+		if ($id > 0)
+		{
+			// Initialize the needel array.
+			$needles = array(
+				'looks'  => array((int) $id)
+			);
+			// Create the link
+			$link = 'index.php?option=com_demo&view=looks&id='. $id;
+		}
+		else
+		{
+			// Initialize the needel array.
+			$needles = array();
+			//Create the link but don't add the id.
+			$link = 'index.php?option=com_demo&view=looks';
+		}
+		if ($catid > 1)
+		{
+			$categories = JCategories::getInstance('demo.looks');
+			$category = $categories->get($catid);
+			if ($category)
+			{
+				$needles['category'] = array_reverse($category->getPath());
+				$needles['categories'] = $needles['category'];
+				$link .= '&catid='.$catid;
+			}
+		}
+
+		if ($item = self::_findItem($needles))
+		{
+			$link .= '&Itemid='.$item;
+		}
+
+		return $link;
+	}
+
+	/**
+	* @param int The route of the Looking
+	*/
+	public static function getLookingRoute($id = 0, $catid = 0)
+	{
+		if ($id > 0)
+		{
+			// Initialize the needel array.
+			$needles = array(
+				'looking'  => array((int) $id)
+			);
+			// Create the link
+			$link = 'index.php?option=com_demo&view=looking&id='. $id;
+		}
+		else
+		{
+			// Initialize the needel array.
+			$needles = array();
+			//Create the link but don't add the id.
+			$link = 'index.php?option=com_demo&view=looking';
+		}
+		if ($catid > 1)
+		{
+			$categories = JCategories::getInstance('demo.looking');
+			$category = $categories->get($catid);
+			if ($category)
+			{
+				$needles['category'] = array_reverse($category->getPath());
+				$needles['categories'] = $needles['category'];
+				$link .= '&catid='.$catid;
+			}
+		}
+
+		if ($item = self::_findItem($needles))
+		{
+			$link .= '&Itemid='.$item;
+		}
+
+		return $link;
+	}
 
 	/**
 	 * Get the URL route for demo category from a category ID and language

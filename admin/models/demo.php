@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -38,7 +38,7 @@ class DemoModelDemo extends JModelList
 		$icons  = array();
                 // view groups array
 		$viewGroups = array(
-			'main' => array('png.look.add', 'png.looks', 'png.help_documents')
+			'main' => array('png.look.add', 'png.looks')
 		);
 		// view access array
 		$viewAccess = array(
@@ -47,12 +47,7 @@ class DemoModelDemo extends JModelList
 			'look.access' => 'look.access',
 			'looks.submenu' => 'look.submenu',
 			'looks.dashboard_list' => 'look.dashboard_list',
-			'look.dashboard_add' => 'look.dashboard_add',
-			'help_document.create' => 'help_document.create',
-			'help_documents.access' => 'help_document.access',
-			'help_document.access' => 'help_document.access',
-			'help_documents.submenu' => 'help_document.submenu',
-			'help_documents.dashboard_list' => 'help_document.dashboard_list');
+			'look.dashboard_add' => 'look.dashboard_add');
 		foreach($viewGroups as $group => $views)
                 {
 			$i = 0;

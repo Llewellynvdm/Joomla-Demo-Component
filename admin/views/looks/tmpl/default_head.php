@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		default_head.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -43,15 +43,6 @@ defined('_JEXEC') or die('Restricted access');
 	</th>
 	<th class="nowrap hidden-phone" >
 			<?php echo JHtml::_('grid.sort', 'COM_DEMO_LOOK_DESCRIPTION_LABEL', 'description', $this->listDirn, $this->listOrder); ?>
-	</th>
-	<th class="nowrap hidden-phone" >
-			<?php echo JHtml::_('grid.sort', 'COM_DEMO_LOOK_ADD_LABEL', 'add', $this->listDirn, $this->listOrder); ?>
-	</th>
-	<th class="nowrap hidden-phone" >
-			<?php echo JHtml::_('grid.sort', 'COM_DEMO_LOOK_ACRONYM_LABEL', 'acronym', $this->listDirn, $this->listOrder); ?>
-	</th>
-	<th class="nowrap hidden-phone" >
-			<?php echo JHtml::_('grid.sort', 'COM_DEMO_LOOK_WEBSITE_LABEL', 'website', $this->listDirn, $this->listOrder); ?>
 	</th>
 	<?php if ($this->canState): ?>
 		<th width="10" class="nowrap center" >

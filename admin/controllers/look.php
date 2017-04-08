@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -94,7 +94,7 @@ class DemoControllerLook extends JControllerForm
 		{
 			// The record has been set. Check the record permissions.
 			$permission = $user->authorise('look.edit', 'com_demo.look.' . (int) $recordId);
-			if (!$permission && !is_null($permission))
+			if (!$permission)
 			{
 				if ($user->authorise('look.edit.own', 'com_demo.look.' . $recordId))
 				{

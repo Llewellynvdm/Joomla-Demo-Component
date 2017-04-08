@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -28,7 +28,7 @@ $document->addScript('components/com_demo/assets/js/site.js');
 
 // Require helper files
 JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php'); 
-JLoader::register('DemoHelperRoute', dirname(__FILE__) . '/helpers/route.php'); ###SITE_GLOBAL_EVENT###
+JLoader::register('DemoHelperRoute', dirname(__FILE__) . '/helpers/route.php'); 
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

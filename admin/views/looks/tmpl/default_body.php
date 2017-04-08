@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		default_body.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -83,15 +83,6 @@ $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 		</td>
 		<td class="hidden-phone">
 			<?php echo $this->escape($item->description); ?>
-		</td>
-		<td class="hidden-phone">
-			<?php echo JText::_($item->add); ?>
-		</td>
-		<td class="hidden-phone">
-			<?php echo $this->escape($item->acronym); ?>
-		</td>
-		<td class="hidden-phone">
-			<?php echo $this->escape($item->website); ?>
 		</td>
 		<td class="center">
 		<?php if ($canDo->get('look.edit.state')) : ?>

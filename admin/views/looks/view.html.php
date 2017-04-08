@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -196,50 +196,6 @@ class DemoViewLooks extends JViewLegacy
                                 JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text')
 			);
                 }  
-
-		// Set Add Selection
-		$this->addOptions = $this->getTheAddSelections();
-		if ($this->addOptions)
-		{
-			// Add Filter
-			JHtmlSidebar::addFilter(
-				'- Select '.JText::_('COM_DEMO_LOOK_ADD_LABEL').' -',
-				'filter_add',
-				JHtml::_('select.options', $this->addOptions, 'value', 'text', $this->state->get('filter.add'))
-			);
-
-			if ($this->canBatch && $this->canCreate && $this->canEdit)
-			{
-				// Add Batch Selection
-				JHtmlBatch_::addListSelection(
-					'- Keep Original '.JText::_('COM_DEMO_LOOK_ADD_LABEL').' -',
-					'batch[add]',
-					JHtml::_('select.options', $this->addOptions, 'value', 'text')
-				);
-			}
-		}
-
-		// Set Acronym Selection
-		$this->acronymOptions = $this->getTheAcronymSelections();
-		if ($this->acronymOptions)
-		{
-			// Acronym Filter
-			JHtmlSidebar::addFilter(
-				'- Select '.JText::_('COM_DEMO_LOOK_ACRONYM_LABEL').' -',
-				'filter_acronym',
-				JHtml::_('select.options', $this->acronymOptions, 'value', 'text', $this->state->get('filter.acronym'))
-			);
-
-			if ($this->canBatch && $this->canCreate && $this->canEdit)
-			{
-				// Acronym Batch Selection
-				JHtmlBatch_::addListSelection(
-					'- Keep Original '.JText::_('COM_DEMO_LOOK_ACRONYM_LABEL').' -',
-					'batch[acronym]',
-					JHtml::_('select.options', $this->acronymOptions, 'value', 'text')
-				);
-			}
-		}
 	}
 
 	/**
@@ -284,78 +240,7 @@ class DemoViewLooks extends JViewLegacy
 			'a.published' => JText::_('JSTATUS'),
 			'a.name' => JText::_('COM_DEMO_LOOK_NAME_LABEL'),
 			'a.description' => JText::_('COM_DEMO_LOOK_DESCRIPTION_LABEL'),
-			'a.add' => JText::_('COM_DEMO_LOOK_ADD_LABEL'),
-			'a.acronym' => JText::_('COM_DEMO_LOOK_ACRONYM_LABEL'),
-			'a.website' => JText::_('COM_DEMO_LOOK_WEBSITE_LABEL'),
 			'a.id' => JText::_('JGRID_HEADING_ID')
 		);
 	} 
-
-	protected function getTheAddSelections()
-	{
-		// Get a db connection.
-		$db = JFactory::getDbo();
-
-		// Create a new query object.
-		$query = $db->getQuery(true);
-
-		// Select the text.
-		$query->select($db->quoteName('add'));
-		$query->from($db->quoteName('#__demo_look'));
-		$query->order($db->quoteName('add') . ' ASC');
-
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-
-		$results = $db->loadColumn();
-
-		if ($results)
-		{
-			// get model
-			$model = $this->getModel();
-			$results = array_unique($results);
-			$filter = array();
-			foreach ($results as $add)
-			{
-				// Translate the add selection
-				$text = $model->selectionTranslation($add,'add');
-				// Now add the add and its text to the options array
-				$filter[] = JHtml::_('select.option', $add, JText::_($text));
-			}
-			return $filter;
-		}
-		return false;
-	}
-
-	protected function getTheAcronymSelections()
-	{
-		// Get a db connection.
-		$db = JFactory::getDbo();
-
-		// Create a new query object.
-		$query = $db->getQuery(true);
-
-		// Select the text.
-		$query->select($db->quoteName('acronym'));
-		$query->from($db->quoteName('#__demo_look'));
-		$query->order($db->quoteName('acronym') . ' ASC');
-
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-
-		$results = $db->loadColumn();
-
-		if ($results)
-		{
-			$results = array_unique($results);
-			$filter = array();
-			foreach ($results as $acronym)
-			{
-				// Now add the acronym and its text to the options array
-				$filter[] = JHtml::_('select.option', $acronym, $acronym);
-			}
-			return $filter;
-		}
-		return false;
-	}
 }

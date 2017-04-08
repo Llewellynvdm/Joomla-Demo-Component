@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -25,7 +25,54 @@ defined('_JEXEC') or die('Restricted access');
  * Demo component helper
  */
 abstract class DemoHelper
-{###SITE_GLOBAL_EVENT_HELPER### ###SITE_CUSTOM_HELPER_SCRIPT###
+{ 
+
+	/**
+	 *	Change to nice fancy date
+	 */
+	public static function fancyDate($date)
+	{
+		if (!self::isValidTimeStamp($date))
+		{
+			$date = strtotime($date);
+		}
+		return date('jS \o\f F Y',$date);
+	}
+
+	/**
+	 *	Change to nice fancy time and date
+	 */
+	public static function fancyDateTime($time)
+	{
+		if (!self::isValidTimeStamp($time))
+		{
+			$time = strtotime($time);
+		}
+		return date('(G:i) jS \o\f F Y',$time);
+	}
+
+	/**
+	 *	Change to nice hour:minutes time
+	 */
+	public static function fancyTime($time)
+	{
+		if (!self::isValidTimeStamp($time))
+		{
+			$time = strtotime($time);
+		}
+		return date('G:i',$time);
+	}
+
+	/**
+	 *	Check if string is a valid time stamp
+	 */
+	public static function isValidTimeStamp($timestamp)
+	{
+		return ((int) $timestamp === $timestamp)
+		&& ($timestamp <= PHP_INT_MAX)
+		&& ($timestamp >= ~PHP_INT_MAX);
+	}
+ 
 	
 	public static function jsonToString($value, $sperator = ", ", $table = null)
 	{
@@ -106,75 +153,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Load the Component Help URLs.
+	*	Can be used to build help urls.
 	**/
 	public static function getHelpUrl($view)
 	{
-		$user	= JFactory::getUser();
-		$groups = $user->get('groups');
-		$db	= JFactory::getDbo();
-		$query	= $db->getQuery(true);
-		$query->select(array('a.id','a.groups','a.target','a.type','a.article','a.url'));
-		$query->from('#__demo_help_document AS a');
-		$query->where('a.site_view = '.$db->quote($view));
-		$query->where('a.location = 2');
-		$query->where('a.published = 1');
-		$db->setQuery($query);
-		$db->execute();
-		if($db->getNumRows())
-		{
-			$helps = $db->loadObjectList();
-			if (self::checkArray($helps))
-			{
-				foreach ($helps as $nr => $help)
-				{
-					if ($help->target == 1)
-					{
-						$targetgroups = json_decode($help->groups, true);
-						if (!array_intersect($targetgroups, $groups))
-						{
-							// if user not in those target groups then remove the item
-							unset($helps[$nr]);
-							continue;
-						}
-					}
-					// set the return type
-					switch ($help->type)
-					{
-						// set joomla article
-						case 1:
-							return self::loadArticleLink($help->article);
-						break;
-						// set help text
-						case 2:
-							return self::loadHelpTextLink($help->id);
-						break;
-						// set Link
-						case 3:
-							return $help->url;
-						break;
-					}
-				}
-			}
-		}
 		return false;
-	}
-
-	/**
-	*	Get the Article Link.
-	**/
-	protected static function loadArticleLink($id)
-	{
-		return JURI::root().'index.php?option=com_content&view=article&id='.$id.'&tmpl=component&layout=modal';
-	}
-
-	/**
-	*	Get the Help Text Link.
-	**/
-	protected static function loadHelpTextLink($id)
-	{
-		$token = JSession::getFormToken();
-		return 'index.php?option=com_demo&task=help.getText&id=' . (int) $id . '&token=' . $token;
 	}
 
 	/**
@@ -328,6 +311,108 @@ abstract class DemoHelper
 
 		return $button->input;
 
+	}
+
+	/**
+	* 	UIKIT Component Classes
+	**/
+	public static $uk_components = array(
+			'data-uk-grid' => array(
+				'grid' ),
+			'uk-accordion' => array(
+				'accordion' ),
+			'uk-autocomplete' => array(
+				'autocomplete' ),
+			'data-uk-datepicker' => array(
+				'datepicker' ),
+			'uk-form-password' => array(
+				'form-password' ),
+			'uk-form-select' => array(
+				'form-select' ),
+			'data-uk-htmleditor' => array(
+				'htmleditor' ),
+			'data-uk-lightbox' => array(
+				'lightbox' ),
+			'uk-nestable' => array(
+				'nestable' ),
+			'UIkit.notify' => array(
+				'notify' ),
+			'data-uk-parallax' => array(
+				'parallax' ),
+			'uk-search' => array(
+				'search' ),
+			'uk-slider' => array(
+				'slider' ),
+			'uk-slideset' => array(
+				'slideset' ),
+			'uk-slideshow' => array(
+				'slideshow',
+				'slideshow-fx' ),
+			'uk-sortable' => array(
+				'sortable' ),
+			'data-uk-sticky' => array(
+				'sticky' ),
+			'data-uk-timepicker' => array(
+				'timepicker' ),
+			'data-uk-tooltip' => array(
+				'tooltip' ),
+			'uk-placeholder' => array(
+				'placeholder' ),
+			'uk-dotnav' => array(
+				'dotnav' ),
+			'uk-slidenav' => array(
+				'slidenav' ),
+			'uk-form' => array(
+				'form-advanced' ),
+			'uk-progress' => array(
+				'progress' ),
+			'upload-drop' => array(
+				'upload', 'form-file' )
+			);
+	
+	/**
+	* 	Add UIKIT Components
+	**/
+	public static $uikit = false;
+
+	/**
+	* 	Get UIKIT Components
+	**/
+	public static function getUikitComp($content,$classes = array())
+	{
+		if (strpos($content,'class="uk-') !== false)
+		{
+			// reset
+			$temp = array();
+			foreach (self::$uk_components as $looking => $add)
+			{
+				if (strpos($content,$looking) !== false)
+				{
+					$temp[] = $looking;
+				}
+			}
+			// make sure uikit is loaded to config
+			if (strpos($content,'class="uk-') !== false)
+			{
+				self::$uikit = true;
+			}
+			// sorter
+			if (self::checkArray($temp))
+			{
+				// merger
+				if (self::checkArray($classes))
+				{
+					$newTemp = array_merge($temp,$classes);
+					$temp = array_unique($newTemp);
+				}
+				return $temp;
+			}
+		}	
+		if (self::checkArray($classes))
+		{
+			return $classes;
+		}
+		return false;
 	} 
 
 	public static function getVar($table, $where = null, $whereString = 'user', $what = 'id', $operator = '=', $main = 'demo')
@@ -384,13 +469,18 @@ abstract class DemoHelper
 
 		if (self::checkArray($where))
 		{
+			// prep main <-- why? well if $main='' is empty then $table can be categories or users
+			if (self::checkString($main))
+			{
+				$main = '_'.ltrim($main, '_');
+			}
 			// Get a db connection.
 			$db = JFactory::getDbo();
 			// Create a new query object.
 			$query = $db->getQuery(true);
 
 			$query->select($db->quoteName(array($what)));
-			$query->from($db->quoteName('#__'.$main.'_'.$table));
+			$query->from($db->quoteName('#_'.$main.'_'.$table));
 			$query->where($db->quoteName($whereString) . ' '.$operator.' (' . implode(',',$where) . ')');
 			$db->setQuery($query);
 			$db->execute();
@@ -472,7 +562,7 @@ abstract class DemoHelper
 			{
 				// The record has been set. Check the record permissions.
 				$permission = $user->authorise($action->name, 'com_demo.'.$view.'.' . (int) $record->id);
-				if (!$permission && !is_null($permission))
+				if (!$permission) // TODO removed && !is_null($permission)
 				{
 					if ($action->name == 'core.edit' || $action->name == $view.'.edit')
 					{
@@ -656,10 +746,22 @@ abstract class DemoHelper
 		return false;
 	}
 
-	public static function checkArray($array)
+	public static function checkArray($array, $removeEmptyString = false)
 	{
 		if (isset($array) && is_array($array) && count($array) > 0)
 		{
+			// also make sure the empty strings are removed
+			if ($removeEmptyString)
+			{
+				foreach ($array as $key => $string)
+				{
+					if (empty($string))
+					{
+						unset($array[$key]);
+					}
+				}
+				return self::checkArray($array, false);
+			}
 			return true;
 		}
 		return false;
@@ -725,62 +827,91 @@ abstract class DemoHelper
 		return $string;
 	}
 
-	public static function safeString($string, $type = 'L', $spacer = '_')
+	public static function safeString($string, $type = 'L', $spacer = '_', $replaceNumbers = true)
 	{
-		// remove all numbers and replace with english text version (works well only up to a thousand)
-		$string = self::replaceNumbers($string);
-
-		if (self::checkString($string))
+		if ($replaceNumbers === true)
 		{
+			// remove all numbers and replace with english text version (works well only up to millions)
+			$string = self::replaceNumbers($string);
+		}
+		// 0nly continue if we have a string
+                if (self::checkString($string))
+                {
+			// create file name without the extention that is safe
+			if ($type === 'filename')
+			{
+				// make sure VDM is not in the string
+				$string = str_replace('VDM', 'vDm', $string);
+				// Remove anything which isn't a word, whitespace, number
+				// or any of the following caracters -_()
+				// If you don't need to handle multi-byte characters
+				// you can use preg_replace rather than mb_ereg_replace
+				// Thanks @Łukasz Rysiak!
+				$string = mb_ereg_replace("([^\w\s\d\-_\(\)])", '', $string);
+				// http://stackoverflow.com/a/2021729/1429677
+				return preg_replace('/\s+/', ' ', $string);
+			}
 			// remove all other characters
 			$string = trim($string);
 			$string = preg_replace('/'.$spacer.'+/', ' ', $string);
 			$string = preg_replace('/\s+/', ' ', $string);
 			$string = preg_replace("/[^A-Za-z ]/", '', $string);
-			// return a string with all first letter of each word uppercase(no undersocre)
-			if ($type == 'W')
-				    {
-			    return ucwords(strtolower($string));
-			}
-				    elseif ($type == 'w')
-				    {
-			    return strtolower($string);
-			}
-				    elseif ($type == 'Ww')
-				    {
-			    return ucfirst(strtolower($string));
-			}
-				    elseif ($type == 'WW')
-				    {
-			    return strtoupper($string);
-			}
-			elseif ($type == 'U')
+			// select final adaptations
+			if ($type === 'L' || $type === 'strtolower')
+                        {
+                                // replace white space with underscore
+                                $string = preg_replace('/\s+/', $spacer, $string);
+                                // default is to return lower
+                                return strtolower($string);
+                        }
+			elseif ($type === 'W')
 			{
-				// replace white space with underscore
-				$string = preg_replace('/\s+/', $spacer, $string);
-				// return all upper
-				return strtoupper($string);
+				// return a string with all first letter of each word uppercase(no undersocre)
+				return ucwords(strtolower($string));
 			}
-			elseif ($type == 'F')
+			elseif ($type === 'w' || $type === 'word')
 			{
-				// replace white space with underscore
-				$string = preg_replace('/\s+/', $spacer, $string);
-				// return with first caracter to upper
+				// return a string with all lowercase(no undersocre)
+				return strtolower($string);
+			}
+			elseif ($type === 'Ww' || $type === 'Word')
+			{
+				// return a string with first letter of the first word uppercase and all the rest lowercase(no undersocre)
 				return ucfirst(strtolower($string));
 			}
-			elseif ($type == 'L')
+			elseif ($type === 'WW' || $type === 'WORD')
 			{
-				// replace white space with underscore
-				$string = preg_replace('/\s+/', $spacer, $string);
-				// default is to return lower
-				    return strtolower($string);
+				// return a string with all the uppercase(no undersocre)
+				return strtoupper($string);
 			}
-
-			// return string
-			return $string;
-		}
-		// not a string
-		return '';
+                        elseif ($type === 'U' || $type === 'strtoupper')
+                        {
+                                // replace white space with underscore
+                                $string = preg_replace('/\s+/', $spacer, $string);
+                                // return all upper
+                                return strtoupper($string);
+                        }
+                        elseif ($type === 'F' || $type === 'ucfirst')
+                        {
+                                // replace white space with underscore
+                                $string = preg_replace('/\s+/', $spacer, $string);
+                                // return with first caracter to upper
+                                return ucfirst(strtolower($string));
+                        }
+                        elseif ($type === 'cA' || $type === 'cAmel' || $type === 'camelcase')
+			{
+				// convert all words to first letter uppercase
+				$string = ucwords(strtolower($string));
+				// remove white space
+				$string = preg_replace('/\s+/', '', $string);
+				// now return first letter lowercase
+				return lcfirst($string);
+			}
+                        // return string
+                        return $string;
+                }
+                // not a string
+                return '';
 	}
 
 	public static function htmlEscape($var, $charset = 'UTF-8', $sorten = false, $length = 40)

@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -28,7 +28,29 @@ JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
 $componentParams = JComponentHelper::getParams('com_demo');
 ?>
-<div id="demo_loader">
+<script type="text/javascript">
+	// waiting spinner
+	var outerDiv = jQuery('body');
+	jQuery('<div id="loading"></div>')
+		.css("background", "rgba(255, 255, 255, .8) url('components/com_demo/assets/images/import.gif') 50% 15% no-repeat")
+		.css("top", outerDiv.position().top - jQuery(window).scrollTop())
+		.css("left", outerDiv.position().left - jQuery(window).scrollLeft())
+		.css("width", outerDiv.width())
+		.css("height", outerDiv.height())
+		.css("position", "fixed")
+		.css("opacity", "0.80")
+		.css("-ms-filter", "progid:DXImageTransform.Microsoft.Alpha(Opacity = 80)")
+		.css("filter", "alpha(opacity = 80)")
+		.css("display", "none")
+		.appendTo(outerDiv);
+	jQuery('#loading').show();
+	// when page is ready remove and show
+	jQuery(window).load(function() {
+		jQuery('#demo_loader').fadeIn('fast');
+		jQuery('#loading').hide();
+	});
+</script>
+<div id="demo_loader" style="display: none;">
 <form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='.(int) $this->item->id.$this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
 	<?php echo JLayoutHelper::render('look.details_above', $this); ?><div class="form-horizontal">
@@ -37,22 +59,21 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'details', JText::_('COM_DEMO_LOOK_DETAILS', true)); ?>
 		<div class="row-fluid form-horizontal-desktop">
-			<div class="span6">
-				<?php echo JLayoutHelper::render('look.details_left', $this); ?>
-			</div>
-			<div class="span6">
-				<?php echo JLayoutHelper::render('look.details_right', $this); ?>
+		</div>
+		<div class="row-fluid form-horizontal-desktop">
+			<div class="span12">
+				<?php echo JLayoutHelper::render('look.details_fullwidth', $this); ?>
 			</div>
 		</div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
 
-	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'repetable_numbers', JText::_('COM_DEMO_LOOK_REPETABLE_NUMBERS', true)); ?>
+	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'more', JText::_('COM_DEMO_LOOK_MORE', true)); ?>
 		<div class="row-fluid form-horizontal-desktop">
 			<div class="span6">
-				<?php echo JLayoutHelper::render('look.repetable_numbers_left', $this); ?>
+				<?php echo JLayoutHelper::render('look.more_left', $this); ?>
 			</div>
 			<div class="span6">
-				<?php echo JLayoutHelper::render('look.repetable_numbers_right', $this); ?>
+				<?php echo JLayoutHelper::render('look.more_right', $this); ?>
 			</div>
 		</div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
@@ -104,70 +125,19 @@ $componentParams = JComponentHelper::getParams('com_demo');
 
 <script type="text/javascript">
 
-// #jform_name listeners for name_vvvvvvv function
-jQuery('#jform_name').on('keyup',function()
-{
-	var name_vvvvvvv = jQuery("#jform_name").val();
-	vvvvvvv(name_vvvvvvv);
-
-});
-jQuery('#adminForm').on('change', '#jform_name',function (e)
-{
-	e.preventDefault();
-	var name_vvvvvvv = jQuery("#jform_name").val();
-	vvvvvvv(name_vvvvvvv);
-
-});
-
-// #jform_add listeners for add_vvvvvvw function
+// #jform_add listeners for add_vvvvvvv function
 jQuery('#jform_add').on('keyup',function()
 {
-	var add_vvvvvvw = jQuery("#jform_add input[type='radio']:checked").val();
-	vvvvvvw(add_vvvvvvw);
+	var add_vvvvvvv = jQuery("#jform_add input[type='radio']:checked").val();
+	vvvvvvv(add_vvvvvvv);
 
 });
 jQuery('#adminForm').on('change', '#jform_add',function (e)
 {
 	e.preventDefault();
-	var add_vvvvvvw = jQuery("#jform_add input[type='radio']:checked").val();
-	vvvvvvw(add_vvvvvvw);
+	var add_vvvvvvv = jQuery("#jform_add input[type='radio']:checked").val();
+	vvvvvvv(add_vvvvvvv);
 
 });
-
-
-jQuery('input.form-field-repeatable').on('value-update', function(e, value){
-	if (value)
-	{
-		buildTable(value,e.currentTarget.id);
-	}
-});
-
-jQuery('input.form-field-repeatable').on('row-add', function(e, row) {
-	if ("jform_male" == e.currentTarget.id)
-	{
-		setSelection('male');
-		updateSelection(row);
-	}
-	else if("jform_female" == e.currentTarget.id)
-	{
-		setSelection('female');
-		updateSelection(row);
-	}
-});
-
-var AgeGroup = new Array;
-function setSelection(gender)
-{
-	AgeGroup.length = 0;
-	<?php $fieldNrs = range(1,9,1); ?>
-	<?php foreach($fieldNrs as $fieldNr): ?>
-		// get options
-		var age_<?php echo $fieldNr ?> = jQuery("#jform_"+gender+"_fields_age-<?php echo $fieldNr ?> option:selected").val();
-		if (age_<?php echo $fieldNr ?>)
-		{
-			AgeGroup.push(age_<?php echo $fieldNr ?>);
-		}
-	<?php endforeach; ?>
-}
 
 </script>

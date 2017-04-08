@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		controller.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -37,7 +37,7 @@ class DemoController extends JControllerLegacy
         function display($cachable = false, $urlparams = false)
 	{
 		// set default view if not set
-		$view		= $this->input->getCmd('view', '###SITE_DEFAULT_VIEW###');
+		$view		= $this->input->getCmd('view', 'looks');
 		$isEdit		= $this->checkEditView($view);
 		$layout		= $this->input->get('layout', null, 'WORD');
 		$id		= $this->input->getInt('id');
@@ -69,7 +69,7 @@ class DemoController extends JControllerLegacy
 				else
 				{
 					// normal redirect back to the list default site view
-					$this->setRedirect(JRoute::_('index.php?option=com_demo&view=###SITE_DEFAULT_VIEW###', false));
+					$this->setRedirect(JRoute::_('index.php?option=com_demo&view=looks', false));
 				}
 				return false;
 			}
@@ -83,7 +83,7 @@ class DemoController extends JControllerLegacy
                 if (DemoHelper::checkString($view))
                 {
                         $views = array(
-
+				'look'
                                 );
                         // check if this is a edit view
                         if (in_array($view,$views))

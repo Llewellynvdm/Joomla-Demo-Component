@@ -3,9 +3,9 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		1.0.5
-	@build			13th July, 2016
-	@created		5th August, 2015
+	@version		2.0.0
+	@build			8th April, 2017
+	@created		18th October, 2016
 	@package		Demo
 	@subpackage		router.php
 	@author			Llewellyn van der Merwe <https://www.vdm.io/>	
@@ -77,11 +77,11 @@ class DemoRouter extends JComponentRouterBase
 			return $segments;
 		}
 
-		if (isset($view) && isset($query['id']) && 0)
+		if (isset($view) && isset($query['id']) && ($view === 'look' || $view === 'looks' || $view === 'looking'))
 		{
 			if ($mId != (int) $query['id'] || $mView != $view)
 			{
-				if (0)
+				if (($view === 'look' || $view === 'looks' || $view === 'looking'))
 				{
 					$segments[] = $view;
 					$id = explode(':', $query['id']);
@@ -119,29 +119,60 @@ class DemoRouter extends JComponentRouterBase
 	 * @since   3.3
 	 */
 	public function parse(&$segments)
-	{
-		//var_dump($segments);
-		//$app = JFactory::getApplication();
-		//$menu = $app->getMenu();
-		//$item = $menu->getActive();
-		
+	{		
 		$count = count($segments);
 		$vars = array();
-				
-		//var_dump($item->query['view']);
+		
 		//Handle View and Identifier
 		switch($segments[0])
 		{
+			case 'look':
+				$vars['view'] = 'look';
+				if (is_numeric($segments[$count-1]))
+				{
+					$vars['id'] = (int) $segments[$count-1];
+				}
+				break;
+			case 'looks':
+				$vars['view'] = 'looks';
+				if (is_numeric($segments[$count-1]))
+				{
+					$vars['id'] = (int) $segments[$count-1];
+				}
+				elseif ($segments[$count-1])
+				{
+					$id = $this->getVar('look', $segments[$count-1], 'alias', 'id');
+					if($id)
+					{
+						$vars['id'] = $id;
+					}
+				}
+				break;
+			case 'looking':
+				$vars['view'] = 'looking';
+				if (is_numeric($segments[$count-1]))
+				{
+					$vars['id'] = (int) $segments[$count-1];
+				}
+				elseif ($segments[$count-1])
+				{
+					$id = $this->getVar('look', $segments[$count-1], 'alias', 'id');
+					if($id)
+					{
+						$vars['id'] = $id;
+					}
+				}
+				break;
 		}
 
 		return $vars;
 	} 
 
-	protected function getVar($table, $where = null, $whereString = 'user', $what = 'id', $operator = '=', $main = 'demo')
+	protected function getVar($table, $where = null, $whereString = null, $what = null, $category = false, $operator = '=', $main = 'demo')
 	{
-		if(!$where)
+		if(!$where || !$what || !$whereString)
 		{
-			$where = JFactory::getUser()->id;
+			return false;
 		}
 		// Get a db connection.
 		$db = JFactory::getDbo();
@@ -149,21 +180,44 @@ class DemoRouter extends JComponentRouterBase
 		$query = $db->getQuery(true);
 
 		$query->select($db->quoteName(array($what)));
-		if ('categories' == $table || 'category' == $table)
+		if ('categories' == $table || 'category' == $table || $category)
 		{
-			$query->from($db->quoteName('#__categories'));
+			$getTable = '#__categories';
+			$query->from($db->quoteName($getTable));
 		}
 		else
 		{
-			$query->from($db->quoteName('#__'.$main.'_'.$table));
+			// we must check if the table exist (TODO not ideal)
+			$tables = $db->getTableList();
+			$app = JFactory::getApplication();
+			$prefix = $app->get('dbprefix');
+			$check = $prefix.$main.'_'.$table;
+			if (in_array($check, $tables))
+			{
+				$getTable = '#__'.$main.'_'.$table;
+				$query->from($db->quoteName($getTable));
+			}
+			else
+			{
+				return false;
+			}
 		}
 		if (is_numeric($where))
 		{
-			$query->where($db->quoteName($whereString) . ' '.$operator.' '.(int) $where);
+			return false;
 		}
-		elseif (is_string($where))
+		elseif ($this->checkString($where))
 		{
-			$query->where($db->quoteName($whereString) . ' '.$operator.' '. $db->quote((string)$where));
+			// we must first check if this table has the column
+			$columns = $db->getTableColumns($getTable);
+			if (isset($columns[$whereString]))
+			{
+				$query->where($db->quoteName($whereString) . ' '.$operator.' '. $db->quote((string)$where));
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
@@ -174,6 +228,15 @@ class DemoRouter extends JComponentRouterBase
 		if ($db->getNumRows())
 		{
 			return $db->loadResult();
+		}
+		return false;
+	}
+	
+	protected function checkString($string)
+	{
+		if (isset($string) && is_string($string) && strlen($string) > 0)
+		{
+			return true;
 		}
 		return false;
 	}
