@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -44,7 +44,10 @@ class DemoViewDemo extends JViewLegacy
 		// Assign data to the view
 		$this->icons			= $this->get('Icons');
 		$this->contributors		= DemoHelper::getContributors();
-
+		
+		// get the manifest details of the component
+		$this->manifest = DemoHelper::manifest();
+		
 		// Set the toolbar
 		$this->addToolBar();
 
@@ -79,15 +82,19 @@ class DemoViewDemo extends JViewLegacy
 	/**
 	 * Method to set up the document properties
 	 *
-	 *
 	 * @return void
 	 */
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-
+		
+		// add dashboard style sheets
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_demo/assets/css/dashboard.css");
-
+		
+		// set page title
 		$document->setTitle(JText::_('COM_DEMO_DASHBOARD'));
+		
+		// add manifest to page JavaScript
+		$document->addScriptDeclaration("var manifest = jQuery.parseJSON('" . json_encode($this->manifest) . "');", "text/javascript");
 	}
 }

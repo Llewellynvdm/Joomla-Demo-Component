@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -255,7 +255,7 @@ class com_demoInstallerScript
 		$app = JFactory::getApplication();
 		$app->enqueueMessage('First set the components global settings and permissions in the <b>Options</b> area, or the front-end of the component will not work as expected. <br />Please note that each view on the front-end has access and permissions, so if you would like the public to access those views they must be given the access and permission.', 'Info');
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
-				<img src="components/com_demo/assets/images/component-300.jpg"/>
+				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>';
 		}
 		// do any updates needed
@@ -296,7 +296,7 @@ class com_demoInstallerScript
 
 
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
-				<img src="components/com_demo/assets/images/component-300.jpg"/>
+				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>
 				<h3>Upgrade to Version 2.0.0 Was Successful! Let us know if anything is not working as expected.</h3>';
 		}

@@ -1,6 +1,6 @@
 # Demo (2.0.0)
 
-![Demo image] (https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/component-300.jpg "The Demo")
+![Demo image] (https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/vdm-component.jpg "The Demo")
 
 Just a basic demo of the most basic implementations of the [Joomla] (http://www.joomla.org) Component Builder's ability.
 
@@ -10,7 +10,7 @@ Just a basic demo of the most basic implementations of the [Joomla] (http://www.
 + *Author*: [Llewellyn van der Merwe] (mailto:info@vdm.io)
 + *Name*: [Demo] (https://www.vdm.io/)
 + *First Build*: 18th October, 2016
-+ *Last Build*: 8th April, 2017
++ *Last Build*: 21st August, 2017
 + *Version*: 2.0.0
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,7 @@ due to [Automated Component Builder] (https://www.vdm.io/joomla-component-builde
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **15283**
++ *Line count*: **15341**
 + *File count*: **147**
 + *Folder count*: **54**
 
@@ -48,6 +48,7 @@ Project duration: **1.8 weeks** or **0.4 months**
 
 ## Donations
 
- If you want to support this project, please consider donating:
- * PayPal: pay@vdm.io
- * Bitcoin: 3H35PYwikEosvcjxHXGPLS1GufZ4b4iFu3
+If you want to support this project, please consider donating:
+* PayPal: [paypal.me/payvdm](https://www.paypal.me/payvdm)
+* Bitcoin: 1FLxiT6wyxgZ3boeviLkYJ1DRpp41uzpxa
+* Ethereum: 0x243392daa3c9c8bc841fcacf7c7f72541cb16823 

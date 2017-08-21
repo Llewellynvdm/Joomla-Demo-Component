@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
@@ -33,7 +33,8 @@ $componentParams = JComponentHelper::getParams('com_demo');
 <?php echo $this->toolbar->render(); ?>
 <form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='.(int) $this->item->id.$this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
-	<?php echo JLayoutHelper::render('look.details_above', $this); ?><div class="form-horizontal">
+	<?php echo JLayoutHelper::render('look.details_above', $this); ?>
+<div class="form-horizontal">
 
 	<?php echo JHtml::_('bootstrap.startTabSet', 'lookTab', array('active' => 'details')); ?>
 
@@ -95,6 +96,7 @@ $componentParams = JComponentHelper::getParams('com_demo');
 	<div>
 		<input type="hidden" name="task" value="look.edit" />
 		<?php echo JHtml::_('form.token'); ?>
+	</div>
 	</div>
 </div>
 

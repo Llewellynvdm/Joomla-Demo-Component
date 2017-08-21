@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		default_vdm.php
@@ -21,30 +21,27 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-$manifest = DemoHelper::manifest();
-JHtml::_('bootstrap.loadCss');
-
 ?>
-<img alt="<?php echo JText::_('COM_DEMO'); ?>" src="components/com_demo/assets/images/component-300.jpg">
+<img alt="<?php echo JText::_('COM_DEMO'); ?>" src="components/com_demo/assets/images/vdm-component.jpg">
 <ul class="list-striped">
-<li><b><?php echo JText::_('COM_DEMO_VERSION'); ?>:</b> <?php echo $manifest->version; ?></li>
-<li><b><?php echo JText::_('COM_DEMO_DATE'); ?>:</b> <?php echo $manifest->creationDate; ?></li>
-<li><b><?php echo JText::_('COM_DEMO_AUTHOR'); ?>:</b> <a href="mailto:<?php echo $manifest->authorEmail; ?>"><?php echo $manifest->author; ?></a></li>
-<li><b><?php echo JText::_('COM_DEMO_WEBSITE'); ?>:</b> <a href="<?php echo $manifest->authorUrl; ?>" target="_blank"><?php echo $manifest->authorUrl; ?></a></li>
-<li><b><?php echo JText::_('COM_DEMO_LICENSE'); ?>:</b> <?php echo $manifest->license; ?></li>
-<li><b><?php echo $manifest->copyright; ?></b></li>
+	<li><b><?php echo JText::_('COM_DEMO_VERSION'); ?>:</b> <?php echo $this->manifest->version; ?>&nbsp;&nbsp;<span class="update-notice"></span></li>
+	<li><b><?php echo JText::_('COM_DEMO_DATE'); ?>:</b> <?php echo $this->manifest->creationDate; ?></li>
+	<li><b><?php echo JText::_('COM_DEMO_AUTHOR'); ?>:</b> <a href="mailto:<?php echo $this->manifest->authorEmail; ?>"><?php echo $this->manifest->author; ?></a></li>
+	<li><b><?php echo JText::_('COM_DEMO_WEBSITE'); ?>:</b> <a href="<?php echo $this->manifest->authorUrl; ?>" target="_blank"><?php echo $this->manifest->authorUrl; ?></a></li>
+	<li><b><?php echo JText::_('COM_DEMO_LICENSE'); ?>:</b> <?php echo $this->manifest->license; ?></li>
+	<li><b><?php echo $this->manifest->copyright; ?></b></li>
 </ul>
 <div class="clearfix"></div>
 <?php if(DemoHelper::checkArray($this->contributors)): ?>
-<?php if(count($this->contributors) > 1): ?>
-<h3><?php echo JText::_('COM_DEMO_CONTRIBUTORS'); ?></h3>
-<?php else: ?>
-<h3><?php echo JText::_('COM_DEMO_CONTRIBUTOR'); ?></h3>
-<?php endif; ?>
-<ul class="list-striped">
-	<?php foreach($this->contributors as $contributor): ?>
-    <li><b><?php echo $contributor['title']; ?>:</b> <?php echo $contributor['name']; ?></li>
-    <?php endforeach; ?>
-</ul>
-<div class="clearfix"></div>
+	<?php if(count($this->contributors) > 1): ?>
+		<h3><?php echo JText::_('COM_DEMO_CONTRIBUTORS'); ?></h3>
+	<?php else: ?>
+		<h3><?php echo JText::_('COM_DEMO_CONTRIBUTOR'); ?></h3>
+	<?php endif; ?>
+	<ul class="list-striped">
+		<?php foreach($this->contributors as $contributor): ?>
+		<li><b><?php echo $contributor['title']; ?>:</b> <?php echo $contributor['name']; ?></li>
+		<?php endforeach; ?>
+	</ul>
+	<div class="clearfix"></div>
 <?php endif; ?>

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`asset_id` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT 'FK to the #__assets table.',
-	`add` TINYINT(1) NOT NULL DEFAULT '0',
+	`add` TINYINT(1) NOT NULL DEFAULT 0,
 	`alias` CHAR(64) NOT NULL DEFAULT '',
 	`dateofbirth` DATE NOT NULL DEFAULT '0000-00-00',
 	`description` TEXT NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	`image` CHAR(64) NOT NULL DEFAULT '',
 	`mobile_phone` VARCHAR(64) NOT NULL DEFAULT '',
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
-	`not_required` INT(1) NOT NULL DEFAULT '0',
+	`not_required` INT(1) NOT NULL DEFAULT 0,
 	`website` VARCHAR(255) NOT NULL DEFAULT '',
 	`params` text NOT NULL DEFAULT '',
 	`published` TINYINT(3) NOT NULL DEFAULT 1,

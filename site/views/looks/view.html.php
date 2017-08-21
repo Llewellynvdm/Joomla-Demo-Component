@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -69,7 +69,7 @@ class DemoViewLooks extends JViewLegacy
 		// Load the header checker class.
 		require_once( JPATH_COMPONENT_SITE.'/helpers/headercheck.php' );
 		// Initialize the header checker.
-		$HeaderCheck = new HeaderCheck;
+		$HeaderCheck = new demoHeaderCheck;
 
 		// Load uikit options.
 		$uikit = $this->params->get('uikit_load');

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		headercheck.php
@@ -21,7 +21,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-class HeaderCheck
+class demoHeaderCheck
 {
 	function js_loaded($script_name)
 	{

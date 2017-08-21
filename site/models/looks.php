@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			8th April, 2017
+	@build			21st August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -71,6 +71,7 @@ class DemoModelLooks extends JModelList
 			array('a.id','a.name','a.alias','a.description','a.add','a.email','a.mobile_phone','a.dateofbirth','a.image','a.website','a.not_required','a.published','a.hits','a.ordering'),
 			array('id','name','alias','description','add','email','mobile_phone','dateofbirth','image','website','not_required','published','hits','ordering')));
 		$query->from($db->quoteName('#__demo_look', 'a'));
+		// Get where a.published is 1
 		$query->where('a.published = 1');
 		$query->order('a.name ASC');
 
