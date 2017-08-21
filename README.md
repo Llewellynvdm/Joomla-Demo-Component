@@ -2,13 +2,13 @@
 
 ![Demo image](https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/vdm-component.jpg "The Demo")
 
-Just a basic demo of the most basic implementations of the [Joomla] (http://www.joomla.org) Component Builder's ability.
+Just a basic demo of the most basic implementations of the [Joomla](http://www.joomla.org) Component Builder's ability.
 
 # Build Details
 
-+ *Company*: [Vast Development Method] (https://www.vdm.io/)
-+ *Author*: [Llewellyn van der Merwe] (mailto:info@vdm.io)
-+ *Name*: [Demo] (https://www.vdm.io/)
++ *Company*: [Vast Development Method](https://www.vdm.io/)
++ *Author*: [Llewellyn van der Merwe](mailto:info@vdm.io)
++ *Name*: [Demo](https://www.vdm.io/)
 + *First Build*: 18th October, 2016
 + *Last Build*: 21st August, 2017
 + *Version*: 2.0.0
@@ -18,7 +18,7 @@ Just a basic demo of the most basic implementations of the [Joomla] (http://www.
 ## Build Time
 
 **43 Hours** or **5 Eight Hour Days** (actual time the author saved -
-due to [Automated Component Builder] (https://www.vdm.io/joomla-component-builder))
+due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder))
 
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
@@ -43,8 +43,8 @@ due to [Automated Component Builder] (https://www.vdm.io/joomla-component-builde
 
 Project duration: **1.8 weeks** or **0.4 months**
 
-> This **component** was build with a Joomla [Automated Component Builder] (https://www.vdm.io/joomla-component-builder).
-> Developed by [Llewellyn van der Merwe] (mailto:joomla@vdm.io)
+> This **component** was build with a Joomla [Automated Component Builder](https://www.vdm.io/joomla-component-builder).
+> Developed by [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 
 ## Donations
 
