@@ -1,6 +1,6 @@
 # Demo (2.0.0)
 
-![Demo image] (https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/vdm-component.jpg "The Demo")
+![Demo image](https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/vdm-component.jpg "The Demo")
 
 Just a basic demo of the most basic implementations of the [Joomla] (http://www.joomla.org) Component Builder's ability.
 
