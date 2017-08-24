@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			21st August, 2017
+	@build			24th August, 2017
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -234,26 +234,38 @@ class com_demoInstallerScript
 			$look_Inserted = $db->insertObject('#__content_types', $look);
 
 
+			// Install the global extenstion assets permission.
+			$query = $db->getQuery(true);
+			// Field to update.
+			$fields = array(
+				$db->quoteName('rules') . ' = ' . $db->quote('{"site.looks.access":{"1":1},"site.looking.access":{"1":1}}'),
+			);
+			// Condition.
+			$conditions = array(
+				$db->quoteName('name') . ' = ' . $db->quote('com_demo')
+			);
+			$query->update($db->quoteName('#__assets'))->set($fields)->where($conditions);
+			$db->setQuery($query);
+			$allDone = $db->execute();
+
 			// Install the global extenstion params.
 			$query = $db->getQuery(true);
-
 			// Field to update.
 			$fields = array(
 				$db->quoteName('params') . ' = ' . $db->quote('{"autorName":"Llewellyn van der Merwe","autorEmail":"info@vdm.io","check_in":"-1 day","save_history":"1","history_limit":"10","uikit_load":"1","uikit_min":"","uikit_style":""}'),
 			);
-
 			// Condition.
 			$conditions = array(
 				$db->quoteName('element') . ' = ' . $db->quote('com_demo')
 			);
-
 			$query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
 			$db->setQuery($query);
 			$allDone = $db->execute();
 
+
 		// Get Application object
 		$app = JFactory::getApplication();
-		$app->enqueueMessage('First set the components global settings and permissions in the <b>Options</b> area, or the front-end of the component will not work as expected. <br />Please note that each view on the front-end has access and permissions, so if you would like the public to access those views they must be given the access and permission.', 'Info');
+		$app->enqueueMessage('This is a demo component developed in <a href="http://vdm.bz/component-builder" taget="_balnk" title="Joomla Component Builder">JCB</a>! You can build more components like this with JCB, checkout our page on <a href="https://github.com/vdm-io/Joomla-Component-Builder" taget="_balnk" title="Joomla Component Builder">github</a> for more info. The future of <a href="http://vdm.bz/component-builder" taget="_balnk" title="Joomla Component Builder">Joomla Component Development</a> is Here!', 'Info');
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>';
