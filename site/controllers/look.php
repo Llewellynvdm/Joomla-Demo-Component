@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -151,13 +151,13 @@ class DemoControllerLook extends JControllerForm
 		$append = '';
 
 		if ($refid)
-                {
+		{
 			$append .= '&ref='.(string)$ref.'&refid='.(int)$refid;
 		}
-                elseif ($ref)
-                {
+		elseif ($ref)
+		{
 			$append .= '&ref='.(string)$ref;
-                }
+		}
 
 		if ($tmpl)
 		{
@@ -269,11 +269,11 @@ class DemoControllerLook extends JControllerForm
 		$this->ref 		= $this->input->get('ref', 0, 'word');
 		$this->refid 	= $this->input->get('refid', 0, 'int');
 
-                if ($this->ref || $this->refid)
-                {
-                        // to make sure the item is checkedin on redirect
-                        $this->task = 'save';
-                }
+		if ($this->ref || $this->refid)
+		{
+			// to make sure the item is checkedin on redirect
+			$this->task = 'save';
+		}
 
 		$saved = parent::save($key, $urlVar);
 

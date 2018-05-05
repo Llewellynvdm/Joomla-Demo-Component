@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	KEY `idx_modifiedby` (`modified_by`),
 	KEY `idx_state` (`published`),
 	KEY `idx_name` (`name`),
-	KEY `idx_alias` (`alias`),
-	KEY `idx_add` (`add`)
+	KEY `idx_add` (`add`),
+	KEY `idx_alias` (`alias`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 

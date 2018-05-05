@@ -24,20 +24,11 @@
 		<action name="look.dashboard_list" title="COM_DEMO_LOOKS_DASHBOARD_LIST" description="COM_DEMO_LOOKS_DASHBOARD_LIST_DESC" />
 		<action name="look.delete" title="COM_DEMO_LOOKS_DELETE" description="COM_DEMO_LOOKS_DELETE_DESC" />
 		<action name="look.edit" title="COM_DEMO_LOOKS_EDIT" description="COM_DEMO_LOOKS_EDIT_DESC" />
-		<action name="look.edit.add" title="COM_DEMO_LOOKS_EDIT_ADD" description="COM_DEMO_LOOKS_EDIT_ADD_DESC" />
-		<action name="look.edit.alias" title="COM_DEMO_LOOKS_EDIT_ALIAS" description="COM_DEMO_LOOKS_EDIT_ALIAS_DESC" />
 		<action name="look.edit.created_by" title="COM_DEMO_LOOKS_EDIT_CREATED_BY" description="COM_DEMO_LOOKS_EDIT_CREATED_BY_DESC" />
 		<action name="look.edit.created" title="COM_DEMO_LOOKS_EDIT_CREATED_DATE" description="COM_DEMO_LOOKS_EDIT_CREATED_DATE_DESC" />
-		<action name="look.edit.dateofbirth" title="COM_DEMO_LOOKS_EDIT_DATEOFBIRTH" description="COM_DEMO_LOOKS_EDIT_DATEOFBIRTH_DESC" />
-		<action name="look.edit.description" title="COM_DEMO_LOOKS_EDIT_DESCRIPTION" description="COM_DEMO_LOOKS_EDIT_DESCRIPTION_DESC" />
-		<action name="look.edit.email" title="COM_DEMO_LOOKS_EDIT_EMAIL" description="COM_DEMO_LOOKS_EDIT_EMAIL_DESC" />
-		<action name="look.edit.image" title="COM_DEMO_LOOKS_EDIT_IMAGE" description="COM_DEMO_LOOKS_EDIT_IMAGE_DESC" />
-		<action name="look.edit.mobile_phone" title="COM_DEMO_LOOKS_EDIT_MOBILE_PHONE" description="COM_DEMO_LOOKS_EDIT_MOBILE_PHONE_DESC" />
-		<action name="look.edit.name" title="COM_DEMO_LOOKS_EDIT_NAME" description="COM_DEMO_LOOKS_EDIT_NAME_DESC" />
 		<action name="look.edit.own" title="COM_DEMO_LOOKS_EDIT_OWN" description="COM_DEMO_LOOKS_EDIT_OWN_DESC" />
 		<action name="look.edit.state" title="COM_DEMO_LOOKS_EDIT_STATE" description="COM_DEMO_LOOKS_EDIT_STATE_DESC" />
 		<action name="look.version" title="COM_DEMO_LOOKS_EDIT_VERSION" description="COM_DEMO_LOOKS_EDIT_VERSION_DESC" />
-		<action name="look.edit.website" title="COM_DEMO_LOOKS_EDIT_WEBSITE" description="COM_DEMO_LOOKS_EDIT_WEBSITE_DESC" />
 		<action name="look.export" title="COM_DEMO_LOOKS_EXPORT" description="COM_DEMO_LOOKS_EXPORT_DESC" />
 		<action name="look.import" title="COM_DEMO_LOOKS_IMPORT" description="COM_DEMO_LOOKS_IMPORT_DESC" />
 		<action name="look.submenu" title="COM_DEMO_LOOKS_SUBMENU" description="COM_DEMO_LOOKS_SUBMENU_DESC" />
@@ -51,15 +42,6 @@
 		<action name="look.create" title="COM_DEMO_LOOKS_CREATE" description="COM_DEMO_LOOKS_CREATE_DESC" />
 		<action name="look.delete" title="COM_DEMO_LOOKS_DELETE" description="COM_DEMO_LOOKS_DELETE_DESC" />
 		<action name="look.access" title="COM_DEMO_LOOKS_ACCESS" description="COM_DEMO_LOOKS_ACCESS_DESC" />
-		<action name="look.edit.name" title="COM_DEMO_LOOKS_EDIT_NAME" description="COM_DEMO_LOOKS_EDIT_NAME_DESC" />
-		<action name="look.edit.description" title="COM_DEMO_LOOKS_EDIT_DESCRIPTION" description="COM_DEMO_LOOKS_EDIT_DESCRIPTION_DESC" />
-		<action name="look.edit.alias" title="COM_DEMO_LOOKS_EDIT_ALIAS" description="COM_DEMO_LOOKS_EDIT_ALIAS_DESC" />
-		<action name="look.edit.dateofbirth" title="COM_DEMO_LOOKS_EDIT_DATEOFBIRTH" description="COM_DEMO_LOOKS_EDIT_DATEOFBIRTH_DESC" />
-		<action name="look.edit.website" title="COM_DEMO_LOOKS_EDIT_WEBSITE" description="COM_DEMO_LOOKS_EDIT_WEBSITE_DESC" />
-		<action name="look.edit.mobile_phone" title="COM_DEMO_LOOKS_EDIT_MOBILE_PHONE" description="COM_DEMO_LOOKS_EDIT_MOBILE_PHONE_DESC" />
-		<action name="look.edit.add" title="COM_DEMO_LOOKS_EDIT_ADD" description="COM_DEMO_LOOKS_EDIT_ADD_DESC" />
-		<action name="look.edit.image" title="COM_DEMO_LOOKS_EDIT_IMAGE" description="COM_DEMO_LOOKS_EDIT_IMAGE_DESC" />
-		<action name="look.edit.email" title="COM_DEMO_LOOKS_EDIT_EMAIL" description="COM_DEMO_LOOKS_EDIT_EMAIL_DESC" />
 		<action name="look.version" title="COM_DEMO_LOOKS_EDIT_VERSION" description="COM_DEMO_LOOKS_EDIT_VERSION_DESC" />
 	</section>
 </access>

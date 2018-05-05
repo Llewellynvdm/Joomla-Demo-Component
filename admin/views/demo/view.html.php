@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -35,12 +35,6 @@ class DemoViewDemo extends JViewLegacy
 	 */
 	function display($tpl = null)
 	{
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-                {
-			JError::raiseError(500, implode('<br />', $errors));
-			return false;
-		};
 		// Assign data to the view
 		$this->icons			= $this->get('Icons');
 		$this->contributors		= DemoHelper::getContributors();
@@ -50,6 +44,12 @@ class DemoViewDemo extends JViewLegacy
 		
 		// Set the toolbar
 		$this->addToolBar();
+		
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
+		{
+			throw new Exception(implode("\n", $errors), 500);
+		}
 
 		// Display the template
 		parent::display($tpl);
@@ -66,15 +66,15 @@ class DemoViewDemo extends JViewLegacy
 		$canDo = DemoHelper::getActions('demo');
 		JToolBarHelper::title(JText::_('COM_DEMO_DASHBOARD'), 'grid-2');
 
-                // set help url for this view if found
-                $help_url = DemoHelper::getHelpUrl('demo');
-                if (DemoHelper::checkString($help_url))
-                {
+		// set help url for this view if found
+		$help_url = DemoHelper::getHelpUrl('demo');
+		if (DemoHelper::checkString($help_url))
+		{
 			JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
-                }
+		}
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
-                {
+		{
 			JToolBarHelper::preferences('com_demo');
 		}
 	}

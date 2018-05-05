@@ -19,7 +19,6 @@
 			label="COM_DEMO_LOOK_CREATED_DATE_LABEL"
 			description="COM_DEMO_LOOK_CREATED_DATE_DESC"
 			size="22"
-
 			format="%Y-%m-%d %H:%M:%S"
 			filter="user_utc"
 		/>
@@ -28,13 +27,11 @@
 			name="created_by"
 			type="user"
 			label="COM_DEMO_LOOK_CREATED_BY_LABEL"
-
 			description="COM_DEMO_LOOK_CREATED_BY_DESC"
 		/>
 		<!-- Published Field. Type: List (joomla) -->
 		<field name="published" type="list" label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC" class="chzn-color-state"
-
 			filter="intval" size="1" default="1" >
 			<option value="1">
 				JPUBLISHED</option>
@@ -63,7 +60,6 @@
 			label="JFIELD_ACCESS_LABEL"
 			description="JFIELD_ACCESS_DESC"
 			default="1"
-
 			required="false"
 		/>
 		<!-- Ordering Field. Type: Numbers (joomla) -->
@@ -75,7 +71,6 @@
 			description=""
 			default="0"
 			size="6"
-
 			required="false"
 		/>
 		<!-- Version Field. Type: Text (joomla) -->
@@ -121,7 +116,7 @@
 			disabled="false"
 			required="true"
 			filter="STRING"
-			message="Error! Please add name here."
+			message="COM_DEMO_LOOK_NAME_MESSAGE"
 			hint="COM_DEMO_LOOK_NAME_HINT"
 		/>
 		<!-- Description Field. Type: Textarea. (joomla) -->
@@ -136,24 +131,6 @@
 			filter="HTML"
 			hint="COM_DEMO_LOOK_DESCRIPTION_HINT"
 		/>
-		<!-- Alias Field. Type: Text. (joomla) -->
-		<field
-			type="text"
-			name="alias"
-			label="COM_DEMO_LOOK_ALIAS_LABEL"
-			description="JFIELD_ALIAS_DESC"
-			filter="STRING"
-			hint="COM_DEMO_LOOK_ALIAS_HINT"
-		/>
-		<!-- Dateofbirth Field. Type: Calendar. (joomla) -->
-		<field
-			type="calendar"
-			name="dateofbirth"
-			label="COM_DEMO_LOOK_DATEOFBIRTH_LABEL"
-			default="1970-01-01"
-			description="COM_DEMO_LOOK_DATEOFBIRTH_DESCRIPTION"
-			format="%Y-%m-%d"
-		/>
 		<!-- Website Field. Type: Url. (joomla) -->
 		<field
 			type="url"
@@ -165,8 +142,24 @@
 			class="text_area"
 			filter="url"
 			validated="url"
-			message="Error! Please add website here."
+			message="COM_DEMO_LOOK_WEBSITE_MESSAGE"
 			hint="COM_DEMO_LOOK_WEBSITE_HINT"
+		/>
+		<!-- Image Field. Type: Media. (joomla) -->
+		<field
+			type="media"
+			name="image"
+			label="COM_DEMO_LOOK_IMAGE_LABEL"
+			directory=""
+		/>
+		<!-- Dateofbirth Field. Type: Calendar. (joomla) -->
+		<field
+			type="calendar"
+			name="dateofbirth"
+			label="COM_DEMO_LOOK_DATEOFBIRTH_LABEL"
+			default="1970-01-01"
+			description="COM_DEMO_LOOK_DATEOFBIRTH_DESCRIPTION"
+			format="%Y-%m-%d"
 		/>
 		<!-- Mobile_phone Field. Type: Tel. (joomla) -->
 		<field
@@ -180,8 +173,23 @@
 			required="true"
 			filter="STRING"
 			validated="tel"
-			message="Error! Please add mobile phone number here."
+			message="COM_DEMO_LOOK_MOBILE_PHONE_MESSAGE"
 			hint="COM_DEMO_LOOK_MOBILE_PHONE_HINT"
+		/>
+		<!-- Email Field. Type: Text. (joomla) -->
+		<field
+			type="text"
+			name="email"
+			label="COM_DEMO_LOOK_EMAIL_LABEL"
+			size="10"
+			maxlength="50"
+			description="COM_DEMO_LOOK_EMAIL_DESCRIPTION"
+			class="text_area"
+			required="true"
+			filter="STRING"
+			validate="email"
+			message="COM_DEMO_LOOK_EMAIL_MESSAGE"
+			hint="COM_DEMO_LOOK_EMAIL_HINT"
 		/>
 		<!-- Add Field. Type: Radio. (joomla) -->
 		<field
@@ -197,33 +205,20 @@
 			<option value="0">
 				COM_DEMO_LOOK_NO</option>
 		</field>
-		<!-- Image Field. Type: Media. (joomla) -->
-		<field
-			type="media"
-			name="image"
-			label="COM_DEMO_LOOK_IMAGE_LABEL"
-			directory=""
-		/>
-		<!-- Email Field. Type: Text. (joomla) -->
-		<field
-			type="text"
-			name="email"
-			label="COM_DEMO_LOOK_EMAIL_LABEL"
-			size="10"
-			maxlength="50"
-			description="COM_DEMO_LOOK_EMAIL_DESCRIPTION"
-			class="text_area"
-			required="true"
-			filter="STRING"
-			validate="email"
-			message="Error! Please add email address here."
-			hint="COM_DEMO_LOOK_EMAIL_HINT"
-		/>
 		<!-- Not_required Field. Type: Hidden. (joomla) -->
 		<field
 			type="hidden"
 			name="not_required"
 			default="[]"
+		/>
+		<!-- Alias Field. Type: Text. (joomla) -->
+		<field
+			type="text"
+			name="alias"
+			label="COM_DEMO_LOOK_ALIAS_LABEL"
+			description="JFIELD_ALIAS_DESC"
+			filter="STRING"
+			hint="COM_DEMO_LOOK_ALIAS_HINT"
 		/>
 	</fieldset>
 

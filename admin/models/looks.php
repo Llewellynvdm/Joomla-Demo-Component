@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -178,7 +178,7 @@ class DemoModelLooks extends JModelList
 			else
 			{
 				$search = $db->quote('%' . $db->escape($search) . '%');
-				$query->where('(a.name LIKE '.$search.' OR a.description LIKE '.$search.' OR a.alias LIKE '.$search.' OR a.add LIKE '.$search.')');
+				$query->where('(a.name LIKE '.$search.' OR a.description LIKE '.$search.' OR a.add LIKE '.$search.' OR a.alias LIKE '.$search.')');
 			}
 		}
 

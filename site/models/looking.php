@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looking.php
@@ -66,10 +66,10 @@ class DemoModelLooking extends JModelItem
 	 */
 	protected function populateState()
 	{
-		$this->app	= JFactory::getApplication();
-		$this->input 	= $this->app->input;
+		$this->app = JFactory::getApplication();
+		$this->input = $this->app->input;
 		// Get the itme main id
-		$id		= $this->input->getInt('id', null);
+		$id = $this->input->getInt('id', null);
 		$this->setState('looking.id', $id);
 
 		// Load the parameters.
@@ -87,7 +87,7 @@ class DemoModelLooking extends JModelItem
 	 */
 	public function getItem($pk = null)
 	{
-		$this->user		= JFactory::getUser();
+		$this->user = JFactory::getUser();
 		// check if this user has permission to access item
 		if (!$this->user->authorise('site.looking.access', 'com_demo'))
 		{
@@ -97,12 +97,12 @@ class DemoModelLooking extends JModelItem
 			$app->redirect(JRoute::_('index.php?option=com_demo&view=looks'));
 			return false;
 		}
-		$this->userId		= $this->user->get('id');
-		$this->guest		= $this->user->get('guest');
-                $this->groups		= $this->user->get('groups');
-                $this->authorisedGroups	= $this->user->getAuthorisedGroups();
-		$this->levels		= $this->user->getAuthorisedViewLevels();
-		$this->initSet		= true;
+		$this->userId = $this->user->get('id');
+		$this->guest = $this->user->get('guest');
+		$this->groups = $this->user->get('groups');
+		$this->authorisedGroups = $this->user->getAuthorisedGroups();
+		$this->levels = $this->user->getAuthorisedViewLevels();
+		$this->initSet = true;
 
 		$pk = (!empty($pk)) ? $pk : (int) $this->getState('looking.id');
 		
@@ -141,8 +141,14 @@ class DemoModelLooking extends JModelItem
 					$app->redirect(JRoute::_('index.php?option=com_demo&view=looks'));
 					return false;
 				}
-				// Make sure the content prepare plugins fire on description.
-				$data->description = JHtml::_('content.prepare',$data->description);
+			// Load the JEvent Dispatcher
+			JPluginHelper::importPlugin('content');
+			$this->_dispatcher = JEventDispatcher::getInstance();
+				// Make sure the content prepare plugins fire on description
+				$_description = new stdClass();
+				$_description->text =& $data->description; // value must be in text
+				// Since all values are now in text (Joomla Limitation), we also add the field name (description) to context
+				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looking.description', &$_description, &$this->params, 0));
 				// Checking if description has uikit components that must be loaded.
 				$this->uikitComp = DemoHelper::getUikitComp($data->description,$this->uikitComp);
 

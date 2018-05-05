@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -260,7 +260,7 @@ class DemoTableLook extends JTable
 						}
 					}
 					// check if there are any view values remaining
-					if (count($_result))
+					if (count( (array) $_result))
 					{
 						$_result = json_encode($_result);
 						$_result = array($_result);

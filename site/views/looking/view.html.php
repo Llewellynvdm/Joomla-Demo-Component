@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -31,7 +31,7 @@ class DemoViewLooking extends JViewLegacy
 {
 	// Overwriting JView display method
 	function display($tpl = null)
-	{
+	{		
 		// get combined params of both component and menu
 		$this->app = JFactory::getApplication();
 		$this->params = $this->app->getParams();
@@ -39,14 +39,7 @@ class DemoViewLooking extends JViewLegacy
 		// get the user object
 		$this->user = JFactory::getUser();
 		// Initialise variables.
-		$this->item	= $this->get('Item');
-
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			JError::raiseError(500, implode(PHP_EOL, $errors));
-			return false;
-		}
+		$this->item = $this->get('Item');
 		// add a hit to the look
 		if ($this->hit($this->item->id))
 		{
@@ -58,6 +51,12 @@ class DemoViewLooking extends JViewLegacy
 
 		// set the document
 		$this->_prepareDocument();
+
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
+		{
+			throw new Exception(implode("\n", $errors), 500);
+		}
 
 		parent::display($tpl);
 	}
@@ -94,7 +93,7 @@ class DemoViewLooking extends JViewLegacy
 		return false;
 	}
 
-        /**
+	/**
 	 * Prepares the document
 	 */
 	protected function _prepareDocument()
@@ -105,7 +104,7 @@ class DemoViewLooking extends JViewLegacy
 		// Load the header checker class.
 		require_once( JPATH_COMPONENT_SITE.'/helpers/headercheck.php' );
 		// Initialize the header checker.
-		$HeaderCheck = new demoHeaderCheck;
+		$HeaderCheck = new demoHeaderCheck; 
 
 		// Load uikit options.
 		$uikit = $this->params->get('uikit_load');
@@ -117,12 +116,12 @@ class DemoViewLooking extends JViewLegacy
 		// The uikit css.
 		if ((!$HeaderCheck->css_loaded('uikit.min') || $uikit == 1) && $uikit != 2 && $uikit != 3)
 		{
-			$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit/css/uikit'.$style.$size.'.css');
+			$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit-v2/css/uikit'.$style.$size.'.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
 		}
 		// The uikit js.
 		if ((!$HeaderCheck->js_loaded('uikit.min') || $uikit == 1) && $uikit != 2 && $uikit != 3)
 		{
-			$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit/js/uikit'.$size.'.js');
+			$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit-v2/js/uikit'.$size.'.js', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript');
 		}
 
 		// Load the needed uikit components in this view.
@@ -137,16 +136,16 @@ class DemoViewLooking extends JViewLegacy
 				foreach (DemoHelper::$uk_components[$class] as $name)
 				{
 					// check if the CSS file exists.
-					if (JFile::exists(JPATH_ROOT.'/media/com_demo/uikit/css/components/'.$name.$style.$size.'.css'))
+					if (JFile::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css'))
 					{
 						// load the css.
-						$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit/css/components/'.$name.$style.$size.'.css');
+						$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
 					}
 					// check if the JavaScript file exists.
-					if (JFile::exists(JPATH_ROOT.'/media/com_demo/uikit/js/components/'.$name.$size.'.js'))
+					if (JFile::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js'))
 					{
 						// load the js.
-						$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit/js/components/'.$name.$size.'.js', 'text/javascript', true);
+						$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('type' => 'text/javascript', 'async' => 'async') : true);
 					}
 				}
 			}
@@ -196,8 +195,8 @@ class DemoViewLooking extends JViewLegacy
 			}
 		}  
 		// add the document default css file
-		$this->document->addStyleSheet(JURI::root(true) .'/components/com_demo/assets/css/looking.css'); 
-        }
+		$this->document->addStyleSheet(JURI::root(true) .'/components/com_demo/assets/css/looking.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css'); 
+	}
 
 	/**
 	 * Setting the toolbar
@@ -206,7 +205,7 @@ class DemoViewLooking extends JViewLegacy
 	{
 		// adding the joomla toolbar to the front
 		JLoader::register('JToolbarHelper', JPATH_ADMINISTRATOR.'/includes/toolbar.php');
-		
+
 		// set help url for this view if found
 		$help_url = DemoHelper::getHelpUrl('looking');
 		if (DemoHelper::checkString($help_url))
@@ -217,7 +216,7 @@ class DemoViewLooking extends JViewLegacy
 		$this->toolbar = JToolbar::getInstance();
 	}
 
-        /**
+	/**
 	 * Escapes a value for output in a view script.
 	 *
 	 * @param   mixed  $var  The output to escape.
@@ -226,7 +225,7 @@ class DemoViewLooking extends JViewLegacy
 	 */
 	public function escape($var, $sorten = false, $length = 40)
 	{
-                // use the helper htmlEscape method instead.
+		// use the helper htmlEscape method instead.
 		return DemoHelper::htmlEscape($var, $this->_charset, $sorten, $length);
 	}
 }

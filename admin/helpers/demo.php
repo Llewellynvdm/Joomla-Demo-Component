@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -29,10 +29,28 @@ abstract class DemoHelper
 	/**
 	*	Load the Component xml manifest.
 	**/
-        public static function manifest()
+	public static function manifest()
 	{
-                $manifestUrl = JPATH_ADMINISTRATOR."/components/com_demo/demo.xml";
-                return simplexml_load_file($manifestUrl);
+		$manifestUrl = JPATH_ADMINISTRATOR."/components/com_demo/demo.xml";
+		return simplexml_load_file($manifestUrl);
+	}
+
+	/**
+	*	Joomla version object
+	**/	
+	protected static $JVersion;
+
+	/**
+	*	set/get Joomla version
+	**/
+	public static function jVersion()
+	{
+		// check if set
+		if (!self::checkObject(self::$JVersion))
+		{
+			self::$JVersion = new JVersion();
+		}
+		return self::$JVersion;
 	}
 
 	/**
@@ -47,22 +65,22 @@ abstract class DemoHelper
 		// get all Contributors (max 20)
 		$searchArray = range('0','20');
 		foreach($searchArray as $nr)
-                {
+ 		{
 			if ((NULL !== $params->get("showContributor".$nr)) && ($params->get("showContributor".$nr) == 1 || $params->get("showContributor".$nr) == 3))
-                        {
+			{
 				// set link based of selected option
 				if($params->get("useContributor".$nr) == 1)
-                                {
+         		{
 					$link_front = '<a href="mailto:'.$params->get("emailContributor".$nr).'" target="_blank">';
 					$link_back = '</a>';
 				}
-                                elseif($params->get("useContributor".$nr) == 2)
-                                {
+				elseif($params->get("useContributor".$nr) == 2)
+				{
 					$link_front = '<a href="'.$params->get("linkContributor".$nr).'" target="_blank">';
 					$link_back = '</a>';
 				}
-                                else
-                                {
+				else
+				{
 					$link_front = '';
 					$link_back = '';
 				}
@@ -86,10 +104,10 @@ abstract class DemoHelper
 	**/
 	public static function addSubmenu($submenu)
 	{
-                // load user for access menus
-                $user = JFactory::getUser();
-                // load the submenus to sidebar
-                JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_DASHBOARD'), 'index.php?option=com_demo&view=demo', $submenu === 'demo');
+		// load user for access menus
+		$user = JFactory::getUser();
+		// load the submenus to sidebar
+		JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_DASHBOARD'), 'index.php?option=com_demo&view=demo', $submenu === 'demo');
 		if ($user->authorise('look.access', 'com_demo') && $user->authorise('look.submenu', 'com_demo'))
 		{
 			JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_LOOKS'), 'index.php?option=com_demo&view=looks', $submenu === 'looks');
@@ -376,6 +394,19 @@ abstract class DemoHelper
 		return false;
 	}
 
+	/**
+	 * Get a Variable 
+	 *
+	 * @param   string   $table        The table from which to get the variable
+	 * @param   string   $where        The value where
+	 * @param   string   $whereString  The target/field string where/name
+	 * @param   string   $what         The return field
+	 * @param   string   $operator     The operator between $whereString/field and $where/value
+	 * @param   string   $main         The component in which the table is found
+	 *
+	 * @return  mix string/int/float
+	 *
+	 */
 	public static function getVar($table, $where = null, $whereString = 'user', $what = 'id', $operator = '=', $main = 'demo')
 	{
 		if(!$where)
@@ -416,6 +447,20 @@ abstract class DemoHelper
 		return false;
 	}
 
+	/**
+	 * Get array of variables
+	 *
+	 * @param   string   $table        The table from which to get the variables
+	 * @param   string   $where        The value where
+	 * @param   string   $whereString  The target/field string where/name
+	 * @param   string   $what         The return field
+	 * @param   string   $operator     The operator between $whereString/field and $where/value
+	 * @param   string   $main         The component in which the table is found
+	 * @param   bool     $unique       The switch to return a unique array
+	 *
+	 * @return  array
+	 *
+	 */
 	public static function getVars($table, $where = null, $whereString = 'user', $what = 'id', $operator = 'IN', $main = 'demo', $unique = true)
 	{
 		if(!$where)
@@ -466,9 +511,9 @@ abstract class DemoHelper
 
 	public static function jsonToString($value, $sperator = ", ", $table = null)
 	{
-                // check if string is JSON
-                $result = json_decode($value, true);
-                if (json_last_error() === JSON_ERROR_NONE)
+		// check if string is JSON
+		$result = json_decode($value, true);
+		if (json_last_error() === JSON_ERROR_NONE)
 		{
 			// is JSON
 			if (self::checkArray($result))
@@ -490,15 +535,15 @@ abstract class DemoHelper
 				}
 				return (string) implode($sperator,$result);
 			}
-                        return (string) json_decode($value);
-                }
-                return $value;
-        }
+			return (string) json_decode($value);
+		}
+		return $value;
+	}
 
 	public static function isPublished($id,$type)
 	{
 		if ($type == 'raw')
-                {
+		{
 			$type = 'item';
 		}
 		$db = JFactory::getDbo();
@@ -511,7 +556,7 @@ abstract class DemoHelper
 		$db->execute();
 		$found = $db->getNumRows();
 		if($found)
-                {
+		{
 			return true;
 		}
 		return false;
@@ -528,33 +573,33 @@ abstract class DemoHelper
 		$db->execute();
 		$found = $db->getNumRows();
 		if($found)
-                {
+  		{
 			return $db->loadResult();
 		}
 		return $id;
 	}
 
-        /**
+	/**
 	*	Get the actions permissions
 	**/
-        public static function getActions($view,&$record = null,$views = null)
+	public static function getActions($view,&$record = null,$views = null)
 	{
 		jimport('joomla.access.access');
 
 		$user	= JFactory::getUser();
 		$result	= new JObject;
 		$view	= self::safeString($view);
-                if (self::checkString($views))
-                {
+		if (self::checkString($views))
+		{
 			$views = self::safeString($views);
-                }
+ 		}
 		// get all actions from component
 		$actions = JAccess::getActions('com_demo', 'component');
-                // set acctions only set in component settiongs
-                $componentActions = array('core.admin','core.manage','core.options','core.export');
+		// set acctions only set in component settiongs
+		$componentActions = array('core.admin','core.manage','core.options','core.export');
 		// loop the actions and set the permissions
 		foreach ($actions as $action)
-                {
+		{
 			// set to use component default
 			$fallback= true;
 			if (self::checkObject($record) && isset($record->id) && $record->id > 0 && !in_array($action->name,$componentActions))
@@ -633,17 +678,17 @@ abstract class DemoHelper
 				}
 				elseif (self::checkString($views) && isset($record->catid) && $record->catid > 0)
 				{
-                                        // make sure we use the core. action check for the categories
-                                        if (strpos($action->name,$view) !== false && strpos($action->name,'core.') === false ) {
-                                                $coreCheck		= explode('.',$action->name);
-                                                $coreCheck[0]	= 'core';
-                                                $categoryCheck	= implode('.',$coreCheck);
-                                        }
-                                        else
-                                        {
-                                                $categoryCheck = $action->name;
-                                        }
-                                        // The record has a category. Check the category permissions.
+					// make sure we use the core. action check for the categories
+					if (strpos($action->name,$view) !== false && strpos($action->name,'core.') === false ) {
+						$coreCheck		= explode('.',$action->name);
+						$coreCheck[0]	= 'core';
+						$categoryCheck	= implode('.',$coreCheck);
+					}
+					else
+					{
+						$categoryCheck = $action->name;
+					}
+					// The record has a category. Check the category permissions.
 					$catpermission = $user->authorise($categoryCheck, 'com_demo.'.$views.'.category.' . (int) $record->catid);
 					if (!$catpermission && !is_null($catpermission))
 					{
@@ -729,24 +774,47 @@ abstract class DemoHelper
 	/**
 	*	Get any component's model
 	**/
-	public static function getModel($name, $path = JPATH_COMPONENT_ADMINISTRATOR, $component = 'demo')
+	public static function getModel($name, $path = JPATH_COMPONENT_ADMINISTRATOR, $component = 'Demo', $config = array())
 	{
+		// fix the name
+		$name = self::safeString($name);
+		// full path
+		$fullPath = $path . '/models';
+		// set prefix
+		$prefix = $component.'Model';
 		// load the model file
-		JModelLegacy::addIncludePath( $path . '/models' );
+		JModelLegacy::addIncludePath($fullPath, $prefix);
 		// get instance
-		$model = JModelLegacy::getInstance( $name, $component.'Model' );
-		// if model not found
+		$model = JModelLegacy::getInstance($name, $prefix, $config);
+		// if model not found (strange)
 		if ($model == false)
 		{
-			// build class name
-			$class = $prefix.$name;
-			// initilize the model
-			new $class();
-			$model = JModelLegacy::getInstance($name, $prefix);
+			jimport('joomla.filesystem.file');
+			// get file path
+			$filePath = $path.'/'.$name.'.php';
+			$fullPath = $fullPath.'/'.$name.'.php';
+			// check if it exists
+			if (JFile::exists($filePath))
+			{
+				// get the file
+				require_once $filePath;
+			}
+			elseif (JFile::exists($fullPath))
+			{
+				// get the file
+				require_once $fullPath;
+			}
+			// build class names
+			$modelClass = $prefix.$name;
+			if (class_exists($modelClass))
+			{
+				// initialize the model
+				return new $modelClass($config);
+			}
 		}
 		return $model;
 	}
-	
+
 	/**
 	*	Add to asset Table
 	*/
@@ -808,7 +876,7 @@ abstract class DemoHelper
 		}
 		return false;
 	}
-	
+
 	/**
 	 *	Gets the default asset Rules for a component/view.
 	 */
@@ -861,30 +929,150 @@ abstract class DemoHelper
 		return JAccess::getAssetRules(0);
 	}
 
+	/**
+	 * xmlAppend
+	 *
+	 * @param   SimpleXMLElement   $xml      The XML element reference in which to inject a comment
+	 * @param   mixed              $node     A SimpleXMLElement node to append to the XML element reference, or a stdClass object containing a comment attribute to be injected before the XML node and a fieldXML attribute containing a SimpleXMLElement
+	 *
+	 * @return  null
+	 *
+	 */
+	public static function xmlAppend(&$xml, $node)
+	{
+		if (!$node)
+		{
+			// element was not returned
+			return;
+		}
+		switch (get_class($node))
+		{
+			case 'stdClass':
+				if (property_exists($node, 'comment'))
+				{
+					self::xmlComment($xml, $node->comment);
+				}
+				if (property_exists($node, 'fieldXML'))
+				{
+					self::xmlAppend($xml, $node->fieldXML);
+				}
+				break;
+			case 'SimpleXMLElement':
+				$domXML = dom_import_simplexml($xml);
+				$domNode = dom_import_simplexml($node);
+				$domXML->appendChild($domXML->ownerDocument->importNode($domNode, true));
+				$xml = simplexml_import_dom($domXML);
+				break;
+		}
+	}
+
+	/**
+	 * xmlComment
+	 *
+	 * @param   SimpleXMLElement   $xml        The XML element reference in which to inject a comment
+	 * @param   string             $comment    The comment to inject
+	 *
+	 * @return  null
+	 *
+	 */
+	public static function xmlComment(&$xml, $comment)
+	{
+		$domXML = dom_import_simplexml($xml);
+		$domComment = new DOMComment($comment);
+		$nodeTarget = $domXML->ownerDocument->importNode($domComment, true);
+		$domXML->appendChild($nodeTarget);
+		$xml = simplexml_import_dom($domXML);
+	}
+
+	/**
+	 * xmlAddAttributes
+	 *
+	 * @param   SimpleXMLElement   $xml          The XML element reference in which to inject a comment
+	 * @param   array              $attributes   The attributes to apply to the XML element
+	 *
+	 * @return  null
+	 *
+	 */
+	public static function xmlAddAttributes(&$xml, $attributes = array())
+	{
+		foreach ($attributes as $key => $value)
+		{
+			$xml->addAttribute($key, $value);
+		}
+	}
+
+	/**
+	 * xmlAddOptions
+	 *
+	 * @param   SimpleXMLElement   $xml          The XML element reference in which to inject a comment
+	 * @param   array              $options      The options to apply to the XML element
+	 *
+	 * @return  void
+	 *
+	 */
+	public static function xmlAddOptions(&$xml, $options = array())
+	{
+		foreach ($options as $key => $value)
+		{
+			$addOption = $xml->addChild('option');
+			$addOption->addAttribute('value', $key);
+			$addOption[] = $value;
+		}
+	}
+
+	/**
+	 * Render Bool Button
+	 *
+	 * @param   array   $args   All the args for the button
+	 *                             0) name
+	 *                             1) additional (options class) // not used at this time
+	 *                             2) default
+	 *                             3) yes (name)
+	 *                             4) no (name)
+	 *
+	 * @return  string    The input html of the button
+	 *
+	 */
 	public static function renderBoolButton()
 	{
 		$args = func_get_args();
+		// check if there is additional button class
+		$additional = isset($args[1]) ? (string) $args[1] : ''; // not used at this time
+		// start the xml
+		$buttonXML = new SimpleXMLElement('<field/>');
+		// button attributes
+		$buttonAttributes = array(
+			'type' => 'radio',
+			'name' => isset($args[0]) ? self::htmlEscape($args[0]) : 'bool_button',
+			'label' => isset($args[0]) ? self::safeString(self::htmlEscape($args[0]), 'Ww') : 'Bool Button', // not seen anyway
+			'class' => 'btn-group',
+			'filter' => 'INT',
+			'default' => isset($args[2]) ? (int) $args[2] : 0);
+		// load the haskey attributes
+		self::xmlAddAttributes($buttonXML, $buttonAttributes);
+		// set the button options
+		$buttonOptions = array(
+			'1' => isset($args[3]) ? self::htmlEscape($args[3]) : 'JYES',
+			'0' => isset($args[4]) ? self::htmlEscape($args[4]) : 'JNO');
+		// load the button options
+		self::xmlAddOptions($buttonXML, $buttonOptions);
 
 		// get the radio element
 		$button = JFormHelper::loadFieldType('radio');
 
-		// setup the properties
-		$name	 	= self::htmlEscape($args[0]);
-		$additional = isset($args[1]) ? (string) $args[1] : '';
-		$value		= $args[2];
-		$yes 	 	= isset($args[3]) ? self::htmlEscape($args[3]) : 'JYES';
-		$no 	 	= isset($args[4]) ? self::htmlEscape($args[4]) : 'JNO';
-
-		// prepare the xml
-		$element = new SimpleXMLElement('<field name="'.$name.'" type="radio" class="btn-group"><option '.$additional.' value="0">'.$no.'</option><option '.$additional.' value="1">'.$yes.'</option></field>');
-
 		// run
-		$button->setup($element, $value);
+		$button->setup($buttonXML, $buttonAttributes['default']);
 
 		return $button->input;
-
 	}
-	
+
+	/**
+	*	Check if have an json string
+	*
+	*	@input	string   The json string to check
+	*
+	*	@returns bool true on success
+	**/
 	public static function checkJson($string)
 	{
 		if (self::checkString($string))
@@ -895,15 +1083,29 @@ abstract class DemoHelper
 		return false;
 	}
 
+	/**
+	*	Check if have an object with a length
+	*
+	*	@input	object   The object to check
+	*
+	*	@returns bool true on success
+	**/
 	public static function checkObject($object)
 	{
-		if (isset($object) && is_object($object) && count($object) > 0)
+		if (isset($object) && is_object($object))
 		{
-			return true;
+			return count((array)$object) > 0;
 		}
 		return false;
 	}
 
+	/**
+	*	Check if have an array with a length
+	*
+	*	@input	array   The array to check
+	*
+	*	@returns bool true on success
+	**/
 	public static function checkArray($array, $removeEmptyString = false)
 	{
 		if (isset($array) && is_array($array) && count($array) > 0)
@@ -925,6 +1127,13 @@ abstract class DemoHelper
 		return false;
 	}
 
+	/**
+	*	Check if have a string with a length
+	*
+	*	@input	string   The string to check
+	*
+	*	@returns bool true on success
+	**/
 	public static function checkString($string)
 	{
 		if (isset($string) && is_string($string) && strlen($string) > 0)
@@ -934,6 +1143,38 @@ abstract class DemoHelper
 		return false;
 	}
 
+	/**
+	*	Check if we are connected
+	*	Thanks https://stackoverflow.com/a/4860432/1429677
+	*
+	*	@returns bool true on success
+	**/
+	public static function isConnected()
+	{
+		// If example.com is down, then probably the whole internet is down, since IANA maintains the domain. Right?
+		$connected = @fsockopen("www.example.com", 80); 
+                // website, port  (try 80 or 443)
+		if ($connected)
+		{
+			//action when connected
+			$is_conn = true;
+			fclose($connected);
+		}
+		else
+		{
+			//action in connection failure
+			$is_conn = false;
+		}
+		return $is_conn;
+	}
+
+	/**
+	*	Merge an array of array's
+	*
+	*	@input	array   The arrays you would like to merge
+	*
+	*	@returns array on success
+	**/
 	public static function mergeArrays($arrays)
 	{
 		if(self::checkArray($arrays))
@@ -957,6 +1198,13 @@ abstract class DemoHelper
 		return self::shorten($string, $length, $addTip);
 	}
 
+	/**
+	*	Shorten a string
+	*
+	*	@input	string   The you would like to shorten
+	*
+	*	@returns string on success
+	**/
 	public static function shorten($string, $length = 40, $addTip = true)
 	{
 		if (self::checkString($string))
@@ -991,6 +1239,13 @@ abstract class DemoHelper
 		return $string;
 	}
 
+	/**
+	*	Making strings safe (various ways)
+	*
+	*	@input	string   The you would like to make safe
+	*
+	*	@returns string on success
+	**/
 	public static function safeString($string, $type = 'L', $spacer = '_', $replaceNumbers = true)
 	{
 		if ($replaceNumbers === true)
@@ -999,8 +1254,8 @@ abstract class DemoHelper
 			$string = self::replaceNumbers($string);
 		}
 		// 0nly continue if we have a string
-                if (self::checkString($string))
-                {
+		if (self::checkString($string))
+		{
 			// create file name without the extention that is safe
 			if ($type === 'filename')
 			{
@@ -1023,12 +1278,12 @@ abstract class DemoHelper
 			$string = preg_replace("/[^A-Za-z ]/", '', $string);
 			// select final adaptations
 			if ($type === 'L' || $type === 'strtolower')
-                        {
-                                // replace white space with underscore
-                                $string = preg_replace('/\s+/', $spacer, $string);
-                                // default is to return lower
-                                return strtolower($string);
-                        }
+			{
+				// replace white space with underscore
+				$string = preg_replace('/\s+/', $spacer, $string);
+				// default is to return lower
+				return strtolower($string);
+			}
 			elseif ($type === 'W')
 			{
 				// return a string with all first letter of each word uppercase(no undersocre)
@@ -1049,21 +1304,21 @@ abstract class DemoHelper
 				// return a string with all the uppercase(no undersocre)
 				return strtoupper($string);
 			}
-                        elseif ($type === 'U' || $type === 'strtoupper')
-                        {
-                                // replace white space with underscore
-                                $string = preg_replace('/\s+/', $spacer, $string);
-                                // return all upper
-                                return strtoupper($string);
-                        }
-                        elseif ($type === 'F' || $type === 'ucfirst')
-                        {
-                                // replace white space with underscore
-                                $string = preg_replace('/\s+/', $spacer, $string);
-                                // return with first caracter to upper
-                                return ucfirst(strtolower($string));
-                        }
-                        elseif ($type === 'cA' || $type === 'cAmel' || $type === 'camelcase')
+			elseif ($type === 'U' || $type === 'strtoupper')
+			{
+					// replace white space with underscore
+					$string = preg_replace('/\s+/', $spacer, $string);
+					// return all upper
+					return strtoupper($string);
+			}
+			elseif ($type === 'F' || $type === 'ucfirst')
+			{
+					// replace white space with underscore
+					$string = preg_replace('/\s+/', $spacer, $string);
+					// return with first caracter to upper
+					return ucfirst(strtolower($string));
+			}
+			elseif ($type === 'cA' || $type === 'cAmel' || $type === 'camelcase')
 			{
 				// convert all words to first letter uppercase
 				$string = ucwords(strtolower($string));
@@ -1072,14 +1327,14 @@ abstract class DemoHelper
 				// now return first letter lowercase
 				return lcfirst($string);
 			}
-                        // return string
-                        return $string;
-                }
-                // not a string
-                return '';
+			// return string
+			return $string;
+		}
+		// not a string
+		return '';
 	}
 
-        public static function htmlEscape($var, $charset = 'UTF-8', $shorten = false, $length = 40)
+	public static function htmlEscape($var, $charset = 'UTF-8', $shorten = false, $length = 40)
 	{
 		if (self::checkString($var))
 		{
@@ -1090,11 +1345,11 @@ abstract class DemoHelper
                                 return self::shorten($string,$length);
 			}
 			return $string;
-                }
+		}
 		else
 		{
 			return '';
-                }
+		}
 	}
 
 	public static function replaceNumbers($string)
@@ -1118,7 +1373,7 @@ abstract class DemoHelper
 		// return the string with no numbers remaining.
 		return $string;
 	}
-	
+
 	/**
 	*	Convert an integer into an English word string
 	*	Thanks to Tom Nicholson <http://php.net/manual/en/function.strval.php#41988>

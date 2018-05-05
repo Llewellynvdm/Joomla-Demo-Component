@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -36,18 +36,11 @@ class DemoViewImport extends JViewLegacy
 	protected $dataType;
 
 	public function display($tpl = null)
-	{
+	{		
 		if ($this->getLayout() !== 'modal')
 		{
 			// Include helper submenu
 			DemoHelper::addSubmenu('import');
-		}
-
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			JError::raiseError(500, implode('<br />', $errors));
-			return false;
 		}
 
 		$paths = new stdClass;
@@ -78,6 +71,12 @@ class DemoViewImport extends JViewLegacy
 			// clear the data type
 			$session->clear('dataType');
 		}
+		
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
+		{
+			throw new Exception(implode("\n", $errors), 500);
+		}
 
 		// Display the template
 		parent::display($tpl);
@@ -97,10 +96,10 @@ class DemoViewImport extends JViewLegacy
 		}
 
 		// set help url for this view if found
-                $help_url = DemoHelper::getHelpUrl('import');
-                if (DemoHelper::checkString($help_url))
-                {
-                       JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
-                }
+		$help_url = DemoHelper::getHelpUrl('import');
+		if (DemoHelper::checkString($help_url))
+		{
+			   JToolbarHelper::help('COM_DEMO_HELP_MANAGER', false, $help_url);
+		}
 	}
 }

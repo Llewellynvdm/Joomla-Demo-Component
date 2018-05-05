@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		router.php
@@ -251,7 +251,7 @@ function DemoBuildRoute(&$query)
 
 function DemoParseRoute($segments)
 {
-	$router = new ContentRouter;
+	$router = new DemoRouter;
 
 	return $router->parse($segments);
 }

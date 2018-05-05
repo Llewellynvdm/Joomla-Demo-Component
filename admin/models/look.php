@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -74,7 +74,7 @@ class DemoModelLook extends JModelAdmin
 	{
 		if ($item = parent::getItem($pk))
 		{
-			if (!empty($item->params))
+			if (!empty($item->params) && !is_array($item->params))
 			{
 				// Convert the params field to an array.
 				$registry = new Registry;
@@ -172,153 +172,6 @@ class DemoModelLook extends JModelAdmin
 			$form->setFieldAttribute('created', 'disabled', 'true');
 			// Disable fields while saving.
 			$form->setFieldAttribute('created', 'filter', 'unset');
-		}
-		// Modify the form based on Edit Name access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.name', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.name', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('name', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('name', 'readonly', 'true');
-			if (!$form->getValue('name'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('name', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('name', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Description access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.description', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.description', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('description', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('description', 'readonly', 'true');
-			if (!$form->getValue('description'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('description', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('description', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Alias access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.alias', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.alias', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('alias', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('alias', 'readonly', 'true');
-			if (!$form->getValue('alias'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('alias', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('alias', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Dateofbirth access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.dateofbirth', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.dateofbirth', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('dateofbirth', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('dateofbirth', 'readonly', 'true');
-			if (!$form->getValue('dateofbirth'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('dateofbirth', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('dateofbirth', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Website access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.website', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.website', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('website', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('website', 'readonly', 'true');
-			if (!$form->getValue('website'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('website', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('website', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Mobile Phone access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.mobile_phone', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.mobile_phone', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('mobile_phone', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('mobile_phone', 'readonly', 'true');
-			if (!$form->getValue('mobile_phone'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('mobile_phone', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('mobile_phone', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Add access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.add', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.add', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('add', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('add', 'readonly', 'true');
-			// Disable radio button for display.
-			$class = $form->getFieldAttribute('add', 'class', '');
-			$form->setFieldAttribute('add', 'class', $class.' disabled no-click');
-			if (!$form->getValue('add'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('add', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('add', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Image access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.image', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.image', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('image', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('image', 'readonly', 'true');
-			if (!$form->getValue('image'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('image', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('image', 'required', 'false');
-			}
-		}
-		// Modify the form based on Edit Email access controls.
-		if ($id != 0 && (!$user->authorise('look.edit.email', 'com_demo.look.' . (int) $id))
-			|| ($id == 0 && !$user->authorise('look.edit.email', 'com_demo')))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('email', 'disabled', 'true');
-			// Disable fields for display.
-			$form->setFieldAttribute('email', 'readonly', 'true');
-			if (!$form->getValue('email'))
-			{
-				// Disable fields while saving.
-				$form->setFieldAttribute('email', 'filter', 'unset');
-				// Disable fields while saving.
-				$form->setFieldAttribute('email', 'required', 'false');
-			}
 		}
 		// Only load these values if no id is found
 		if (0 == $id)
@@ -696,8 +549,6 @@ class DemoModelLook extends JModelAdmin
 			$this->user 		= JFactory::getUser();
 			$this->table 		= $this->getTable();
 			$this->tableClassName	= get_class($this->table);
-			$this->contentType	= new JUcmType;
-			$this->type		= $this->contentType->getTypeByTable($this->tableClassName);
 			$this->canDo		= DemoHelper::getActions('look');
 		}
 
@@ -722,7 +573,6 @@ class DemoModelLook extends JModelAdmin
 		}
 
 		$newIds = array();
-
 		// Parent exists so let's proceed
 		while (!empty($pks))
 		{
@@ -732,17 +582,11 @@ class DemoModelLook extends JModelAdmin
 			$this->table->reset();
 
 			// only allow copy if user may edit this item.
-
 			if (!$this->user->authorise('look.edit', $contexts[$pk]))
-
 			{
-
 				// Not fatal error
-
 				$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_BATCH_MOVE_ROW_NOT_FOUND', $pk));
-
 				continue;
-
 			}
 
 			// Check that the row actually exists
@@ -752,7 +596,6 @@ class DemoModelLook extends JModelAdmin
 				{
 					// Fatal error
 					$this->setError($error);
-
 					return false;
 				}
 				else
@@ -762,7 +605,6 @@ class DemoModelLook extends JModelAdmin
 					continue;
 				}
 			}
-
 			list($this->table->name, $this->table->alias) = $this->_generateNewTitle($this->table->alias, $this->table->name);
 
 			// insert all set values
@@ -845,8 +687,6 @@ class DemoModelLook extends JModelAdmin
 			$this->user		= JFactory::getUser();
 			$this->table		= $this->getTable();
 			$this->tableClassName	= get_class($this->table);
-			$this->contentType	= new JUcmType;
-			$this->type		= $this->contentType->getTypeByTable($this->tableClassName);
 			$this->canDo		= DemoHelper::getActions('look');
 		}
 
@@ -870,7 +710,6 @@ class DemoModelLook extends JModelAdmin
 			if (!$this->user->authorise('look.edit', $contexts[$pk]))
 			{
 				$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
-
 				return false;
 			}
 
@@ -881,7 +720,6 @@ class DemoModelLook extends JModelAdmin
 				{
 					// Fatal error
 					$this->setError($error);
-
 					return false;
 				}
 				else
@@ -996,7 +834,7 @@ class DemoModelLook extends JModelAdmin
 		// Automatic handling of alias for empty fields
 		if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (int) $input->get('id') == 0)
 		{
-			if ($data['alias'] == null)
+			if ($data['alias'] == null || empty($data['alias']))
 			{
 				if (JFactory::getConfig()->get('unicodeslugs') == 1)
 				{
@@ -1014,8 +852,7 @@ class DemoModelLook extends JModelAdmin
 					$msg = JText::_('COM_DEMO_LOOK_SAVE_WARNING');
 				}
 
-				list($name, $alias) = $this->_generateNewTitle($data['alias'], $data['name']);
-				$data['alias'] = $alias;
+				$data['alias'] = $this->_generateNewTitle($data['alias']);
 
 				if (isset($msg))
 				{
@@ -1070,26 +907,49 @@ class DemoModelLook extends JModelAdmin
 	}
 
 	/**
-	* Method to change the title & alias.
+	* Method to change the title/s & alias.
 	*
-	* @param   string   $alias        The alias.
-	* @param   string   $title        The title.
+	* @param   string         $alias        The alias.
+	* @param   string/array   $title        The title.
 	*
-	* @return	array  Contains the modified title and alias.
+	* @return	array/string  Contains the modified title/s and/or alias.
 	*
 	*/
-	protected function _generateNewTitle($alias, $title)
+	protected function _generateNewTitle($alias, $title = null)
 	{
 
-		// Alter the title & alias
+		// Alter the title/s & alias
 		$table = $this->getTable();
 
 		while ($table->load(array('alias' => $alias)))
 		{
-			$title = JString::increment($title);
+			// Check if this is an array of titles
+			if (DemoHelper::checkArray($title))
+			{
+				foreach($title as $nr => &$_title)
+				{
+					$_title = JString::increment($_title);
+				}
+			}
+			// Make sure we have a title
+			elseif ($title)
+			{
+				$title = JString::increment($title);
+			}
 			$alias = JString::increment($alias, 'dash');
 		}
-
-		return array($title, $alias);
+		// Check if this is an array of titles
+		if (DemoHelper::checkArray($title))
+		{
+			$title[] = $alias;
+			return $title;
+		}
+		// Make sure we have a title
+		elseif ($title)
+		{
+			return array($title, $alias);
+		}
+		// We only had an alias
+		return $alias;
 	}
 }

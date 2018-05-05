@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th August, 2017
+	@build			24th April, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		default.php
@@ -40,7 +40,7 @@ defined('_JEXEC') or die('Restricted access');
     </tbody>
 </table>
 
-<?php if (isset($this->items) && demoHelper::checkArray($this->items) && count($this->items) > 4): ?>
+<?php if (isset($this->items) && isset($this->pagination) && isset($this->pagination->pagesTotal) && $this->pagination->pagesTotal > 1): ?>
 <form name="adminForm" method="post">
 	<div class="pagination">
 		<?php if ($this->params->def('show_pagination_results', 1)) : ?>
