@@ -10,7 +10,7 @@ Just a basic demo of the most basic implementations of the [Joomla](http://www.j
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Demo](https://www.vdm.io/)
 + *First Build*: 18th October, 2016
-+ *Last Build*: 24th April, 2018
++ *Last Build*: 5th May, 2018
 + *Version*: 2.0.0
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,7 @@ due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **14587**
++ *Line count*: **14621**
 + *File count*: **147**
 + *Folder count*: **54**
 

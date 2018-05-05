@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.2" method="upgrade">
 	<name>COM_DEMO</name>
-	<creationDate>24th April, 2018</creationDate>
+	<creationDate>5th May, 2018</creationDate>
 	<author>Llewellyn van der Merwe</author>
 	<authorEmail>joomla@vdm.io</authorEmail>
 	<authorUrl>https://www.vdm.io/</authorUrl>
@@ -95,6 +95,6 @@
 
 	</administration>
 	<updateservers>
-		<server type="extension" enabled="1" element="com_demo" name="Demo">https://www.vdm.io/updates/demo_update_server.xml</server>
+		<server type="extension" enabled="1" element="com_demo" name="Demo">https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/demo_updateserver.xml</server>
 	</updateservers>
 </extension>

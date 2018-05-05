@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			24th April, 2018
+	@build			5th May, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -321,11 +321,11 @@ class DemoTableLook extends JTable
 	}
 
 	/**
-	 * Generate a valid alias from title / date.
-	 * Remains public to be able to check for duplicated alias before saving
-	 *
-	 * @return  string
-	 */
+	* Generate a valid alias from title / date.
+	* Remains public to be able to check for duplicated alias before saving
+	*
+	* @return  string
+	*/
 	public function generateAlias()
 	{
 		if (empty($this->alias))
@@ -337,7 +337,7 @@ class DemoTableLook extends JTable
 
 		if (trim(str_replace('-', '', $this->alias)) == '')
 		{
-			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
+			$this->alias = JFactory::getDate()->format('Y-m-d-H-i-s');
 		}
 
 		return $this->alias;
