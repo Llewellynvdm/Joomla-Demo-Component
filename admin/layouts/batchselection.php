@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		batchselection.php
@@ -22,8 +22,8 @@
 defined('JPATH_BASE') or die;
 
 JHtmlBehavior::core();
-$divWrapper 	= range(1,120,2);
-$counter 		= 0;
+$divWrapper = range(1,120,2);
+$counter = 0;
 ?>
 <?php if ($displayData->ListSelection) : ?>
 <div class="row-fluid">

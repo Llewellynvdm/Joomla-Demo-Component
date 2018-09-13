@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
@@ -31,7 +31,7 @@ JHtml::_('behavior.calendar');
 $componentParams = JComponentHelper::getParams('com_demo');
 ?>
 <?php echo $this->toolbar->render(); ?>
-<form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='.(int) $this->item->id.$this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
+<form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='. (int) $this->item->id . $this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
 	<?php echo JLayoutHelper::render('look.details_above', $this); ?>
 <div class="form-horizontal">
@@ -58,6 +58,10 @@ $componentParams = JComponentHelper::getParams('com_demo');
 			</div>
 		</div>
 	<?php echo JHtml::_('bootstrap.endTab'); ?>
+
+	<?php $this->ignore_fieldsets = array('details','metadata','vdmmetadata','accesscontrol'); ?>
+	<?php $this->tab_name = 'lookTab'; ?>
+	<?php echo JLayoutHelper::render('joomla.edit.params', $this); ?>
 
 	<?php if ($this->canDo->get('look.delete') || $this->canDo->get('look.edit.created_by') || $this->canDo->get('look.edit.state') || $this->canDo->get('look.edit.created')) : ?>
 	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'publishing', JText::_('COM_DEMO_LOOK_PUBLISHING', true)); ?>

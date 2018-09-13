@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looking.php
@@ -20,9 +20,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-// import Joomla modelitem library
-jimport('joomla.application.component.modelitem');
 
 /**
  * Demo Looking Model
@@ -123,8 +120,8 @@ class DemoModelLooking extends JModelItem
 
 				// Get from #__demo_look as a
 				$query->select($db->quoteName(
-			array('a.id','a.name','a.alias','a.description','a.add','a.email','a.mobile_phone','a.dateofbirth','a.image','a.website','a.published','a.hits'),
-			array('id','name','alias','description','add','email','mobile_phone','dateofbirth','image','website','published','hits')));
+			array('a.id','a.name','a.alias','a.description','a.add','a.email','a.mobile_phone','a.dateofbirth','a.image','a.website','a.published','a.hits','a.created_by'),
+			array('id','name','alias','description','add','email','mobile_phone','dateofbirth','image','website','published','hits','created_by')));
 				$query->from($db->quoteName('#__demo_look', 'a'));
 				$query->where('a.id = ' . (int) $pk);
 
@@ -144,11 +141,13 @@ class DemoModelLooking extends JModelItem
 			// Load the JEvent Dispatcher
 			JPluginHelper::importPlugin('content');
 			$this->_dispatcher = JEventDispatcher::getInstance();
+				// Check if item has params, or pass whole item.
+				$params = (isset($data->params) && DemoHelper::checkJson($data->params)) ? json_decode($data->params) : $data;
 				// Make sure the content prepare plugins fire on description
 				$_description = new stdClass();
 				$_description->text =& $data->description; // value must be in text
 				// Since all values are now in text (Joomla Limitation), we also add the field name (description) to context
-				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looking.description', &$_description, &$this->params, 0));
+				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looking.description', &$_description, &$params, 0));
 				// Checking if description has uikit components that must be loaded.
 				$this->uikitComp = DemoHelper::getUikitComp($data->description,$this->uikitComp);
 
@@ -171,15 +170,14 @@ class DemoModelLooking extends JModelItem
 		}
 
 		return $this->_item[$pk];
-	} 
-
+	}
 
 	/**
-	* Get the uikit needed components
-	*
-	* @return mixed  An array of objects on success.
-	*
-	*/
+	 * Get the uikit needed components
+	 *
+	 * @return mixed  An array of objects on success.
+	 *
+	 */
 	public function getUikitComp()
 	{
 		if (isset($this->uikitComp) && DemoHelper::checkArray($this->uikitComp))
@@ -187,5 +185,5 @@ class DemoModelLooking extends JModelItem
 			return $this->uikitComp;
 		}
 		return false;
-	}  
+	}
 }

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -20,9 +20,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-// import Joomla view library
-jimport('joomla.application.component.view');
 
 /**
  * Demo View class for the Looking
@@ -104,7 +101,7 @@ class DemoViewLooking extends JViewLegacy
 		// Load the header checker class.
 		require_once( JPATH_COMPONENT_SITE.'/helpers/headercheck.php' );
 		// Initialize the header checker.
-		$HeaderCheck = new demoHeaderCheck; 
+		$HeaderCheck = new demoHeaderCheck;
 
 		// Load uikit options.
 		$uikit = $this->params->get('uikit_load');
@@ -149,7 +146,7 @@ class DemoViewLooking extends JViewLegacy
 					}
 				}
 			}
-		}   
+		}
 		// load the meta description
 		if (isset($this->item->metadesc) && $this->item->metadesc)
 		{
@@ -193,9 +190,9 @@ class DemoViewLooking extends JViewLegacy
 					$this->document->setMetadata($k, $v);
 				}
 			}
-		}  
+		} 
 		// add the document default css file
-		$this->document->addStyleSheet(JURI::root(true) .'/components/com_demo/assets/css/looking.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css'); 
+		$this->document->addStyleSheet(JURI::root(true) .'/components/com_demo/assets/css/looking.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
 	}
 
 	/**

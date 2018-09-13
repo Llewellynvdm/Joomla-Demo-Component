@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -20,9 +20,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-// import Joomla controlleradmin library
-jimport('joomla.application.component.controlleradmin');
 
 /**
  * Demo Controller

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -20,6 +20,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+JHtml::_('behavior.tabstate');
 
 // Set the component css/js
 $document = JFactory::getDocument();
@@ -27,18 +28,14 @@ $document->addStyleSheet('components/com_demo/assets/css/site.css');
 $document->addScript('components/com_demo/assets/js/site.js');
 
 // Require helper files
-JLoader::register('DemoHelper', dirname(__FILE__) . '/helpers/demo.php'); 
-JLoader::register('DemoHelperRoute', dirname(__FILE__) . '/helpers/route.php'); 
-
-// import joomla controller library
-jimport('joomla.application.component.controller');
+JLoader::register('DemoHelper', __DIR__ . '/helpers/demo.php'); 
+JLoader::register('DemoHelperRoute', __DIR__ . '/helpers/route.php'); 
 
 // Get an instance of the controller prefixed by Demo
 $controller = JControllerLegacy::getInstance('Demo');
 
 // Perform the request task
-$jinput = JFactory::getApplication()->input;
-$controller->execute($jinput->get('task', null, 'CMD'));
+$controller->execute(JFactory::getApplication()->input->get('task'));
 
 // Redirect if set by the controller
 $controller->redirect();

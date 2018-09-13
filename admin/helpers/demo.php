@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -25,7 +25,7 @@ defined('_JEXEC') or die('Restricted access');
  * Demo component helper.
  */
 abstract class DemoHelper
-{  
+{
 	/**
 	*	Load the Component xml manifest.
 	**/
@@ -92,8 +92,8 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Can be used to build help urls.
-	**/
+	 *	Can be used to build help urls.
+	 **/
 	public static function getHelpUrl($view)
 	{
 		return false;
@@ -112,11 +112,16 @@ abstract class DemoHelper
 		{
 			JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_LOOKS'), 'index.php?option=com_demo&view=looks', $submenu === 'looks');
 		}
-	} 
+		if (JComponentHelper::isEnabled('com_fields'))
+		{
+			JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_LOOKS_FIELDS'), 'index.php?option=com_fields&context=com_demo.look', $submenu === 'fields.fields');
+			JHtmlSidebar::addEntry(JText::_('COM_DEMO_SUBMENU_LOOKS_FIELDS_GROUPS'), 'index.php?option=com_fields&view=groups&context=com_demo.look', $submenu === 'fields.groups');
+		}
+	}
 
 	/**
-	* 	UIKIT Component Classes
-	**/
+	 *  UIKIT Component Classes
+	 **/
 	public static $uk_components = array(
 			'data-uk-grid' => array(
 				'grid' ),
@@ -170,15 +175,15 @@ abstract class DemoHelper
 			'upload-drop' => array(
 				'upload', 'form-file' )
 			);
-	
+
 	/**
-	* 	Add UIKIT Components
-	**/
+	 *  Add UIKIT Components
+	 **/
 	public static $uikit = false;
 
 	/**
-	* 	Get UIKIT Components
-	**/
+	 *  Get UIKIT Components
+	 **/
 	public static function getUikitComp($content,$classes = array())
 	{
 		if (strpos($content,'class="uk-') !== false)
@@ -208,13 +213,13 @@ abstract class DemoHelper
 				}
 				return $temp;
 			}
-		}	
+		}
 		if (self::checkArray($classes))
 		{
 			return $classes;
 		}
 		return false;
-	} 
+	}
 
 	/**
 	 * Prepares the xml document
@@ -244,19 +249,19 @@ abstract class DemoHelper
 		{
 			$subjectTab = 'Sheet1';
 		}
-		
-		// make sure the file is loaded		
+
+		// make sure the file is loaded
 		JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
-		
+
 		// Create new PHPExcel object
 		$objPHPExcel = new PHPExcel();
-		
+
 		// Set document properties
 		$objPHPExcel->getProperties()->setCreator($creator)
-									 ->setCompany('Vast Development Method')
-									 ->setLastModifiedBy($modified)
-									 ->setTitle($title)
-									 ->setSubject($subjectTab);
+			->setCompany('Vast Development Method')
+			->setLastModifiedBy($modified)
+			->setTitle($title)
+			->setSubject($subjectTab);
 		if (!$description)
 		{
 			$objPHPExcel->getProperties()->setDescription($description);
@@ -269,7 +274,7 @@ abstract class DemoHelper
 		{
 			$objPHPExcel->getProperties()->setCategory($category);
 		}
-		
+
 		// Some styles
 		$headerStyles = array(
 			'font'  => array(
@@ -291,7 +296,7 @@ abstract class DemoHelper
 				'size'  => 11,
 				'name'  => 'Verdana'
 		));
-		
+
 		// Add some data
 		if (self::checkArray($rows))
 		{
@@ -318,43 +323,43 @@ abstract class DemoHelper
 		{
 			return false;
 		}
-		
+
 		// Rename worksheet
 		$objPHPExcel->getActiveSheet()->setTitle($subjectTab);
-		
+
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		$objPHPExcel->setActiveSheetIndex(0);
-		
+
 		// Redirect output to a client's web browser (Excel5)
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$fileName.'.xls"');
 		header('Cache-Control: max-age=0');
 		// If you're serving to IE 9, then the following may be needed
 		header('Cache-Control: max-age=1');
-		
+
 		// If you're serving to IE over SSL, then the following may be needed
 		header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 		header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
 		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
 		header ('Pragma: public'); // HTTP/1.0
-		
+
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output');
 		jexit();
 	}
-	
+
 	/**
-	* Get CSV Headers
-	*/
+	 * Get CSV Headers
+	 */
 	public static function getFileHeaders($dataType)
-	{		
-		// make sure these files are loaded		
+	{
+		// make sure these files are loaded
 		JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
 		JLoader::import('ChunkReadFilter', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/PHPExcel/Reader');
 		// get session object
-		$session	= JFactory::getSession();
-		$package	= $session->get('package', null);
-		$package	= json_decode($package, true);
+		$session = JFactory::getSession();
+		$package = $session->get('package', null);
+		$package = json_decode($package, true);
 		// set the headers
 		if(isset($package['dir']))
 		{
@@ -532,16 +537,16 @@ abstract class DemoHelper
 					{
 						if ($external)
 						{
-							if ($name = self::getVar(null, $val, $id, $name, '=', $table))
+							if ($_name = self::getVar(null, $val, $id, $name, '=', $table))
 							{
-								$names[] = $name;
+								$names[] = $_name;
 							}
 						}
 						else
 						{
-							if ($name = self::getVar($table, $val, $id, $name))
+							if ($_name = self::getVar($table, $val, $id, $name))
 							{
-								$names[] = $name;
+								$names[] = $_name;
 							}
 						}
 					}
@@ -931,7 +936,7 @@ abstract class DemoHelper
 					}
 				}
 				// check if there are any view values remaining
-				if (count($_result))
+				if (count((array)$_result))
 				{
 					$_result = json_encode($_result);
 					$_result = array($_result);
@@ -1038,6 +1043,46 @@ abstract class DemoHelper
 	}
 
 	/**
+	 * get the field object
+	 *
+	 * @param   array      $attributes   The array of attributes
+	 * @param   string     $default      The default of the field
+	 * @param   array      $options      The options to apply to the XML element
+	 *
+	 * @return  object
+	 *
+	 */
+	public static function getFieldObject(&$attributes, $default = '', $options = null)
+	{
+		// make sure we have attributes and a type value
+		if (self::checkArray($attributes) && isset($attributes['type']))
+		{
+			// make sure the form helper class is loaded
+			if (!method_exists('JFormHelper', 'loadFieldType'))
+			{
+				jimport('joomla.form.form');
+			}
+			// get field type
+			$field = JFormHelper::loadFieldType($attributes['type'],true);
+			// start field xml
+			$XML = new SimpleXMLElement('<field/>');
+			// load the attributes
+			self::xmlAddAttributes($XML, $attributes);
+			// check if we have options
+			if (self::checkArray($options))
+			{
+				// load the options
+				self::xmlAddOptions($XML, $options);
+			}
+			// setup the field
+			$field->setup($XML, $default);
+			// return the field object
+			return $field;
+		}
+		return false;
+	}
+
+	/**
 	 * Render Bool Button
 	 *
 	 * @param   array   $args   All the args for the button
@@ -1055,8 +1100,6 @@ abstract class DemoHelper
 		$args = func_get_args();
 		// check if there is additional button class
 		$additional = isset($args[1]) ? (string) $args[1] : ''; // not used at this time
-		// start the xml
-		$buttonXML = new SimpleXMLElement('<field/>');
 		// button attributes
 		$buttonAttributes = array(
 			'type' => 'radio',
@@ -1065,22 +1108,12 @@ abstract class DemoHelper
 			'class' => 'btn-group',
 			'filter' => 'INT',
 			'default' => isset($args[2]) ? (int) $args[2] : 0);
-		// load the haskey attributes
-		self::xmlAddAttributes($buttonXML, $buttonAttributes);
 		// set the button options
 		$buttonOptions = array(
 			'1' => isset($args[3]) ? self::htmlEscape($args[3]) : 'JYES',
 			'0' => isset($args[4]) ? self::htmlEscape($args[4]) : 'JNO');
-		// load the button options
-		self::xmlAddOptions($buttonXML, $buttonOptions);
-
-		// get the radio element
-		$button = JFormHelper::loadFieldType('radio');
-
-		// run
-		$button->setup($buttonXML, $buttonAttributes['default']);
-
-		return $button->input;
+		// return the input
+		return self::getFieldObject($buttonAttributes, $buttonAttributes['default'], $buttonOptions)->input;
 	}
 
 	/**
@@ -1125,7 +1158,7 @@ abstract class DemoHelper
 	**/
 	public static function checkArray($array, $removeEmptyString = false)
 	{
-		if (isset($array) && is_array($array) && count($array) > 0)
+		if (isset($array) && is_array($array) && count((array)$array) > 0)
 		{
 			// also make sure the empty strings are removed
 			if ($removeEmptyString)
@@ -1228,7 +1261,7 @@ abstract class DemoHelper
 		{
 			$initial = strlen($string);
 			$words = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
-			$words_count = count($words);
+			$words_count = count((array)$words);
 
 			$word_length = 0;
 			$last_word = 0;
@@ -1263,7 +1296,7 @@ abstract class DemoHelper
 	*
 	*	@returns string on success
 	**/
-	public static function safeString($string, $type = 'L', $spacer = '_', $replaceNumbers = true)
+	public static function safeString($string, $type = 'L', $spacer = '_', $replaceNumbers = true, $keepOnlyCharacters = true)
 	{
 		if ($replaceNumbers === true)
 		{
@@ -1292,7 +1325,16 @@ abstract class DemoHelper
 			$string = trim($string);
 			$string = preg_replace('/'.$spacer.'+/', ' ', $string);
 			$string = preg_replace('/\s+/', ' ', $string);
-			$string = preg_replace("/[^A-Za-z ]/", '', $string);
+			// remove all and keep only characters
+			if ($keepOnlyCharacters)
+			{
+				$string = preg_replace("/[^A-Za-z ]/", '', $string);
+			}
+			// keep both numbers and characters
+			else
+			{
+				$string = preg_replace("/[^A-Za-z0-9 ]/", '', $string);
+			}
 			// select final adaptations
 			if ($type === 'L' || $type === 'strtolower')
 			{

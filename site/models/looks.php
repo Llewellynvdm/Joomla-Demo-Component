@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -20,9 +20,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-// import the Joomla modellist library
-jimport('joomla.application.component.modellist');
 
 /**
  * Demo Model for Looks
@@ -68,8 +65,8 @@ class DemoModelLooks extends JModelList
 
 		// Get from #__demo_look as a
 		$query->select($db->quoteName(
-			array('a.id','a.name','a.alias','a.description','a.add','a.email','a.mobile_phone','a.dateofbirth','a.image','a.website','a.not_required','a.published','a.hits','a.ordering'),
-			array('id','name','alias','description','add','email','mobile_phone','dateofbirth','image','website','not_required','published','hits','ordering')));
+			array('a.id','a.name','a.alias','a.description','a.add','a.email','a.mobile_phone','a.dateofbirth','a.image','a.website','a.not_required','a.published','a.hits','a.ordering','a.created_by'),
+			array('id','name','alias','description','add','email','mobile_phone','dateofbirth','image','website','not_required','published','hits','ordering','created_by')));
 		$query->from($db->quoteName('#__demo_look', 'a'));
 		// Get where a.published is 1
 		$query->where('a.published = 1');
@@ -95,7 +92,7 @@ class DemoModelLooks extends JModelList
 			// redirect away to the home page if no access allowed.
 			$app->redirect(JURI::root());
 			return false;
-		}  
+		}
 		// load parent items
 		$items = parent::getItems();
 
@@ -112,15 +109,17 @@ class DemoModelLooks extends JModelList
 			{
 				// Always create a slug for sef URL's
 				$item->slug = (isset($item->alias) && isset($item->id)) ? $item->id.':'.$item->alias : $item->id;
+				// Check if item has params, or pass whole item.
+				$params = (isset($item->params) && DemoHelper::checkJson($item->params)) ? json_decode($item->params) : $item;
 				// Make sure the content prepare plugins fire on description
 				$_description = new stdClass();
 				$_description->text =& $item->description; // value must be in text
 				// Since all values are now in text (Joomla Limitation), we also add the field name (description) to context
-				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looks.description', &$_description, &$this->params, 0));
+				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looks.description', &$_description, &$params, 0));
 				// Checking if description has uikit components that must be loaded.
 				$this->uikitComp = DemoHelper::getUikitComp($item->description,$this->uikitComp);
 			}
-		} 
+		}
 
 
 		// do a quick build of all edit links links
@@ -146,15 +145,14 @@ class DemoModelLooks extends JModelList
 
 		// return items
 		return $items;
-	} 
-
+	}
 
 	/**
-	* Get the uikit needed components
-	*
-	* @return mixed  An array of objects on success.
-	*
-	*/
+	 * Get the uikit needed components
+	 *
+	 * @return mixed  An array of objects on success.
+	 *
+	 */
 	public function getUikitComp()
 	{
 		if (isset($this->uikitComp) && DemoHelper::checkArray($this->uikitComp))
@@ -162,5 +160,5 @@ class DemoModelLooks extends JModelList
 			return $this->uikitComp;
 		}
 		return false;
-	}  
+	}
 }

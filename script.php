@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -22,8 +22,6 @@
 defined('_JEXEC') or die('Restricted access');
 
 JHTML::_('behavior.modal');
-jimport('joomla.installer.installer');
-jimport('joomla.installer.helper');
 
 /**
  * Script File of Demo Component
@@ -55,6 +53,168 @@ class com_demoInstallerScript
 
 		// Create a new query object.
 		$query = $db->getQuery(true);
+		// Select ids from fields
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__fields'));
+		// Where look context is found
+		$query->where( $db->quoteName('context') . ' = '. $db->quote('com_demo.look') );
+		$db->setQuery($query);
+		// Execute query to see if context is found
+		$db->execute();
+		$look_found = $db->getNumRows();
+		// Now check if there were any rows
+		if ($look_found)
+		{
+			// Since there are load the needed  look field ids
+			$look_field_ids = $db->loadColumn();
+			// Remove look from the field table
+			$look_condition = array( $db->quoteName('context') . ' = '. $db->quote('com_demo.look') );
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->delete($db->quoteName('#__fields'));
+			$query->where($look_condition);
+			$db->setQuery($query);
+			// Execute the query to remove look items
+			$look_done = $db->execute();
+			if ($look_done)
+			{
+				// If succesfully remove look add queued success message.
+				$app->enqueueMessage(JText::_('The fields with type (com_demo.look) context was removed from the <b>#__fields</b> table'));
+			}
+			// Also Remove look field values
+			$look_condition = array( $db->quoteName('field_id') . ' IN ('. implode(',', $look_field_ids) .')');
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->delete($db->quoteName('#__fields_values'));
+			$query->where($look_condition);
+			$db->setQuery($query);
+			// Execute the query to remove look field values
+			$look_done = $db->execute();
+			if ($look_done)
+			{
+				// If succesfully remove look add queued success message.
+				$app->enqueueMessage(JText::_('The fields values for look was removed from the <b>#__fields_values</b> table'));
+			}
+		}
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		// Select ids from field groups
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__fields_groups'));
+		// Where look context is found
+		$query->where( $db->quoteName('context') . ' = '. $db->quote('com_demo.look') );
+		$db->setQuery($query);
+		// Execute query to see if context is found
+		$db->execute();
+		$look_found = $db->getNumRows();
+		// Now check if there were any rows
+		if ($look_found)
+		{
+			// Remove look from the field groups table
+			$look_condition = array( $db->quoteName('context') . ' = '. $db->quote('com_demo.look') );
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->delete($db->quoteName('#__fields_groups'));
+			$query->where($look_condition);
+			$db->setQuery($query);
+			// Execute the query to remove look items
+			$look_done = $db->execute();
+			if ($look_done)
+			{
+				// If succesfully remove look add queued success message.
+				$app->enqueueMessage(JText::_('The field groups with type (com_demo.look) context was removed from the <b>#__fields_groups</b> table'));
+			}
+		}
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		// Select id from content type table
+		$query->select($db->quoteName('type_id'));
+		$query->from($db->quoteName('#__content_types'));
+		// Where look alias is found
+		$query->where( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.look') );
+		$db->setQuery($query);
+		// Execute query to see if alias is found
+		$db->execute();
+		$look_found = $db->getNumRows();
+		// Now check if there were any rows
+		if ($look_found)
+		{
+			// Since there are load the needed  look type ids
+			$look_ids = $db->loadColumn();
+			// Remove look from the content type table
+			$look_condition = array( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.look') );
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->delete($db->quoteName('#__content_types'));
+			$query->where($look_condition);
+			$db->setQuery($query);
+			// Execute the query to remove look items
+			$look_done = $db->execute();
+			if ($look_done)
+			{
+				// If succesfully remove look add queued success message.
+				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__content_type</b> table'));
+			}
+
+			// Remove look items from the contentitem tag map table
+			$look_condition = array( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.look') );
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->delete($db->quoteName('#__contentitem_tag_map'));
+			$query->where($look_condition);
+			$db->setQuery($query);
+			// Execute the query to remove look items
+			$look_done = $db->execute();
+			if ($look_done)
+			{
+				// If succesfully remove look add queued success message.
+				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__contentitem_tag_map</b> table'));
+			}
+
+			// Remove look items from the ucm content table
+			$look_condition = array( $db->quoteName('core_type_alias') . ' = ' . $db->quote('com_demo.look') );
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->delete($db->quoteName('#__ucm_content'));
+			$query->where($look_condition);
+			$db->setQuery($query);
+			// Execute the query to remove look items
+			$look_done = $db->execute();
+			if ($look_done)
+			{
+				// If succesfully remove look add queued success message.
+				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__ucm_content</b> table'));
+			}
+
+			// Make sure that all the look items are cleared from DB
+			foreach ($look_ids as $look_id)
+			{
+				// Remove look items from the ucm base table
+				$look_condition = array( $db->quoteName('ucm_type_id') . ' = ' . $look_id);
+				// Create a new query object.
+				$query = $db->getQuery(true);
+				$query->delete($db->quoteName('#__ucm_base'));
+				$query->where($look_condition);
+				$db->setQuery($query);
+				// Execute the query to remove look items
+				$db->execute();
+
+				// Remove look items from the ucm history table
+				$look_condition = array( $db->quoteName('ucm_type_id') . ' = ' . $look_id);
+				// Create a new query object.
+				$query = $db->getQuery(true);
+				$query->delete($db->quoteName('#__ucm_history'));
+				$query->where($look_condition);
+				$db->setQuery($query);
+				// Execute the query to remove look items
+				$db->execute();
+			}
+		}
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
 		// Select id from content type table
 		$query->select($db->quoteName('type_id'));
 		$query->from($db->quoteName('#__content_types'));
@@ -78,7 +238,7 @@ class com_demoInstallerScript
 			$db->setQuery($query);
 			// Execute the query to remove Look items
 			$look_done = $db->execute();
-			if ($look_done);
+			if ($look_done)
 			{
 				// If succesfully remove Look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__content_type</b> table'));
@@ -93,7 +253,7 @@ class com_demoInstallerScript
 			$db->setQuery($query);
 			// Execute the query to remove Look items
 			$look_done = $db->execute();
-			if ($look_done);
+			if ($look_done)
 			{
 				// If succesfully remove Look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__contentitem_tag_map</b> table'));
@@ -108,7 +268,7 @@ class com_demoInstallerScript
 			$db->setQuery($query);
 			// Execute the query to remove Look items
 			$look_done = $db->execute();
-			if ($look_done);
+			if ($look_done)
 			{
 				// If succesfully remove Look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__ucm_content</b> table'));
@@ -152,7 +312,7 @@ class com_demoInstallerScript
 		$query->where($demo_condition);
 		$db->setQuery($query);
 		$look_done = $db->execute();
-		if ($look_done);
+		if ($look_done)
 		{
 			// If succesfully remove demo add queued success message.
 			$app->enqueueMessage(JText::_('All related items was removed from the <b>#__assets</b> table'));

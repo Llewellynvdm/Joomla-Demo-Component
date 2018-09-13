@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		route.php
@@ -21,10 +21,6 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// Component Helper
-jimport('joomla.application.component.helper');
-jimport('joomla.application.categories');
-
 /**
  * Demo Route Helper
  **/
@@ -33,8 +29,8 @@ abstract class DemoHelperRoute
 	protected static $lookup;
 
 	/**
-	* @param int The route of the Looks
-	*/
+	 * @param int The route of the Looks
+	 */
 	public static function getLooksRoute($id = 0, $catid = 0)
 	{
 		if ($id > 0)
@@ -74,8 +70,8 @@ abstract class DemoHelperRoute
 	}
 
 	/**
-	* @param int The route of the Looking
-	*/
+	 * @param int The route of the Looking
+	 */
 	public static function getLookingRoute($id = 0, $catid = 0)
 	{
 		if ($id > 0)

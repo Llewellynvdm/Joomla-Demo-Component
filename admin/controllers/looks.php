@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -21,24 +21,33 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// import Joomla controlleradmin library
-jimport('joomla.application.component.controlleradmin');
-
 /**
  * Looks Controller
  */
 class DemoControllerLooks extends JControllerAdmin
 {
-	protected $text_prefix = 'COM_DEMO_LOOKS';
 	/**
-	 * Proxy for getModel.
-	 * @since	2.5
+	 * The prefix to use with controller messages.
+	 *
+	 * @var    string
+	 * @since  1.6
 	 */
-	public function getModel($name = 'Look', $prefix = 'DemoModel', $config = array())
+	protected $text_prefix = 'COM_DEMO_LOOKS';
+
+	/**
+	 * Method to get a model object, loading it if required.
+	 *
+	 * @param   string  $name    The model name. Optional.
+	 * @param   string  $prefix  The class prefix. Optional.
+	 * @param   array   $config  Configuration array for model. Optional.
+	 *
+	 * @return  JModelLegacy  The model.
+	 *
+	 * @since   1.6
+	 */
+	public function getModel($name = 'Look', $prefix = 'DemoModel', $config = array('ignore_request' => true))
 	{
-		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
-		
-		return $model;
+		return parent::getModel($name, $prefix, $config);
 	}
 
 	public function exportData()
@@ -102,5 +111,5 @@ class DemoControllerLooks extends JControllerAdmin
 		$message = JText::_('COM_DEMO_IMPORT_FAILED');
 		$this->setRedirect(JRoute::_('index.php?option=com_demo&view=looks', false), $message, 'error');
 		return;
-	}  
+	}
 }

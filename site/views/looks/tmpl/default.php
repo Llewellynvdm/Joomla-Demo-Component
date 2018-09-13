@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		default.php
@@ -19,10 +19,11 @@
 /------------------------------------------------------------------------------------------------------*/
 
 // No direct access to this file
-defined('_JEXEC') or die('Restricted access'); 
+defined('_JEXEC') or die('Restricted access');
 
 ?>
- <table class="uk-table uk-table-hover">
+<form action="<?php echo JRoute::_('index.php?option=com_demo'); ?>" method="post" name="adminForm" id="adminForm">
+<table class="uk-table uk-table-hover">
     <caption><?php echo JText::_('COM_DEMO_LIST_OF_ALL_LOOKS'); ?></caption>
     <thead>
         <tr>
@@ -41,12 +42,13 @@ defined('_JEXEC') or die('Restricted access');
 </table>
 
 <?php if (isset($this->items) && isset($this->pagination) && isset($this->pagination->pagesTotal) && $this->pagination->pagesTotal > 1): ?>
-<form name="adminForm" method="post">
 	<div class="pagination">
 		<?php if ($this->params->def('show_pagination_results', 1)) : ?>
 			<p class="counter pull-right"> <?php echo $this->pagination->getPagesCounter(); ?> <?php echo $this->pagination->getLimitBox(); ?></p>
 		<?php endif; ?>
 		<?php echo $this->pagination->getPagesLinks(); ?>
 	</div>
+<?php endif; ?>
+<input type="hidden" name="task" value="" />
+<?php echo JHtml::_('form.token'); ?>
 </form>
-<?php endif; ?> 

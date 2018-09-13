@@ -10,20 +10,20 @@ Just a basic demo of the most basic implementations of the [Joomla](http://www.j
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Demo](https://www.vdm.io/)
 + *First Build*: 18th October, 2016
-+ *Last Build*: 5th May, 2018
++ *Last Build*: 13th September, 2018
 + *Version*: 2.0.0
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 
 ## Build Time
 
-**41 Hours** or **5 Eight Hour Days** (actual time the author saved -
+**42 Hours** or **5 Eight Hour Days** (actual time the author saved -
 due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder))
 
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **14621**
++ *Line count*: **14920**
 + *File count*: **147**
 + *Folder count*: **54**
 
@@ -35,7 +35,7 @@ due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder
 > **mapping @4hours** = codingtime / 10;
 > **office @7hours** = codingtime / 6;)
 
-**68 Hours** or **9 Eight Hour Days**
+**69 Hours** or **9 Eight Hour Days**
 (a total of the realistic time frame for this project)
 
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,

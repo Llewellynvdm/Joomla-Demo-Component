@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -20,9 +20,6 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-// import the Joomla modellist library
-jimport('joomla.application.component.modellist');
 
 /**
  * Looks Model
@@ -95,7 +92,7 @@ class DemoModelLooks extends JModelList
 	 * @return  mixed  An array of data items on success, false on failure.
 	 */
 	public function getItems()
-	{ 
+	{
 		// check in items
 		$this->checkInNow();
 
@@ -105,11 +102,9 @@ class DemoModelLooks extends JModelList
 		// set values to display correctly.
 		if (DemoHelper::checkArray($items))
 		{
-			// get user object.
-			$user = JFactory::getUser();
 			foreach ($items as $nr => &$item)
 			{
-				$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
+				$access = (JFactory::getUser()->authorise('look.access', 'com_demo.look.' . (int) $item->id) && JFactory::getUser()->authorise('look.access', 'com_demo'));
 				if (!$access)
 				{
 					unset($items[$nr]);
@@ -117,7 +112,7 @@ class DemoModelLooks extends JModelList
 				}
 
 			}
-		}  
+		}
         
 		// return items
 		return $items;
@@ -195,10 +190,10 @@ class DemoModelLooks extends JModelList
 	}
 
 	/**
-	* Method to get list export data.
-	*
-	* @return mixed  An array of data items on success, false on failure.
-	*/
+	 * Method to get list export data.
+	 *
+	 * @return mixed  An array of data items on success, false on failure.
+	 */
 	public function getExportData($pks)
 	{
 		// setup the query
@@ -238,11 +233,9 @@ class DemoModelLooks extends JModelList
 				// set values to display correctly.
 				if (DemoHelper::checkArray($items))
 				{
-					// get user object.
-					$user = JFactory::getUser();
 					foreach ($items as $nr => &$item)
 					{
-						$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
+						$access = (JFactory::getUser()->authorise('look.access', 'com_demo.look.' . (int) $item->id) && JFactory::getUser()->authorise('look.access', 'com_demo'));
 						if (!$access)
 						{
 							unset($items[$nr]);
@@ -292,7 +285,7 @@ class DemoModelLooks extends JModelList
 			return $headers;
 		}
 		return false;
-	} 
+	}
 	
 	/**
 	 * Method to get a store id based on model configuration state.
@@ -316,16 +309,16 @@ class DemoModelLooks extends JModelList
 	}
 
 	/**
-	* Build an SQL query to checkin all items left checked out longer then a set time.
-	*
-	* @return  a bool
-	*
-	*/
+	 * Build an SQL query to checkin all items left checked out longer then a set time.
+	 *
+	 * @return  a bool
+	 *
+	 */
 	protected function checkInNow()
 	{
 		// Get set check in time
 		$time = JComponentHelper::getParams('com_demo')->get('check_in');
-		
+
 		if ($time)
 		{
 

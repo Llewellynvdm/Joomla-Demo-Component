@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			5th May, 2018
+	@build			13th September, 2018
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -22,9 +22,6 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\Registry\Registry;
-
-// import Joomla table library
-jimport('joomla.database.table');
 
 /**
  * Looks Table class
@@ -49,7 +46,7 @@ class DemoTableLook extends JTable
 		parent::__construct('#__demo_look', 'id', $db);
 
 		// Adding History Options
-		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look')); 
+		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look'));
 	}	
  
 	public function bind($array, $ignore = '')
@@ -321,11 +318,11 @@ class DemoTableLook extends JTable
 	}
 
 	/**
-	* Generate a valid alias from title / date.
-	* Remains public to be able to check for duplicated alias before saving
-	*
-	* @return  string
-	*/
+	 * Generate a valid alias from title / date.
+	 * Remains public to be able to check for duplicated alias before saving
+	 *
+	 * @return  string
+	 */
 	public function generateAlias()
 	{
 		if (empty($this->alias))
