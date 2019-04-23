@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		route.php
@@ -45,8 +45,10 @@ abstract class DemoHelperRoute
 		else
 		{
 			// Initialize the needel array.
-			$needles = array();
-			//Create the link but don't add the id.
+			$needles = array(
+				'looks'  => array()
+			);
+			// Create the link but don't add the id.
 			$link = 'index.php?option=com_demo&view=looks';
 		}
 		if ($catid > 1)
@@ -86,8 +88,10 @@ abstract class DemoHelperRoute
 		else
 		{
 			// Initialize the needel array.
-			$needles = array();
-			//Create the link but don't add the id.
+			$needles = array(
+				'looking'  => array()
+			);
+			// Create the link but don't add the id.
 			$link = 'index.php?option=com_demo&view=looking';
 		}
 		if ($catid > 1)
@@ -194,8 +198,8 @@ abstract class DemoHelperRoute
 			}
 		}
 		return $link;
-	}	
-	
+	}
+
 	protected static function _findItem($needles = null,$type = null)
 	{
 		$app      = JFactory::getApplication();
@@ -243,6 +247,10 @@ abstract class DemoHelperRoute
 							self::$lookup[$language][$view][$item->query['id']] = $item->id;
 						}
 					}
+					else
+					{
+						self::$lookup[$language][$view][0] = $item->id;
+					}
 				}
 			}
 		}
@@ -253,17 +261,24 @@ abstract class DemoHelperRoute
 			{
 				if (isset(self::$lookup[$language][$view]))
 				{
-					foreach ($ids as $id)
+					if (DemoHelper::checkArray($ids))
 					{
-						if (isset(self::$lookup[$language][$view][(int) $id]))
+						foreach ($ids as $id)
 						{
-							return self::$lookup[$language][$view][(int) $id];
+							if (isset(self::$lookup[$language][$view][(int) $id]))
+							{
+								return self::$lookup[$language][$view][(int) $id];
+							}
 						}
+					}
+					elseif (isset(self::$lookup[$language][$view][0]))
+					{
+						return self::$lookup[$language][$view][0];
 					}
 				}
 			}
 		}
-		
+
 		if ($type)
 		{
 			// Check if the global menu item has been set.

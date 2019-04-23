@@ -167,13 +167,14 @@
 			minyear="-120"
 			maxyear="-1"
 		/>
-		<!-- Mobile_phone Field. Type: Tel. (joomla) -->
+		<!-- Mobile_phone Field. Type: Text. (joomla) -->
 		<field
-			type="tel"
+			type="text"
 			name="mobile_phone"
 			label="COM_DEMO_LOOK_MOBILE_PHONE_LABEL"
 			size="10"
 			maxlength="50"
+			default=""
 			description="COM_DEMO_LOOK_MOBILE_PHONE_DESCRIPTION"
 			class="text_area"
 			required="true"

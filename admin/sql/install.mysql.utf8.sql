@@ -9,9 +9,8 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	`image` CHAR(64) NOT NULL DEFAULT '',
 	`mobile_phone` VARCHAR(64) NOT NULL DEFAULT '',
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
-	`not_required` INT(1) NOT NULL DEFAULT 0,
 	`website` VARCHAR(255) NOT NULL DEFAULT '',
-	`params` text NOT NULL DEFAULT '',
+	`params` text NOT NULL,
 	`published` TINYINT(3) NOT NULL DEFAULT 1,
 	`created_by` INT(10) unsigned NOT NULL DEFAULT 0,
 	`modified_by` INT(10) unsigned NOT NULL DEFAULT 0,
@@ -23,9 +22,9 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	`hits` INT(10) unsigned NOT NULL DEFAULT 0,
 	`access` INT(10) unsigned NOT NULL DEFAULT 0,
 	`ordering` INT(11) NOT NULL DEFAULT 0,
-	`metakey` TEXT NOT NULL DEFAULT '',
-	`metadesc` TEXT NOT NULL DEFAULT '',
-	`metadata` TEXT NOT NULL DEFAULT '',
+	`metakey` TEXT NOT NULL,
+	`metadesc` TEXT NOT NULL,
+	`metadata` TEXT NOT NULL,
 	PRIMARY KEY  (`id`),
 	KEY `idx_access` (`access`),
 	KEY `idx_checkout` (`checked_out`),
@@ -35,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	KEY `idx_name` (`name`),
 	KEY `idx_add` (`add`),
 	KEY `idx_alias` (`alias`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 
 

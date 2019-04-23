@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
@@ -26,7 +26,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
-$componentParams = JComponentHelper::getParams('com_demo');
+$componentParams = $this->params; // will be removed just use $this->params instead
 ?>
 <script type="text/javascript">
 	// waiting spinner

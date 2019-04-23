@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -46,6 +46,8 @@ class DemoViewLooks extends JViewLegacy
 		$this->listOrder = $this->escape($this->state->get('list.ordering'));
 		$this->listDirn = $this->escape($this->state->get('list.direction'));
 		$this->saveOrder = $this->listOrder == 'ordering';
+		// set the return here value
+		$this->return_here = urlencode(base64_encode((string) JUri::getInstance()));
 		// get global action permissions
 		$this->canDo = DemoHelper::getActions('look');
 		$this->canEdit = $this->canDo->get('look.edit');

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -123,7 +123,7 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Load the Component xml manifest.
+	* Load the Component xml manifest.
 	**/
 	public static function manifest()
 	{
@@ -132,12 +132,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Joomla version object
+	* Joomla version object
 	**/	
 	protected static $JVersion;
 
 	/**
-	*	set/get Joomla version
+	* set/get Joomla version
 	**/
 	public static function jVersion()
 	{
@@ -150,7 +150,7 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Load the Contributors details.
+	* Load the Contributors details.
 	**/
 	public static function getContributors()
 	{
@@ -196,7 +196,7 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Get any component's model
+	* Get any component's model
 	**/
 	public static function getModel($name, $path = JPATH_COMPONENT_SITE, $component = 'Demo', $config = array())
 	{
@@ -240,9 +240,9 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Add to asset Table
+	* Add to asset Table
 	*/
-	public static function setAsset($id,$table)
+	public static function setAsset($id, $table, $inherit = true)
 	{
 		$parent = JTable::getInstance('Asset');
 		$parent->loadByName('com_demo');
@@ -259,8 +259,6 @@ abstract class DemoHelper
 
 		if ($error)
 		{
-			$this->setError($error);
-
 			return false;
 		}
 		else
@@ -276,7 +274,7 @@ abstract class DemoHelper
 			$asset->name      = $name;
 			$asset->title     = $title;
 			// get the default asset rules
-			$rules = self::getDefaultAssetRules('com_demo',$table);
+			$rules = self::getDefaultAssetRules('com_demo', $table, $inherit);
 			if ($rules instanceof JAccessRules)
 			{
 				$asset->rules = (string) $rules;
@@ -304,55 +302,62 @@ abstract class DemoHelper
 	}
 
 	/**
-	 *	Gets the default asset Rules for a component/view.
+	 * Gets the default asset Rules for a component/view.
 	 */
-	protected static function getDefaultAssetRules($component,$view)
+	protected static function getDefaultAssetRules($component, $view, $inherit = true)
 	{
-		// Need to find the asset id by the name of the component.
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true)
-			->select($db->quoteName('id'))
-			->from($db->quoteName('#__assets'))
-			->where($db->quoteName('name') . ' = ' . $db->quote($component));
-		$db->setQuery($query);
-		$db->execute();
-		if ($db->loadRowList())
+		// if new or inherited
+		$assetId = 0;
+		// Only get the actual item rules if not inheriting
+		if (!$inherit)
 		{
-			// asset alread set so use saved rules
-			$assetId = (int) $db->loadResult();
-			$result =  JAccess::getAssetRules($assetId);
-			if ($result instanceof JAccessRules)
+			// Need to find the asset id by the name of the component.
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->select($db->quoteName('id'))
+				->from($db->quoteName('#__assets'))
+				->where($db->quoteName('name') . ' = ' . $db->quote($component));
+			$db->setQuery($query);
+			$db->execute();
+			// check that there is a value
+			if ($db->getNumRows())
 			{
-				$_result = (string) $result;
-				$_result = json_decode($_result);
-				foreach ($_result as $name => &$rule)
-				{
-					$v = explode('.', $name);
-					if ($view !== $v[0])
-					{
-						// remove since it is not part of this view
-						unset($_result->$name);
-					}
-					else
-					{
-						// clear the value since we inherit
-						$rule = array();
-					}
-				}
-				// check if there are any view values remaining
-				if (count((array)$_result))
-				{
-					$_result = json_encode($_result);
-					$_result = array($_result);
-					// Instantiate and return the JAccessRules object for the asset rules.
-					$rules = new JAccessRules($_result);
-
-					return $rules;
-				}
-				return $result;
+				// asset already set so use saved rules
+				$assetId = (int) $db->loadResult();
 			}
 		}
-		return JAccess::getAssetRules(0);
+		// get asset rules
+		$result =  JAccess::getAssetRules($assetId);
+		if ($result instanceof JAccessRules)
+		{
+			$_result = (string) $result;
+			$_result = json_decode($_result);
+			foreach ($_result as $name => &$rule)
+			{
+				$v = explode('.', $name);
+				if ($view !== $v[0])
+				{
+					// remove since it is not part of this view
+					unset($_result->$name);
+				}
+				elseif ($inherit)
+				{
+					// clear the value since we inherit
+					$rule = array();
+				}
+			}
+			// check if there are any view values remaining
+			if (count($_result))
+			{
+				$_result = json_encode($_result);
+				$_result = array($_result);
+				// Instantiate and return the JAccessRules object for the asset rules.
+				$rules = new JAccessRules($_result);
+				// return filtered rules
+				return $rules;
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -777,183 +782,149 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Get the actions permissions
+	* Get the action permissions
+	*
+	* @param  string   $view        The related view name
+	* @param  int      $record      The item to act upon
+	* @param  string   $views       The related list view name
+	* @param  mixed    $target      Only get this permission (like edit, create, delete)
+	* @param  string   $component   The target component
+	*
+	* @return  object   The JObject of permission/authorised actions
+	* 
 	**/
-	public static function getActions($view,&$record = null,$views = null)
+	public static function getActions($view, &$record = null, $views = null, $target = null, $component = 'demo')
 	{
-		jimport('joomla.access.access');
-
-		$user	= JFactory::getUser();
-		$result	= new JObject;
-		$view	= self::safeString($view);
+		// get the user object
+		$user = JFactory::getUser();
+		// load the JObject
+		$result = new JObject;
+		// make view name safe (just incase)
+		$view = self::safeString($view);
 		if (self::checkString($views))
 		{
 			$views = self::safeString($views);
-		}
+ 		}
 		// get all actions from component
-		$actions = JAccess::getActions('com_demo', 'component');
-		// set acctions only set in component settiongs
-		$componentActions = array('core.admin','core.manage','core.options','core.export');
+		$actions = JAccess::getActionsFromFile(
+			JPATH_ADMINISTRATOR . '/components/com_' . $component . '/access.xml',
+			"/access/section[@name='component']/"
+		);
+		// if non found then return empty JObject
+		if (empty($actions))
+		{
+			return $result;
+		}
+		// get created by if not found
+		if (self::checkObject($record) && !isset($record->created_by) && isset($record->id))
+		{
+			$record->created_by = self::getVar($view, $record->id, 'id', 'created_by', '=', $component);
+		}
+		// set actions only set in component settings
+		$componentActions = array('core.admin', 'core.manage', 'core.options', 'core.export');
+		// check if we have a target
+		$checkTarget = false;
+		if ($target)
+		{
+			// convert to an array
+			if (self::checkString($target))
+			{
+				$target = array($target);
+			}
+			// check if we are good to go
+			if (self::checkArray($target))
+			{
+				$checkTarget = true;
+			}
+		}
 		// loop the actions and set the permissions
 		foreach ($actions as $action)
 		{
+			// check target action filter
+			if ($checkTarget && self::filterActions($view, $action->name, $target))
+			{
+				continue;
+			}
 			// set to use component default
 			$fallback = true;
-			if (self::checkObject($record) && isset($record->id) && $record->id > 0 && !in_array($action->name,$componentActions))
+			// reset permission per/action
+			$permission = false;
+			$catpermission = false;
+			// set area
+			$area = 'comp';
+			// check if the record has an ID and the action is item related (not a component action)
+			if (self::checkObject($record) && isset($record->id) && $record->id > 0 && !in_array($action->name, $componentActions) &&
+				(strpos($action->name, 'core.') !== false || strpos($action->name, $view . '.') !== false))
 			{
+				// we are in item
+				$area = 'item';
 				// The record has been set. Check the record permissions.
-				$permission = $user->authorise($action->name, 'com_demo.'.$view.'.' . (int) $record->id);
-				if (!$permission) // TODO removed && !is_null($permission)
+				$permission = $user->authorise($action->name, 'com_' . $component . '.' . $view . '.' . (int) $record->id);
+				// if no permission found, check edit own
+				if (!$permission)
 				{
-					if ($action->name == 'core.edit' || $action->name == $view.'.edit')
+					// With edit, if the created_by matches current user then dig deeper.
+					if (($action->name === 'core.edit' || $action->name === $view . '.edit') && $record->created_by > 0 && ($record->created_by == $user->id))
 					{
-						if ($user->authorise('core.edit.own', 'com_demo.'.$view.'.' . (int) $record->id))
+						// the correct target
+						$coreCheck = (array) explode('.', $action->name);
+						// check that we have both local and global access
+						if ($user->authorise($coreCheck[0] . '.edit.own', 'com_' . $component . '.' . $view . '.' . (int) $record->id) &&
+							$user->authorise($coreCheck[0]  . '.edit.own', 'com_' . $component))
 						{
-							// If the owner matches 'me' then allow.
-							if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-							{
-								$result->set($action->name, true);
-								// set not to use component default
-								$fallback = false;
-							}
-							else
-							{
-								$result->set($action->name, false);
-								// set not to use component default
-								$fallback = false;
-							}
+							// allow edit
+							$result->set($action->name, true);
+							// set not to use global default
+							// because we already validated it
+							$fallback = false;
 						}
-						elseif ($user->authorise($view.'edit.own', 'com_demo.'.$view.'.' . (int) $record->id))
+						else
 						{
-							// If the owner matches 'me' then allow.
-							if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-							{
-								$result->set($action->name, true);
-								// set not to use component default
-								$fallback = false;
-							}
-							else
-							{
-								$result->set($action->name, false);
-								// set not to use component default
-								$fallback = false;
-							}
-						}
-						elseif ($user->authorise('core.edit.own', 'com_demo'))
-						{
-							// If the owner matches 'me' then allow.
-							if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-							{
-								$result->set($action->name, true);
-								// set not to use component default
-								$fallback = false;
-							}
-							else
-							{
-								$result->set($action->name, false);
-								// set not to use component default
-								$fallback = false;
-							}
-						}
-						elseif ($user->authorise($view.'edit.own', 'com_demo'))
-						{
-							// If the owner matches 'me' then allow.
-							if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-							{
-								$result->set($action->name, true);
-								// set not to use component default
-								$fallback = false;
-							}
-							else
-							{
-								$result->set($action->name, false);
-								// set not to use component default
-								$fallback = false;
-							}
+							// do not allow edit
+							$result->set($action->name, false);
+							$fallback = false;
 						}
 					}
 				}
 				elseif (self::checkString($views) && isset($record->catid) && $record->catid > 0)
 				{
+					// we are in item
+					$area = 'category';
+					// set the core check
+					$coreCheck = explode('.', $action->name);
+					$core = $coreCheck[0];
 					// make sure we use the core. action check for the categories
-					if (strpos($action->name,$view) !== false && strpos($action->name,'core.') === false ) {
-						$coreCheck		= explode('.',$action->name);
-						$coreCheck[0]	= 'core';
-						$categoryCheck	= implode('.',$coreCheck);
+					if (strpos($action->name, $view) !== false && strpos($action->name, 'core.') === false )
+					{
+						$coreCheck[0] = 'core';
+						$categoryCheck = implode('.', $coreCheck);
 					}
 					else
 					{
 						$categoryCheck = $action->name;
 					}
 					// The record has a category. Check the category permissions.
-					$catpermission = $user->authorise($categoryCheck, 'com_demo.'.$views.'.category.' . (int) $record->catid);
+					$catpermission = $user->authorise($categoryCheck, 'com_' . $component . '.' . $views . '.category.' . (int) $record->catid);
 					if (!$catpermission && !is_null($catpermission))
 					{
-						if ($action->name == 'core.edit' || $action->name == $view.'.edit')
+						// With edit, if the created_by matches current user then dig deeper.
+						if (($action->name === 'core.edit' || $action->name === $view . '.edit') && $record->created_by > 0 && ($record->created_by == $user->id))
 						{
-							if ($user->authorise('core.edit.own', 'com_demo.'.$views.'.category.' . (int) $record->catid))
+							// check that we have both local and global access
+							if ($user->authorise('core.edit.own', 'com_' . $component . '.' . $views . '.category.' . (int) $record->catid) &&
+								$user->authorise($core . '.edit.own', 'com_' . $component))
 							{
-								// If the owner matches 'me' then allow.
-								if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-								{
-									$result->set($action->name, true);
-									// set not to use component default
-									$fallback = false;
-								}
-								else
-								{
-									$result->set($action->name, false);
-									// set not to use component default
-									$fallback = false;
-								}
+								// allow edit
+								$result->set($action->name, true);
+								// set not to use global default
+								// because we already validated it
+								$fallback = false;
 							}
-							elseif ($user->authorise($view.'edit.own', 'com_demo.'.$views.'.category.' . (int) $record->catid))
+							else
 							{
-								// If the owner matches 'me' then allow.
-								if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-								{
-									$result->set($action->name, true);
-									// set not to use component default
-									$fallback = false;
-								}
-								else
-								{
-									$result->set($action->name, false);
-									// set not to use component default
-									$fallback = false;
-								}
-							}
-							elseif ($user->authorise('core.edit.own', 'com_demo'))
-							{
-								// If the owner matches 'me' then allow.
-								if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-								{
-									$result->set($action->name, true);
-									// set not to use component default
-									$fallback = false;
-								}
-								else
-								{
-									$result->set($action->name, false);
-									// set not to use component default
-									$fallback = false;
-								}
-							}
-							elseif ($user->authorise($view.'edit.own', 'com_demo'))
-							{
-								// If the owner matches 'me' then allow.
-								if (isset($record->created_by) && $record->created_by > 0 && ($record->created_by == $user->id))
-								{
-									$result->set($action->name, true);
-									// set not to use component default
-									$fallback = false;
-								}
-								else
-								{
-									$result->set($action->name, false);
-									// set not to use component default
-									$fallback = false;
-								}
+								// do not allow edit
+								$result->set($action->name, false);
+								$fallback = false;
 							}
 						}
 					}
@@ -962,18 +933,53 @@ abstract class DemoHelper
 			// if allowed then fallback on component global settings
 			if ($fallback)
 			{
-				$result->set($action->name, $user->authorise($action->name, 'com_demo'));
+				// if item/category blocks access then don't fall back on global
+				if ((($area === 'item') && !$permission) || (($area === 'category') && !$catpermission))
+				{
+					// do not allow
+					$result->set($action->name, false);
+				}
+				// Finally remember the global settings have the final say. (even if item allow)
+				// The local item permissions can block, but it can't open and override of global permissions.
+				// Since items are created by users and global permissions is set by system admin.
+				else
+				{
+					$result->set($action->name, $user->authorise($action->name, 'com_' . $component));
+				}
 			}
 		}
 		return $result;
 	}
 
 	/**
-	*	Check if have an json string
+	* Filter the action permissions
 	*
-	*	@input	string   The json string to check
+	* @param  string   $action   The action to check
+	* @param  array    $targets  The array of target actions
 	*
-	*	@returns bool true on success
+	* @return  boolean   true if action should be filtered out
+	* 
+	**/
+	protected static function filterActions(&$view, &$action, &$targets)
+	{
+		foreach ($targets as $target)
+		{
+			if (strpos($action, $view . '.' . $target) !== false ||
+				strpos($action, 'core.' . $target) !== false)
+			{
+				return false;
+				break;
+			}
+		}
+		return true;
+	}
+
+	/**
+	* Check if have an json string
+	*
+	* @input	string   The json string to check
+	*
+	* @returns bool true on success
 	**/
 	public static function checkJson($string)
 	{
@@ -986,11 +992,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Check if have an object with a length
+	* Check if have an object with a length
 	*
-	*	@input	object   The object to check
+	* @input	object   The object to check
 	*
-	*	@returns bool true on success
+	* @returns bool true on success
 	**/
 	public static function checkObject($object)
 	{
@@ -1002,15 +1008,15 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Check if have an array with a length
+	* Check if have an array with a length
 	*
-	*	@input	array   The array to check
+	* @input	array   The array to check
 	*
-	*	@returns bool true on success
+	* @returns bool/int  number of items in array on success
 	**/
 	public static function checkArray($array, $removeEmptyString = false)
 	{
-		if (isset($array) && is_array($array) && count((array)$array) > 0)
+		if (isset($array) && is_array($array) && ($nr = count((array)$array)) > 0)
 		{
 			// also make sure the empty strings are removed
 			if ($removeEmptyString)
@@ -1024,17 +1030,17 @@ abstract class DemoHelper
 				}
 				return self::checkArray($array, false);
 			}
-			return true;
+			return $nr;
 		}
 		return false;
 	}
 
 	/**
-	*	Check if have a string with a length
+	* Check if have a string with a length
 	*
-	*	@input	string   The string to check
+	* @input	string   The string to check
 	*
-	*	@returns bool true on success
+	* @returns bool true on success
 	**/
 	public static function checkString($string)
 	{
@@ -1046,10 +1052,10 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Check if we are connected
-	*	Thanks https://stackoverflow.com/a/4860432/1429677
+	* Check if we are connected
+	* Thanks https://stackoverflow.com/a/4860432/1429677
 	*
-	*	@returns bool true on success
+	* @returns bool true on success
 	**/
 	public static function isConnected()
 	{
@@ -1071,11 +1077,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Merge an array of array's
+	* Merge an array of array's
 	*
-	*	@input	array   The arrays you would like to merge
+	* @input	array   The arrays you would like to merge
 	*
-	*	@returns array on success
+	* @returns array on success
 	**/
 	public static function mergeArrays($arrays)
 	{
@@ -1101,11 +1107,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Shorten a string
+	* Shorten a string
 	*
-	*	@input	string   The you would like to shorten
+	* @input	string   The you would like to shorten
 	*
-	*	@returns string on success
+	* @returns string on success
 	**/
 	public static function shorten($string, $length = 40, $addTip = true)
 	{
@@ -1142,11 +1148,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Making strings safe (various ways)
+	* Making strings safe (various ways)
 	*
-	*	@input	string   The you would like to make safe
+	* @input	string   The you would like to make safe
 	*
-	*	@returns string on success
+	* @returns string on success
 	**/
 	public static function safeString($string, $type = 'L', $spacer = '_', $replaceNumbers = true, $keepOnlyCharacters = true)
 	{
@@ -1286,11 +1292,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Convert an integer into an English word string
-	*	Thanks to Tom Nicholson <http://php.net/manual/en/function.strval.php#41988>
+	* Convert an integer into an English word string
+	* Thanks to Tom Nicholson <http://php.net/manual/en/function.strval.php#41988>
 	*
-	*	@input	an int
-	*	@returns a string
+	* @input	an int
+	* @returns a string
 	**/
 	public static function numberToString($x)
 	{
@@ -1377,9 +1383,9 @@ abstract class DemoHelper
 	}
 
 	/**
-	*	Random Key
+	* Random Key
 	*
-	*	@returns a string
+	* @returns a string
 	**/
 	public static function randomkey($size)
 	{

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		more_left.php
@@ -29,20 +29,10 @@ $fields = $displayData->get('fields') ?: array(
 
 $hiddenFields = $displayData->get('hidden_fields') ?: array();
 
-foreach ($fields as $field)
-{
-	$field = is_array($field) ? $field : array($field);
-	foreach ($field as $f)
-	{
-		if ($form->getField($f))
-		{
-			if (in_array($f, $hiddenFields))
-			{
-				$form->setFieldAttribute($f, 'type', 'hidden');
-			}
-
-			echo $form->renderField($f);
-			break;
-		}
-	}
-}
+?>
+<?php foreach($fields as $field): ?>
+	<?php if (in_array($field, $hiddenFields)) : ?>
+		<?php $form->setFieldAttribute($field, 'type', 'hidden'); ?>
+	<?php endif; ?>
+	<?php echo $form->renderField($field, null, null, array('class' => 'control-wrapper-' . $field)); ?>
+<?php endforeach; ?>

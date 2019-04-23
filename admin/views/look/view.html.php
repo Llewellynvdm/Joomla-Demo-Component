@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -32,13 +32,15 @@ class DemoViewLook extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		// set params
+		$this->params = JComponentHelper::getParams('com_demo');
 		// Assign the variables
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
 		$this->script = $this->get('Script');
 		$this->state = $this->get('State');
 		// get action permissions
-		$this->canDo = DemoHelper::getActions('look',$this->item);
+		$this->canDo = DemoHelper::getActions('look', $this->item);
 		// get input
 		$jinput = JFactory::getApplication()->input;
 		$this->ref = $jinput->get('ref', 0, 'word');

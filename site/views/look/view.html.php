@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -32,13 +32,15 @@ class DemoViewLook extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		// set params
+		$this->params = JComponentHelper::getParams('com_demo');
 		// Assign the variables
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
 		$this->script = $this->get('Script');
 		$this->state = $this->get('State');
 		// get action permissions
-		$this->canDo = DemoHelper::getActions('look',$this->item);
+		$this->canDo = DemoHelper::getActions('look', $this->item);
 		// get input
 		$jinput = JFactory::getApplication()->input;
 		$this->ref = $jinput->get('ref', 0, 'word');
@@ -178,7 +180,7 @@ class DemoViewLook extends JViewLegacy
 	{
 		if(strlen($var) > 30)
 		{
-    		// use the helper htmlEscape method instead and shorten the string
+    			// use the helper htmlEscape method instead and shorten the string
 			return DemoHelper::htmlEscape($var, $this->_charset, true, 30);
 		}
 		// use the helper htmlEscape method instead.
@@ -198,13 +200,20 @@ class DemoViewLook extends JViewLegacy
 			$this->document = JFactory::getDocument();
 		}
 		$this->document->setTitle(JText::_($isNew ? 'COM_DEMO_LOOK_NEW' : 'COM_DEMO_LOOK_EDIT'));
-		// we need this to fix the form display
-		$this->document->addStyleSheet(JURI::root()."administrator/templates/isis/css/template.css", (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
-		$this->document->addScript(JURI::root()."administrator/templates/isis/js/template.js", (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript');
+		// only add the ISIS template css & js if needed (default is 1 = true)
+		// you can override this in the global component options
+		// just add a (radio yes/no field) with a name called add_isis_template
+		// to your components config area
+		if ($this->params->get('add_isis_template', 1))
+		{
+			// we need this to fix the form display (TODO)
+			$this->document->addStyleSheet(JURI::root() . "administrator/templates/isis/css/template.css", (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
+			$this->document->addScript(JURI::root() . "administrator/templates/isis/js/template.js", (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript');
+		}
 		// the default style of this view
 		$this->document->addStyleSheet(JURI::root()."components/com_demo/assets/css/look.css", (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
 		// default javascript of this view
-		$this->document->addScript(JURI::root().$this->script, (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript');
+		$this->document->addScript(JURI::root(). $this->script, (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript');
 		$this->document->addScript(JURI::root(). "components/com_demo/views/look/submitbutton.js", (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript'); 
 		JText::script('view not acceptable. Error');
 	}

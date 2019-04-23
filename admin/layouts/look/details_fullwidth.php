@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		details_fullwidth.php
@@ -27,16 +27,14 @@ $fields = $displayData->get('fields') ?: array(
 	'description'
 );
 
+$hiddenFields = $displayData->get('hidden_fields') ?: array();
+
 ?>
 <div class="form-vertical">
-<?php foreach($fields as $field): ?>
-    <div class="control-group">
-        <div class="control-label">
-            <?php echo $form->getLabel($field); ?>
-        </div>
-        <div class="controls">
-            <?php echo $form->getInput($field); ?>
-        </div>
-    </div>
-<?php endforeach; ?>
+	<?php foreach($fields as $field): ?>
+		<?php if (in_array($field, $hiddenFields)) : ?>
+			<?php $form->setFieldAttribute($field, 'type', 'hidden'); ?>
+		<?php endif; ?>
+		<?php echo $form->renderField($field, null, null, array('class' => 'control-wrapper-' . $field)); ?>
+	<?php endforeach; ?>
 </div>

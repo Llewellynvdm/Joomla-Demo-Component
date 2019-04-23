@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -229,7 +229,7 @@ class DemoTableLook extends JTable
 		{
 			// asset alread set so use saved rules
 			$assetId = (int) $db->loadResult();
-			return JAccess::getAssetRules($assetId);
+			return JAccess::getAssetRules($assetId); // (TODO) instead of keeping inherited Allowed it becomes Allowed.
 		}
 		// try again
 		elseif ($try)

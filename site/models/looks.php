@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -64,9 +64,7 @@ class DemoModelLooks extends JModelList
 		$query = $db->getQuery(true);
 
 		// Get from #__demo_look as a
-		$query->select($db->quoteName(
-			array('a.id','a.name','a.alias','a.description','a.add','a.email','a.mobile_phone','a.dateofbirth','a.image','a.website','a.not_required','a.published','a.hits','a.ordering','a.created_by'),
-			array('id','name','alias','description','add','email','mobile_phone','dateofbirth','image','website','not_required','published','hits','ordering','created_by')));
+		$query->select('a.*');
 		$query->from($db->quoteName('#__demo_look', 'a'));
 		// Get where a.published is 1
 		$query->where('a.published = 1');
@@ -102,22 +100,10 @@ class DemoModelLooks extends JModelList
 		// Insure all item fields are adapted where needed.
 		if (DemoHelper::checkArray($items))
 		{
-			// Load the JEvent Dispatcher
-			JPluginHelper::importPlugin('content');
-			$this->_dispatcher = JEventDispatcher::getInstance();
 			foreach ($items as $nr => &$item)
 			{
 				// Always create a slug for sef URL's
 				$item->slug = (isset($item->alias) && isset($item->id)) ? $item->id.':'.$item->alias : $item->id;
-				// Check if item has params, or pass whole item.
-				$params = (isset($item->params) && DemoHelper::checkJson($item->params)) ? json_decode($item->params) : $item;
-				// Make sure the content prepare plugins fire on description
-				$_description = new stdClass();
-				$_description->text =& $item->description; // value must be in text
-				// Since all values are now in text (Joomla Limitation), we also add the field name (description) to context
-				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looks.description', &$_description, &$params, 0));
-				// Checking if description has uikit components that must be loaded.
-				$this->uikitComp = DemoHelper::getUikitComp($item->description,$this->uikitComp);
 			}
 		}
 

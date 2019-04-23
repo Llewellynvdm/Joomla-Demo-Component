@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.0
-	@build			13th September, 2018
+	@build			23rd April, 2019
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
@@ -28,7 +28,7 @@ JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.tabstate');
 JHtml::_('behavior.calendar');
-$componentParams = JComponentHelper::getParams('com_demo');
+$componentParams = $this->params; // will be removed just use $this->params instead
 ?>
 <?php echo $this->toolbar->render(); ?>
 <form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='. (int) $this->item->id . $this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
