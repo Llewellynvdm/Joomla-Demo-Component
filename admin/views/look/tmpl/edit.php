@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.0
-	@build			23rd April, 2019
+	@version		2.0.2
+	@build			30th May, 2020
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
@@ -120,7 +120,6 @@ $componentParams = $this->params; // will be removed just use $this->params inst
 	<div>
 		<input type="hidden" name="task" value="look.edit" />
 		<?php echo JHtml::_('form.token'); ?>
-	</div>
 	</div>
 </div>
 

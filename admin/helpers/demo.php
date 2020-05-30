@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.0
-	@build			23rd April, 2019
+	@version		2.0.2
+	@build			30th May, 2020
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -21,14 +21,260 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Language\Language;
+use Joomla\String\StringHelper;
+use Joomla\Utilities\ArrayHelper;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * Demo component helper.
  */
 abstract class DemoHelper
 {
 	/**
-	* Load the Component xml manifest.
-	**/
+	 * Composer Switch
+	 * 
+	 * @var      array
+	 */
+	protected static $composer = array();
+
+	/**
+	 * The Main Active Language
+	 * 
+	 * @var      string
+	 */
+	public static $langTag;
+
+	// <<<=== Privacy integration with Joomla Privacy suite ===>>>
+
+	/**
+	 * Performs validation to determine if the data associated with a remove information request can be processed
+	 *
+	 * @param   PrivacyPlugin  $plugin  The plugin being processed
+	 * @param   PrivacyRemovalStatus  $status  The status being set
+	 * @param   PrivacyTableRequest  $request  The request record being processed
+	 * @param   JUser                $user     The user account associated with this request if available
+	 *
+	 * @return  PrivacyRemovalStatus
+	 */
+	public static function onPrivacyCanRemoveData(&$plugin, &$status, &$request, &$user)
+	{
+		// Bucket to get all reasons why removal not allowed
+		$reasons = array();
+		// Check if user has permission to delete Looks
+		if (!$user->authorise('look.delete', 'com_demo') && !$user->authorise('look.privacy.delete', 'com_demo'))
+		{
+			$reasons[] = JText::_('COM_DEMO_PRIVACY_CANT_REMOVE_LOOKS');
+		}
+		// Check if any reasons were found not to allow removal
+		if (self::checkArray($reasons))
+		{
+			$status->canRemove = false;
+			$status->reason = implode(' ' . PHP_EOL, $reasons) . ' ' . PHP_EOL . JText::_('COM_DEMO_PRIVACY_CANT_REMOVE_CONTACT_SUPPORT');
+		}
+		return $status;
+	}
+
+	/**
+	 * Processes an export request for Joomla core user data
+	 *
+	 * @param   PrivacyPlugin  $plugin  The plugin being processed
+	 * @param   DomainArray  $domains  The array of domains
+	 * @param   PrivacyTableRequest  $request  The request record being processed
+	 * @param   JUser                $user     The user account associated with this request if available
+	 *
+	 * @return  PrivacyExportDomain[]
+	 */
+	public static function onPrivacyExportRequest(&$plugin, &$domains, &$request, &$user)
+	{
+		// Check if user has permission to access Looks
+		if ($user->authorise('look.access', 'com_demo') || $user->authorise('look.privacy.access', 'com_demo'))
+		{
+			// Get Look domain
+			$domains[] = self::createLooksDomain($plugin, $user);
+		}
+		return $domains;
+	}
+
+	/**
+	 * Create the domain for the Look
+	 *
+	 * @param   JTableUser  $user  The JTableUser object to process
+	 *
+	 * @return  PrivacyExportDomain
+	 */
+	protected static function createLooksDomain(&$plugin, &$user)
+	{
+		// create Looks domain
+		$domain = self::createDomain('look', 'demo_look_data');
+		// get database object
+		$db = JFactory::getDbo();
+		// get all item ids of Looks that belong to this user
+		$query = $db->getQuery(true)
+			->select('id')
+			->from($db->quoteName('#__demo_look'));
+		$query->where($db->quoteName('created_by') . ' = ' . $db->quote($user->id));
+		// get all items for the Looks domain
+		$pks = $db->setQuery($query)->loadColumn();
+		// get the Looks model
+		$model = self::getModel('looks', JPATH_ADMINISTRATOR . '/components/com_demo');
+		// Get all item details of Looks that belong to this user
+		$items = $model->getPrivacyExport($pks, $user);
+		// check if we have items since permissions could block the request
+		if (self::checkArray($items))
+		{
+			// Remove Look default columns
+			foreach (array('params', 'asset_id', 'checked_out', 'checked_out_time', 'created', 'created_by', 'modified', 'modified_by', 'published', 'ordering', 'access', 'version', 'hits') as $column)
+			{
+				$items = ArrayHelper::dropColumn($items, $column);
+			}
+			// load the items into the domain object
+			foreach ($items as $item)
+			{
+				$domain->addItem(self::createItemFromArray($item, $item['id']));
+			}
+		}
+		return $domain;
+	}
+
+	/**
+	 * Create a new domain object
+	 *
+	 * @param   string  $name         The domain's name
+	 * @param   string  $description  The domain's description
+	 *
+	 * @return  PrivacyExportDomain
+	 *
+	 * @since   3.9.0
+	 */
+	protected static function createDomain($name, $description = '')
+	{
+		$domain              = new PrivacyExportDomain;
+		$domain->name        = $name;
+		$domain->description = $description;
+
+		return $domain;
+	}
+
+	/**
+	 * Create an item object for an array
+	 *
+	 * @param   array         $data    The array data to convert
+	 * @param   integer|null  $itemId  The ID of this item
+	 *
+	 * @return  PrivacyExportItem
+	 *
+	 * @since   3.9.0
+	 */
+	protected static function createItemFromArray(array $data, $itemId = null)
+	{
+		$item = new PrivacyExportItem;
+		$item->id = $itemId;
+
+		foreach ($data as $key => $value)
+		{
+			if (is_object($value))
+			{
+				$value = (array) $value;
+			}
+
+			if (is_array($value))
+			{
+				$value = print_r($value, true);
+			}
+
+			$field        = new PrivacyExportField;
+			$field->name  = $key;
+			$field->value = $value;
+
+			$item->addField($field);
+		}
+
+		return $item;
+	}
+
+	/**
+	 * Removes the data associated with a remove information request
+	 *
+	 * @param   PrivacyTableRequest  $request  The request record being processed
+	 * @param   JUser                $user     The user account associated with this request if available
+	 *
+	 * @return  void
+	 */
+	public static function onPrivacyRemoveData(&$plugin, &$request, &$user)
+	{
+		// Check if user has permission to delet Looks
+		if ($user->authorise('look.delete', 'com_demo') || $user->authorise('look.privacy.delete', 'com_demo'))
+		{
+			// Remove Look data
+			self::removeLooksData($plugin, $user);
+		}
+	}
+
+	/**
+	 * Remove the Look data
+	 *
+	 * @param   JTableUser  $user  The JTableUser object to process
+	 *
+	 * @return  void
+	 */
+	protected static function removeLooksData(&$plugin, &$user)
+	{
+		// get database object
+		$db = JFactory::getDbo();
+		// get all item ids of Looks that belong to this user
+		$query = $db->getQuery(true)
+			->select('id')
+			->from($db->quoteName('#__demo_look'));
+		$query->where($db->quoteName('created_by') . ' = ' . $db->quote($user->id));
+		// get all items for the Looks table that belong to this user
+		$pks = $db->setQuery($query)->loadColumn();
+
+		if (self::checkArray($pks))
+		{
+			// get the look model
+			$model = self::getModel('look', JPATH_ADMINISTRATOR . '/components/com_demo');
+			// get the Looks table
+			$table = $model->getTable();
+			// Iterate the items to delete each one.
+			foreach ($pks as $i => $pk)
+			{
+				if ($table->load($pk))
+				{
+					$table->delete($pk);
+				}
+			}
+			// Clear the component's cache
+			$model->cleanCache();
+		}
+	}
+
+
+	/**
+	 * Load the Composer Vendors
+	 */
+	public static function composerAutoload($target)
+	{
+		// insure we load the composer vendor only once
+		if (!isset(self::$composer[$target]))
+		{
+			// get the function name
+			$functionName = self::safeString('compose' . $target);
+			// check if method exist
+			if (method_exists(__CLASS__, $functionName))
+			{
+				return self::{$functionName}();
+			}
+			return false;
+		}
+		return self::$composer[$target];
+	}
+
+	/**
+	 * Load the Component xml manifest.
+	 */
 	public static function manifest()
 	{
 		$manifestUrl = JPATH_ADMINISTRATOR."/components/com_demo/demo.xml";
@@ -36,13 +282,13 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Joomla version object
-	**/	
+	 * Joomla version object
+	 */	
 	protected static $JVersion;
 
 	/**
-	* set/get Joomla version
-	**/
+	 * set/get Joomla version
+	 */
 	public static function jVersion()
 	{
 		// check if set
@@ -54,8 +300,8 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Load the Contributors details.
-	**/
+	 * Load the Contributors details.
+	 */
 	public static function getContributors()
 	{
 		// get params
@@ -100,8 +346,8 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Configure the Linkbar.
-	**/
+	 * Configure the Linkbar.
+	 */
 	public static function addSubmenu($submenu)
 	{
 		// load user for access menus
@@ -222,19 +468,18 @@ abstract class DemoHelper
 	}
 
 	/**
-	 * Prepares the xml document
-	 */
-	public static function xls($rows,$fileName = null,$title = null,$subjectTab = null,$creator = 'Vast Development Method',$description = null,$category = null,$keywords = null,$modified = null)
+	* Prepares the xml document
+	*/
+	public static function xls($rows, $fileName = null, $title = null, $subjectTab = null, $creator = 'Joomla Component Builder', $description = null, $category = null,$keywords = null, $modified = null)
 	{
 		// set the user
 		$user = JFactory::getUser();
-		
-		// set fieldname if not set
+		// set fileName if not set
 		if (!$fileName)
 		{
 			$fileName = 'exported_'.JFactory::getDate()->format('jS_F_Y');
 		}
-		// set modiefied if not set
+		// set modified if not set
 		if (!$modified)
 		{
 			$modified = $user->name;
@@ -250,29 +495,33 @@ abstract class DemoHelper
 			$subjectTab = 'Sheet1';
 		}
 
-		// make sure the file is loaded
-		JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
+		// make sure we have the composer classes loaded
+		self::composerAutoload('phpspreadsheet');
 
-		// Create new PHPExcel object
-		$objPHPExcel = new PHPExcel();
+		// Create new Spreadsheet object
+		$spreadsheet = new Spreadsheet();
 
 		// Set document properties
-		$objPHPExcel->getProperties()->setCreator($creator)
-			->setCompany('Vast Development Method')
+		$spreadsheet->getProperties()
+			->setCreator($creator)
+			->setCompany('Joomla Component Builder')
 			->setLastModifiedBy($modified)
 			->setTitle($title)
 			->setSubject($subjectTab);
-		if (!$description)
+		// set description
+		if ($description)
 		{
-			$objPHPExcel->getProperties()->setDescription($description);
+			$spreadsheet->getProperties()->setDescription($description);
 		}
-		if (!$keywords)
+		// set keywords
+		if ($keywords)
 		{
-			$objPHPExcel->getProperties()->setKeywords($keywords);
+			$spreadsheet->getProperties()->setKeywords($keywords);
 		}
-		if (!$category)
+		// set category
+		if ($category)
 		{
-			$objPHPExcel->getProperties()->setCategory($category);
+			$spreadsheet->getProperties()->setCategory($category);
 		}
 
 		// Some styles
@@ -304,15 +553,15 @@ abstract class DemoHelper
 			foreach ($rows as $array){
 				$a = 'A';
 				foreach ($array as $value){
-					$objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.$i, $value);
+					$spreadsheet->setActiveSheetIndex(0)->setCellValue($a.$i, $value);
 					if ($i == 1){
-						$objPHPExcel->getActiveSheet()->getColumnDimension($a)->setAutoSize(true);
-						$objPHPExcel->getActiveSheet()->getStyle($a.$i)->applyFromArray($headerStyles);
-						$objPHPExcel->getActiveSheet()->getStyle($a.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+						$spreadsheet->getActiveSheet()->getColumnDimension($a)->setAutoSize(true);
+						$spreadsheet->getActiveSheet()->getStyle($a.$i)->applyFromArray($headerStyles);
+						$spreadsheet->getActiveSheet()->getStyle($a.$i)->getAlignment()->setHorizontal(PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 					} elseif ($a === 'A'){
-						$objPHPExcel->getActiveSheet()->getStyle($a.$i)->applyFromArray($sideStyles);
+						$spreadsheet->getActiveSheet()->getStyle($a.$i)->applyFromArray($sideStyles);
 					} else {
-						$objPHPExcel->getActiveSheet()->getStyle($a.$i)->applyFromArray($normalStyles);
+						$spreadsheet->getActiveSheet()->getStyle($a.$i)->applyFromArray($normalStyles);
 					}
 					$a++;
 				}
@@ -325,10 +574,10 @@ abstract class DemoHelper
 		}
 
 		// Rename worksheet
-		$objPHPExcel->getActiveSheet()->setTitle($subjectTab);
+		$spreadsheet->getActiveSheet()->setTitle($subjectTab);
 
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
-		$objPHPExcel->setActiveSheetIndex(0);
+		$spreadsheet->setActiveSheetIndex(0);
 
 		// Redirect output to a client's web browser (Excel5)
 		header('Content-Type: application/vnd.ms-excel');
@@ -343,19 +592,18 @@ abstract class DemoHelper
 		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
 		header ('Pragma: public'); // HTTP/1.0
 
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$objWriter->save('php://output');
+		$writer = IOFactory::createWriter($spreadsheet, 'Xls');
+		$writer->save('php://output');
 		jexit();
 	}
 
 	/**
-	 * Get CSV Headers
-	 */
+	* Get CSV Headers
+	*/
 	public static function getFileHeaders($dataType)
 	{
-		// make sure these files are loaded
-		JLoader::import('PHPExcel', JPATH_COMPONENT_ADMINISTRATOR . '/helpers');
-		JLoader::import('ChunkReadFilter', JPATH_COMPONENT_ADMINISTRATOR . '/helpers/PHPExcel/Reader');
+		// make sure we have the composer classes loaded
+		self::composerAutoload('phpspreadsheet');
 		// get session object
 		$session = JFactory::getSession();
 		$package = $session->get('package', null);
@@ -363,13 +611,12 @@ abstract class DemoHelper
 		// set the headers
 		if(isset($package['dir']))
 		{
-			$chunkFilter = new PHPExcel_Reader_chunkReadFilter();
 			// only load first three rows
-			$chunkFilter->setRows(2,1);
+			$chunkFilter = new PhpOffice\PhpSpreadsheet\Reader\chunkReadFilter(2,1);
 			// identify the file type
-			$inputFileType = PHPExcel_IOFactory::identify($package['dir']);
+			$inputFileType = IOFactory::identify($package['dir']);
 			// create the reader for this file type
-			$excelReader = PHPExcel_IOFactory::createReader($inputFileType);
+			$excelReader = IOFactory::createReader($inputFileType);
 			// load the limiting filter
 			$excelReader->setReadFilter($chunkFilter);
 			$excelReader->setReadDataOnly(true);
@@ -397,6 +644,19 @@ abstract class DemoHelper
 			return $headers;
 		}
 		return false;
+	}
+
+	/**
+	* Load the Composer Vendor phpspreadsheet
+	*/
+	protected static function composephpspreadsheet()
+	{
+		// load the autoloader for phpspreadsheet
+		require_once JPATH_SITE . '/libraries/phpspreadsheet/vendor/autoload.php';
+		// do not load again
+		self::$composer['phpspreadsheet'] = true;
+
+		return  true;
 	}
 
 	/**
@@ -499,7 +759,15 @@ abstract class DemoHelper
 			{
 				$query->from($db->quoteName('#_'.$main.'_'.$table));
 			}
-			$query->where($db->quoteName($whereString) . ' '.$operator.' (' . implode(',',$where) . ')');
+			// add strings to array search
+			if ('IN_STRINGS' === $operator || 'NOT IN_STRINGS' === $operator)
+			{
+				$query->where($db->quoteName($whereString) . ' ' . str_replace('_STRINGS', '', $operator) . ' ("' . implode('","',$where) . '")');
+			}
+			else
+			{
+				$query->where($db->quoteName($whereString) . ' ' . $operator . ' (' . implode(',',$where) . ')');
+			}
 			$db->setQuery($query);
 			$db->execute();
 			if ($db->getNumRows())
@@ -602,21 +870,26 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Get the action permissions
-	*
-	* @param  string   $view        The related view name
-	* @param  int      $record      The item to act upon
-	* @param  string   $views       The related list view name
-	* @param  mixed    $target      Only get this permission (like edit, create, delete)
-	* @param  string   $component   The target component
-	*
-	* @return  object   The JObject of permission/authorised actions
-	* 
-	**/
-	public static function getActions($view, &$record = null, $views = null, $target = null, $component = 'demo')
+	 * Get the action permissions
+	 *
+	 * @param  string   $view        The related view name
+	 * @param  int      $record      The item to act upon
+	 * @param  string   $views       The related list view name
+	 * @param  mixed    $target      Only get this permission (like edit, create, delete)
+	 * @param  string   $component   The target component
+	 * @param  object   $user        The user whose permissions we are loading
+	 *
+	 * @return  object   The JObject of permission/authorised actions
+	 * 
+	 */
+	public static function getActions($view, &$record = null, $views = null, $target = null, $component = 'demo', $user = 'null')
 	{
-		// get the user object
-		$user = JFactory::getUser();
+		// load the user if not given
+		if (!self::checkObject($user))
+		{
+			// get the user object
+			$user = JFactory::getUser();
+		}
 		// load the JObject
 		$result = new JObject;
 		// make view name safe (just incase)
@@ -772,14 +1045,14 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Filter the action permissions
-	*
-	* @param  string   $action   The action to check
-	* @param  array    $targets  The array of target actions
-	*
-	* @return  boolean   true if action should be filtered out
-	* 
-	**/
+	 * Filter the action permissions
+	 *
+	 * @param  string   $action   The action to check
+	 * @param  array    $targets  The array of target actions
+	 *
+	 * @return  boolean   true if action should be filtered out
+	 * 
+	 */
 	protected static function filterActions(&$view, &$action, &$targets)
 	{
 		foreach ($targets as $target)
@@ -795,40 +1068,44 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Get any component's model
-	**/
-	public static function getModel($name, $path = JPATH_COMPONENT_ADMINISTRATOR, $component = 'Demo', $config = array())
+	 * Get any component's model
+	 */
+	public static function getModel($name, $path = JPATH_COMPONENT_ADMINISTRATOR, $Component = 'Demo', $config = array())
 	{
 		// fix the name
 		$name = self::safeString($name);
-		// full path
-		$fullPath = $path . '/models';
-		// set prefix
-		$prefix = $component.'Model';
+		// full path to models
+		$fullPathModels = $path . '/models';
 		// load the model file
-		JModelLegacy::addIncludePath($fullPath, $prefix);
+		JModelLegacy::addIncludePath($fullPathModels, $Component . 'Model');
+		// make sure the table path is loaded
+		if (!isset($config['table_path']) || !self::checkString($config['table_path']))
+		{
+			// This is the JCB default path to tables in Joomla 3.x
+			$config['table_path'] = JPATH_ADMINISTRATOR . '/components/com_' . strtolower($Component) . '/tables';
+		}
 		// get instance
-		$model = JModelLegacy::getInstance($name, $prefix, $config);
+		$model = JModelLegacy::getInstance($name, $Component . 'Model', $config);
 		// if model not found (strange)
 		if ($model == false)
 		{
 			jimport('joomla.filesystem.file');
 			// get file path
-			$filePath = $path.'/'.$name.'.php';
-			$fullPath = $fullPath.'/'.$name.'.php';
+			$filePath = $path . '/' . $name . '.php';
+			$fullPathModel = $fullPathModels . '/' . $name . '.php';
 			// check if it exists
 			if (JFile::exists($filePath))
 			{
 				// get the file
 				require_once $filePath;
 			}
-			elseif (JFile::exists($fullPath))
+			elseif (JFile::exists($fullPathModel))
 			{
 				// get the file
-				require_once $fullPath;
+				require_once $fullPathModel;
 			}
 			// build class names
-			$modelClass = $prefix.$name;
+			$modelClass = $Component . 'Model' . $name;
 			if (class_exists($modelClass))
 			{
 				// initialize the model
@@ -839,8 +1116,8 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Add to asset Table
-	*/
+	 * Add to asset Table
+	 */
 	public static function setAsset($id, $table, $inherit = true)
 	{
 		$parent = JTable::getInstance('Asset');
@@ -946,7 +1223,7 @@ abstract class DemoHelper
 				}
 			}
 			// check if there are any view values remaining
-			if (count($_result))
+			if (count((array) $_result))
 			{
 				$_result = json_encode($_result);
 				$_result = array($_result);
@@ -1071,7 +1348,31 @@ abstract class DemoHelper
 				jimport('joomla.form.form');
 			}
 			// get field type
-			$field = JFormHelper::loadFieldType($attributes['type'],true);
+			$field = JFormHelper::loadFieldType($attributes['type'], true);
+			// get field xml
+			$XML = self::getFieldXML($attributes, $options);
+			// setup the field
+			$field->setup($XML, $default);
+			// return the field object
+			return $field;
+		}
+		return false;
+	}
+
+	/**
+	 * get the field xml
+	 *
+	 * @param   array      $attributes   The array of attributes
+	 * @param   array      $options      The options to apply to the XML element
+	 *
+	 * @return  object
+	 *
+	 */
+	public static function getFieldXML(&$attributes, $options = null)
+	{
+		// make sure we have attributes and a type value
+		if (self::checkArray($attributes))
+		{
 			// start field xml
 			$XML = new SimpleXMLElement('<field/>');
 			// load the attributes
@@ -1082,10 +1383,8 @@ abstract class DemoHelper
 				// load the options
 				self::xmlAddOptions($XML, $options);
 			}
-			// setup the field
-			$field->setup($XML, $default);
-			// return the field object
-			return $field;
+			// return the field xml
+			return $XML;
 		}
 		return false;
 	}
@@ -1125,12 +1424,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Check if have an json string
-	*
-	* @input	string   The json string to check
-	*
-	* @returns bool true on success
-	**/
+	 * Check if have an json string
+	 *
+	 * @input	string   The json string to check
+	 *
+	 * @returns bool true on success
+	 */
 	public static function checkJson($string)
 	{
 		if (self::checkString($string))
@@ -1142,12 +1441,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Check if have an object with a length
-	*
-	* @input	object   The object to check
-	*
-	* @returns bool true on success
-	**/
+	 * Check if have an object with a length
+	 *
+	 * @input	object   The object to check
+	 *
+	 * @returns bool true on success
+	 */
 	public static function checkObject($object)
 	{
 		if (isset($object) && is_object($object))
@@ -1158,12 +1457,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Check if have an array with a length
-	*
-	* @input	array   The array to check
-	*
-	* @returns bool/int  number of items in array on success
-	**/
+	 * Check if have an array with a length
+	 *
+	 * @input	array   The array to check
+	 *
+	 * @returns bool/int  number of items in array on success
+	 */
 	public static function checkArray($array, $removeEmptyString = false)
 	{
 		if (isset($array) && is_array($array) && ($nr = count((array)$array)) > 0)
@@ -1186,12 +1485,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Check if have a string with a length
-	*
-	* @input	string   The string to check
-	*
-	* @returns bool true on success
-	**/
+	 * Check if have a string with a length
+	 *
+	 * @input	string   The string to check
+	 *
+	 * @returns bool true on success
+	 */
 	public static function checkString($string)
 	{
 		if (isset($string) && is_string($string) && strlen($string) > 0)
@@ -1202,11 +1501,11 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Check if we are connected
-	* Thanks https://stackoverflow.com/a/4860432/1429677
-	*
-	* @returns bool true on success
-	**/
+	 * Check if we are connected
+	 * Thanks https://stackoverflow.com/a/4860432/1429677
+	 *
+	 * @returns bool true on success
+	 */
 	public static function isConnected()
 	{
 		// If example.com is down, then probably the whole internet is down, since IANA maintains the domain. Right?
@@ -1227,12 +1526,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Merge an array of array's
-	*
-	* @input	array   The arrays you would like to merge
-	*
-	* @returns array on success
-	**/
+	 * Merge an array of array's
+	 *
+	 * @input	array   The arrays you would like to merge
+	 *
+	 * @returns array on success
+	 */
 	public static function mergeArrays($arrays)
 	{
 		if(self::checkArray($arrays))
@@ -1257,12 +1556,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Shorten a string
-	*
-	* @input	string   The you would like to shorten
-	*
-	* @returns string on success
-	**/
+	 * Shorten a string
+	 *
+	 * @input	string   The you would like to shorten
+	 *
+	 * @returns string on success
+	 */
 	public static function shorten($string, $length = 40, $addTip = true)
 	{
 		if (self::checkString($string))
@@ -1298,12 +1597,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Making strings safe (various ways)
-	*
-	* @input	string   The you would like to make safe
-	*
-	* @returns string on success
-	**/
+	 * Making strings safe (various ways)
+	 *
+	 * @input	string   The you would like to make safe
+	 *
+	 * @returns string on success
+	 */
 	public static function safeString($string, $type = 'L', $spacer = '_', $replaceNumbers = true, $keepOnlyCharacters = true)
 	{
 		if ($replaceNumbers === true)
@@ -1333,6 +1632,8 @@ abstract class DemoHelper
 			$string = trim($string);
 			$string = preg_replace('/'.$spacer.'+/', ' ', $string);
 			$string = preg_replace('/\s+/', ' ', $string);
+			// Transliterate string
+			$string = self::transliterate($string);
 			// remove all and keep only characters
 			if ($keepOnlyCharacters)
 			{
@@ -1401,6 +1702,19 @@ abstract class DemoHelper
 		return '';
 	}
 
+	public static function transliterate($string)
+	{
+		// set tag only once
+		if (!self::checkString(self::$langTag))
+		{
+			// get global value
+			self::$langTag = JComponentHelper::getParams('com_demo')->get('language', 'en-GB');
+		}
+		// Transliterate on the language requested
+		$lang = Language::getInstance(self::$langTag);
+		return $lang->transliterate($string);
+	}
+
 	public static function htmlEscape($var, $charset = 'UTF-8', $shorten = false, $length = 40)
 	{
 		if (self::checkString($var))
@@ -1442,12 +1756,12 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Convert an integer into an English word string
-	* Thanks to Tom Nicholson <http://php.net/manual/en/function.strval.php#41988>
-	*
-	* @input	an int
-	* @returns a string
-	**/
+	 * Convert an integer into an English word string
+	 * Thanks to Tom Nicholson <http://php.net/manual/en/function.strval.php#41988>
+	 *
+	 * @input	an int
+	 * @returns a string
+	 */
 	public static function numberToString($x)
 	{
 		$nwords = array( "zero", "one", "two", "three", "four", "five", "six", "seven",
@@ -1533,10 +1847,10 @@ abstract class DemoHelper
 	}
 
 	/**
-	* Random Key
-	*
-	* @returns a string
-	**/
+	 * Random Key
+	 *
+	 * @returns a string
+	 */
 	public static function randomkey($size)
 	{
 		$bag = "abcefghijknopqrstuwxyzABCDDEFGHIJKLLMMNOPQRSTUVVWXYZabcddefghijkllmmnopqrstuvvwxyzABCEFGHIJKNOPQRSTUWXYZ";

@@ -32,6 +32,8 @@
 		<action name="look.version" title="COM_DEMO_LOOKS_EDIT_VERSION" description="COM_DEMO_LOOKS_EDIT_VERSION_DESC" />
 		<action name="look.export" title="COM_DEMO_LOOKS_EXPORT" description="COM_DEMO_LOOKS_EXPORT_DESC" />
 		<action name="look.import" title="COM_DEMO_LOOKS_IMPORT" description="COM_DEMO_LOOKS_IMPORT_DESC" />
+		<action name="look.privacy.access" title="COM_DEMO_LOOKS_PRIVACY_ACCESS" description="COM_DEMO_LOOKS_PRIVACY_ACCESS_DESC" />
+		<action name="look.privacy.delete" title="COM_DEMO_LOOKS_PRIVACY_DELETE" description="COM_DEMO_LOOKS_PRIVACY_DELETE_DESC" />
 		<action name="look.submenu" title="COM_DEMO_LOOKS_SUBMENU" description="COM_DEMO_LOOKS_SUBMENU_DESC" />
 	</section>
 	<section name="look">
@@ -43,6 +45,8 @@
 		<action name="look.create" title="COM_DEMO_LOOKS_CREATE" description="COM_DEMO_LOOKS_CREATE_DESC" />
 		<action name="look.delete" title="COM_DEMO_LOOKS_DELETE" description="COM_DEMO_LOOKS_DELETE_DESC" />
 		<action name="look.access" title="COM_DEMO_LOOKS_ACCESS" description="COM_DEMO_LOOKS_ACCESS_DESC" />
+		<action name="look.privacy.delete" title="COM_DEMO_LOOKS_PRIVACY_DELETE" description="COM_DEMO_LOOKS_PRIVACY_DELETE_DESC" />
+		<action name="look.privacy.access" title="COM_DEMO_LOOKS_PRIVACY_ACCESS" description="COM_DEMO_LOOKS_PRIVACY_ACCESS_DESC" />
 		<action name="look.version" title="COM_DEMO_LOOKS_EDIT_VERSION" description="COM_DEMO_LOOKS_EDIT_VERSION_DESC" />
 	</section>
 	<section name="fieldgroup">

@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.0
-	@build			23rd April, 2019
+	@version		2.0.2
+	@build			30th May, 2020
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		router.php
@@ -184,6 +184,8 @@ class DemoRouter extends JComponentRouterBase
 		{
 			$getTable = '#__categories';
 			$query->from($db->quoteName($getTable));
+			// we need this to target the components categories (TODO will keep an eye on this)
+			$query->where($db->quoteName('extension') . ' LIKE '. $db->quote((string)'com_' . $main . '%'));
 		}
 		else
 		{

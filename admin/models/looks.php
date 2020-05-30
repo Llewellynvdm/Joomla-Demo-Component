@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.0
-	@build			23rd April, 2019
+	@version		2.0.2
+	@build			30th May, 2020
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -20,6 +20,8 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Looks Model
@@ -99,12 +101,18 @@ class DemoModelLooks extends JModelList
 		// load parent items
 		$items = parent::getItems();
 
-		// set values to display correctly.
+		// Set values to display correctly.
 		if (DemoHelper::checkArray($items))
 		{
+			// Get the user object if not set.
+			if (!isset($user) || !DemoHelper::checkObject($user))
+			{
+				$user = JFactory::getUser();
+			}
 			foreach ($items as $nr => &$item)
 			{
-				$access = (JFactory::getUser()->authorise('look.access', 'com_demo.look.' . (int) $item->id) && JFactory::getUser()->authorise('look.access', 'com_demo'));
+				// Remove items the user can't access.
+				$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
 				if (!$access)
 				{
 					unset($items[$nr]);
@@ -180,7 +188,7 @@ class DemoModelLooks extends JModelList
 
 		// Add the list ordering clause.
 		$orderCol = $this->state->get('list.ordering', 'a.id');
-		$orderDirn = $this->state->get('list.direction', 'asc');	
+		$orderDirn = $this->state->get('list.direction', 'asc');
 		if ($orderCol != '')
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
@@ -192,17 +200,23 @@ class DemoModelLooks extends JModelList
 	/**
 	 * Method to get list export data.
 	 *
+	 * @param   array  $pks  The ids of the items to get
+	 * @param   JUser  $user  The user making the request
+	 *
 	 * @return mixed  An array of data items on success, false on failure.
 	 */
-	public function getExportData($pks)
+	public function getExportData($pks, $user = null)
 	{
 		// setup the query
 		if (DemoHelper::checkArray($pks))
 		{
-			// Set a value to know this is exporting method.
+			// Set a value to know this is export method. (USE IN CUSTOM CODE TO ALTER OUTCOME)
 			$_export = true;
-			// Get the user object.
-			$user = JFactory::getUser();
+			// Get the user object if not set.
+			if (!isset($user) || !DemoHelper::checkObject($user))
+			{
+				$user = JFactory::getUser();
+			}
 			// Create a new query object.
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true);
@@ -230,12 +244,13 @@ class DemoModelLooks extends JModelList
 			{
 				$items = $db->loadObjectList();
 
-				// set values to display correctly.
+				// Set values to display correctly.
 				if (DemoHelper::checkArray($items))
 				{
 					foreach ($items as $nr => &$item)
 					{
-						$access = (JFactory::getUser()->authorise('look.access', 'com_demo.look.' . (int) $item->id) && JFactory::getUser()->authorise('look.access', 'com_demo'));
+						// Remove items the user can't access.
+						$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
 						if (!$access)
 						{
 							unset($items[$nr]);
@@ -283,6 +298,81 @@ class DemoModelLooks extends JModelList
 				$headers->{$column} = $column;
 			}
 			return $headers;
+		}
+		return false;
+	}
+
+	/**
+	 * Method to get data during an export request.
+	 *
+	 * @param   array  $pks  The ids of the items to get
+	 * @param   JUser  $user  The user making the request
+	 *
+	 * @return mixed  An array of data items on success, false on failure.
+	 */
+	public function getPrivacyExport($pks, $user = null)
+	{
+		// setup the query
+		if (DemoHelper::checkArray($pks))
+		{
+			// Set a value to know this is privacy method. (USE IN CUSTOM CODE TO ALTER OUTCOME)
+			$_privacy = true;
+			// Get the user object if not set.
+			if (!isset($user) || !DemoHelper::checkObject($user))
+			{
+				$user = JFactory::getUser();
+			}
+			// Create a new query object.
+			$db = JFactory::getDBO();
+			$query = $db->getQuery(true);
+
+			// Select some fields
+			$query->select('a.*');
+
+			// From the demo_look table
+			$query->from($db->quoteName('#__demo_look', 'a'));
+			$query->where('a.id IN (' . implode(',',$pks) . ')');
+			// Get global switch to activate text only export
+			$export_text_only = JComponentHelper::getParams('com_demo')->get('export_text_only', 0);
+			// Implement View Level Access
+			if (!$user->authorise('core.options', 'com_demo'))
+			{
+				$groups = implode(',', $user->getAuthorisedViewLevels());
+				$query->where('a.access IN (' . $groups . ')');
+			}
+
+			// Order the results by ordering
+			$query->order('a.ordering  ASC');
+
+			// Load the items
+			$db->setQuery($query);
+			$db->execute();
+			if ($db->getNumRows())
+			{
+				$items = $db->loadObjectList();
+
+				// Set values to display correctly.
+				if (DemoHelper::checkArray($items))
+				{
+					// Get the user object if not set.
+					if (!isset($user) || !DemoHelper::checkObject($user))
+					{
+						$user = JFactory::getUser();
+					}
+					foreach ($items as $nr => &$item)
+					{
+						// Remove items the user can't access.
+						$access = ($user->authorise('look.access', 'com_demo.look.' . (int) $item->id) && $user->authorise('look.access', 'com_demo'));
+						if (!$access)
+						{
+							unset($items[$nr]);
+							continue;
+						}
+
+					}
+				}
+				return json_decode(json_encode($items), true);
+			}
 		}
 		return false;
 	}

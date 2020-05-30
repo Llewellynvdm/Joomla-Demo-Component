@@ -216,7 +216,7 @@
 		<field
 			type="hidden"
 			name="not_required"
-			default="[]"
+			default="一_一"
 		/>
 		<!-- Alias Field. Type: Text. (joomla) -->
 		<field

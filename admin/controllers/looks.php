@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.0
-	@build			23rd April, 2019
+	@version		2.0.2
+	@build			30th May, 2020
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -20,6 +20,8 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Looks Controller
@@ -62,7 +64,7 @@ class DemoControllerLooks extends JControllerAdmin
 			$input = JFactory::getApplication()->input;
 			$pks = $input->post->get('cid', array(), 'array');
 			// Sanitize the input
-			JArrayHelper::toInteger($pks);
+			ArrayHelper::toInteger($pks);
 			// Get the model
 			$model = $this->getModel('Looks');
 			// get the data to export

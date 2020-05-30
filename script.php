@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.0
-	@build			23rd April, 2019
+	@version		2.0.2
+	@build			30th May, 2020
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -29,21 +29,27 @@ JHTML::_('behavior.modal');
 class com_demoInstallerScript
 {
 	/**
-	 * method to install the component
+	 * Constructor
 	 *
-	 * @return void
+	 * @param   JAdapterInstance  $parent  The object responsible for running this script
 	 */
-	function install($parent)
-	{
-
-	}
+	public function __construct(JAdapterInstance $parent) {}
 
 	/**
-	 * method to uninstall the component
+	 * Called on installation
 	 *
-	 * @return void
+	 * @param   JAdapterInstance  $parent  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
 	 */
-	function uninstall($parent)
+	public function install(JAdapterInstance $parent) {}
+
+	/**
+	 * Called on uninstallation
+	 *
+	 * @param   JAdapterInstance  $parent  The object responsible for running this script
+	 */
+	public function uninstall(JAdapterInstance $parent)
 	{
 		// Get Application object
 		$app = JFactory::getApplication();
@@ -318,6 +324,56 @@ class com_demoInstallerScript
 			$app->enqueueMessage(JText::_('All related items was removed from the <b>#__assets</b> table'));
 		}
 
+
+		// Set db if not set already.
+		if (!isset($db))
+		{
+			$db = JFactory::getDbo();
+		}
+		// Set app if not set already.
+		if (!isset($app))
+		{
+			$app = JFactory::getApplication();
+		}
+		// Remove Demo from the action_logs_extensions table
+		$demo_action_logs_extensions = array( $db->quoteName('extension') . ' = ' . $db->quote('com_demo') );
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$query->delete($db->quoteName('#__action_logs_extensions'));
+		$query->where($demo_action_logs_extensions);
+		$db->setQuery($query);
+		// Execute the query to remove Demo
+		$demo_removed_done = $db->execute();
+		if ($demo_removed_done)
+		{
+			// If successfully remove Demo add queued success message.
+			$app->enqueueMessage(JText::_('The com_demo extension was removed from the <b>#__action_logs_extensions</b> table'));
+		}
+
+		// Set db if not set already.
+		if (!isset($db))
+		{
+			$db = JFactory::getDbo();
+		}
+		// Set app if not set already.
+		if (!isset($app))
+		{
+			$app = JFactory::getApplication();
+		}
+		// Remove Demo Look from the action_log_config table
+		$look_action_log_config = array( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.look') );
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$query->delete($db->quoteName('#__action_log_config'));
+		$query->where($look_action_log_config);
+		$db->setQuery($query);
+		// Execute the query to remove com_demo.look
+		$look_action_log_config_done = $db->execute();
+		if ($look_action_log_config_done)
+		{
+			// If successfully removed Demo Look add queued success message.
+			$app->enqueueMessage(JText::_('The com_demo.look type alias was removed from the <b>#__action_log_config</b> table'));
+		}
 		// little notice as after service, in case of bad experience with component.
 		echo '<h2>Did something go wrong? Are you disappointed?</h2>
 		<p>Please let me know at <a href="mailto:joomla@vdm.io">joomla@vdm.io</a>.
@@ -327,57 +383,73 @@ class com_demoInstallerScript
 	}
 
 	/**
-	 * method to update the component
+	 * Called on update
 	 *
-	 * @return void
+	 * @param   JAdapterInstance  $parent  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
 	 */
-	function update($parent)
-	{
-		
-	}
+	public function update(JAdapterInstance $parent){}
 
 	/**
-	 * method to run before an install/update/uninstall method
+	 * Called before any type of action
 	 *
-	 * @return void
+	 * @param   string  $type  Which action is happening (install|uninstall|discover_install|update)
+	 * @param   JAdapterInstance  $parent  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
 	 */
-	function preflight($type, $parent)
+	public function preflight($type, JAdapterInstance $parent)
 	{
 		// get application
 		$app = JFactory::getApplication();
-		// is redundant ...hmmm
-		if ($type == 'uninstall')
+		// is redundant or so it seems ...hmmm let me know if it works again
+		if ($type === 'uninstall')
 		{
 			return true;
 		}
 		// the default for both install and update
 		$jversion = new JVersion();
-		if (!$jversion->isCompatible('3.6.0'))
+		if (!$jversion->isCompatible('3.8.0'))
 		{
-			$app->enqueueMessage('Please upgrade to at least Joomla! 3.6.0 before continuing!', 'error');
+			$app->enqueueMessage('Please upgrade to at least Joomla! 3.8.0 before continuing!', 'error');
 			return false;
 		}
 		// do any updates needed
-		if ($type == 'update')
+		if ($type === 'update')
 		{
 		}
 		// do any install needed
-		if ($type == 'install')
+		if ($type === 'install')
 		{
 		}
+		// check if the PHPExcel stuff is still around
+		if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel.php'))
+		{
+			// We need to remove this old PHPExcel folder
+			$this->removeFolder(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel');
+			// We need to remove this old PHPExcel file
+			JFile::delete(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel.php');
+		}
+		return true;
 	}
 
 	/**
-	 * method to run after an install/update/uninstall method
+	 * Called after any type of action
 	 *
-	 * @return void
+	 * @param   string  $type  Which action is happening (install|uninstall|discover_install|update)
+	 * @param   JAdapterInstance  $parent  The object responsible for running this script
+	 *
+	 * @return  boolean  True on success
 	 */
-	function postflight($type, $parent)
+	public function postflight($type, JAdapterInstance $parent)
 	{
 		// get application
 		$app = JFactory::getApplication();
+		// We check if we have dynamic folders to copy
+		$this->setDynamicF0ld3rs($app, $parent);
 		// set the default component settings
-		if ($type == 'install')
+		if ($type === 'install')
 		{
 
 			// Get The Database object
@@ -400,7 +472,7 @@ class com_demoInstallerScript
 			$query = $db->getQuery(true);
 			// Field to update.
 			$fields = array(
-				$db->quoteName('rules') . ' = ' . $db->quote('{"site.looks.access":{"1":1},"site.looking.access":{"1":1}}'),
+				$db->quoteName('rules') . ' = ' . $db->quote('{"site.looks.access":{"1":1}}'),
 			);
 			// Condition.
 			$conditions = array(
@@ -431,9 +503,38 @@ class com_demoInstallerScript
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>';
+
+			// Set db if not set already.
+			if (!isset($db))
+			{
+				$db = JFactory::getDbo();
+			}
+			// Create the demo action logs extensions object.
+			$demo_action_logs_extensions = new stdClass();
+			$demo_action_logs_extensions->extension = 'com_demo';
+
+			// Set the object into the action logs extensions table.
+			$demo_action_logs_extensions_Inserted = $db->insertObject('#__action_logs_extensions', $demo_action_logs_extensions);
+
+			// Set db if not set already.
+			if (!isset($db))
+			{
+				$db = JFactory::getDbo();
+			}
+			// Create the look action log config object.
+			$look_action_log_config = new stdClass();
+			$look_action_log_config->type_title = 'LOOK';
+			$look_action_log_config->type_alias = 'com_demo.look';
+			$look_action_log_config->id_holder = 'id';
+			$look_action_log_config->title_holder = 'name';
+			$look_action_log_config->table_name = '#__demo_look';
+			$look_action_log_config->text_prefix = 'COM_DEMO';
+
+			// Set the object into the action log config table.
+			$look_Inserted = $db->insertObject('#__action_log_config', $look_action_log_config);
 		}
 		// do any updates needed
-		if ($type == 'update')
+		if ($type === 'update')
 		{
 
 			// Get The Database object
@@ -472,7 +573,201 @@ class com_demoInstallerScript
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>
-				<h3>Upgrade to Version 2.0.0 Was Successful! Let us know if anything is not working as expected.</h3>';
+				<h3>Upgrade to Version 2.0.2 Was Successful! Let us know if anything is not working as expected.</h3>';
+
+			// Set db if not set already.
+			if (!isset($db))
+			{
+				$db = JFactory::getDbo();
+			}
+			// Create the demo action logs extensions object.
+			$demo_action_logs_extensions = new stdClass();
+			$demo_action_logs_extensions->extension = 'com_demo';
+
+			// Check if demo action log extension is already in action logs extensions DB.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('id')));
+			$query->from($db->quoteName('#__action_logs_extensions'));
+			$query->where($db->quoteName('extension') . ' LIKE '. $db->quote($demo_action_logs_extensions->extension));
+			$db->setQuery($query);
+			$db->execute();
+
+			// Set the object into the action logs extensions table if not found.
+			if (!$db->getNumRows())
+			{
+				$demo_action_logs_extensions_Inserted = $db->insertObject('#__action_logs_extensions', $demo_action_logs_extensions);
+			}
+
+			// Set db if not set already.
+			if (!isset($db))
+			{
+				$db = JFactory::getDbo();
+			}
+			// Create the look action log config object.
+			$look_action_log_config = new stdClass();
+			$look_action_log_config->id = null;
+			$look_action_log_config->type_title = 'LOOK';
+			$look_action_log_config->type_alias = 'com_demo.look';
+			$look_action_log_config->id_holder = 'id';
+			$look_action_log_config->title_holder = 'name';
+			$look_action_log_config->table_name = '#__demo_look';
+			$look_action_log_config->text_prefix = 'COM_DEMO';
+
+			// Check if look action log config is already in action_log_config DB.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('id')));
+			$query->from($db->quoteName('#__action_log_config'));
+			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($look_action_log_config->type_alias));
+			$db->setQuery($query);
+			$db->execute();
+
+			// Set the object into the content types table.
+			if ($db->getNumRows())
+			{
+				$look_action_log_config->id = $db->loadResult();
+				$look_action_log_config_Updated = $db->updateObject('#__action_log_config', $look_action_log_config, 'id');
+			}
+			else
+			{
+				$look_action_log_config_Inserted = $db->insertObject('#__action_log_config', $look_action_log_config);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Remove folders with files
+	 * 
+	 * @param   string   $dir     The path to folder to remove
+	 * @param   boolean  $ignore  The folders and files to ignore and not remove
+	 *
+	 * @return  boolean   True in all is removed
+	 * 
+	 */
+	protected function removeFolder($dir, $ignore = false)
+	{
+		if (JFolder::exists($dir))
+		{
+			$it = new RecursiveDirectoryIterator($dir);
+			$it = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+			// remove ending /
+			$dir = rtrim($dir, '/');
+			// now loop the files & folders
+			foreach ($it as $file)
+			{
+				if ('.' === $file->getBasename() || '..' ===  $file->getBasename()) continue;
+				// set file dir
+				$file_dir = $file->getPathname();
+				// check if this is a dir or a file
+				if ($file->isDir())
+				{
+					$keeper = false;
+					if ($this->checkArray($ignore))
+					{
+						foreach ($ignore as $keep)
+						{
+							if (strpos($file_dir, $dir.'/'.$keep) !== false)
+							{
+								$keeper = true;
+							}
+						}
+					}
+					if ($keeper)
+					{
+						continue;
+					}
+					JFolder::delete($file_dir);
+				}
+				else
+				{
+					$keeper = false;
+					if ($this->checkArray($ignore))
+					{
+						foreach ($ignore as $keep)
+						{
+							if (strpos($file_dir, $dir.'/'.$keep) !== false)
+							{
+								$keeper = true;
+							}
+						}
+					}
+					if ($keeper)
+					{
+						continue;
+					}
+					JFile::delete($file_dir);
+				}
+			}
+			// delete the root folder if not ignore found
+			if (!$this->checkArray($ignore))
+			{
+				return JFolder::delete($dir);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if have an array with a length
+	 *
+	 * @input	array   The array to check
+	 *
+	 * @returns bool/int  number of items in array on success
+	 */
+	protected function checkArray($array, $removeEmptyString = false)
+	{
+		if (isset($array) && is_array($array) && ($nr = count((array)$array)) > 0)
+		{
+			// also make sure the empty strings are removed
+			if ($removeEmptyString)
+			{
+				foreach ($array as $key => $string)
+				{
+					if (empty($string))
+					{
+						unset($array[$key]);
+					}
+				}
+				return $this->checkArray($array, false);
+			}
+			return $nr;
+		}
+		return false;
+	}
+
+	/**
+	 * Method to set/copy dynamic folders into place (use with caution)
+	 *
+	 * @return void
+	 */
+	protected function setDynamicF0ld3rs($app, $parent)
+	{
+		// get the instalation path
+		$installer = $parent->getParent();
+		$installPath = $installer->getPath('source');
+		// get all the folders
+		$folders = JFolder::folders($installPath);
+		// check if we have folders we may want to copy
+		$doNotCopy = array('media','admin','site'); // Joomla already deals with these
+		if (count((array) $folders) > 1)
+		{
+			foreach ($folders as $folder)
+			{
+				// Only copy if not a standard folders
+				if (!in_array($folder, $doNotCopy))
+				{
+					// set the source path
+					$src = $installPath.'/'.$folder;
+					// set the destination path
+					$dest = JPATH_ROOT.'/'.$folder;
+					// now try to copy the folder
+					if (!JFolder::copy($src, $dest, '', true))
+					{
+						$app->enqueueMessage('Could not copy '.$folder.' folder into place, please make sure destination is writable!', 'error');
+					}
+				}
+			}
 		}
 	}
 }

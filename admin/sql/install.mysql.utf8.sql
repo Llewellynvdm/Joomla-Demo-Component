@@ -26,14 +26,14 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	`metadesc` TEXT NOT NULL,
 	`metadata` TEXT NOT NULL,
 	PRIMARY KEY  (`id`),
+	KEY `idx_name` (`name`),
+	KEY `idx_add` (`add`),
+	KEY `idx_alias` (`alias`),
 	KEY `idx_access` (`access`),
 	KEY `idx_checkout` (`checked_out`),
 	KEY `idx_createdby` (`created_by`),
 	KEY `idx_modifiedby` (`modified_by`),
-	KEY `idx_state` (`published`),
-	KEY `idx_name` (`name`),
-	KEY `idx_add` (`add`),
-	KEY `idx_alias` (`alias`)
+	KEY `idx_state` (`published`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 
