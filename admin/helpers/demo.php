@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -22,6 +22,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Language\Language;
+use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -508,6 +509,8 @@ abstract class DemoHelper
 			->setLastModifiedBy($modified)
 			->setTitle($title)
 			->setSubject($subjectTab);
+		// The file type
+		$file_type = 'Xls';
 		// set description
 		if ($description)
 		{
@@ -547,21 +550,46 @@ abstract class DemoHelper
 		));
 
 		// Add some data
-		if (self::checkArray($rows))
+		if (($size = self::checkArray($rows)) !== false)
 		{
 			$i = 1;
-			foreach ($rows as $array){
+
+			// Based on data size we adapt the behaviour.
+			$xls_mode = 1;
+			if ($size > 3000)
+			{
+				$xls_mode = 3;
+				$file_type = 'Csv';
+			}
+			elseif ($size > 2000)
+			{
+				$xls_mode = 2;
+			}
+
+			// Set active sheet and get it.
+			$active_sheet = $spreadsheet->setActiveSheetIndex(0);
+			foreach ($rows as $array)
+			{
 				$a = 'A';
-				foreach ($array as $value){
-					$spreadsheet->setActiveSheetIndex(0)->setCellValue($a.$i, $value);
-					if ($i == 1){
-						$spreadsheet->getActiveSheet()->getColumnDimension($a)->setAutoSize(true);
-						$spreadsheet->getActiveSheet()->getStyle($a.$i)->applyFromArray($headerStyles);
-						$spreadsheet->getActiveSheet()->getStyle($a.$i)->getAlignment()->setHorizontal(PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-					} elseif ($a === 'A'){
-						$spreadsheet->getActiveSheet()->getStyle($a.$i)->applyFromArray($sideStyles);
-					} else {
-						$spreadsheet->getActiveSheet()->getStyle($a.$i)->applyFromArray($normalStyles);
+				foreach ($array as $value)
+				{
+					$active_sheet->setCellValue($a.$i, $value);
+					if ($xls_mode != 3)
+					{
+						if ($i == 1)
+						{
+							$active_sheet->getColumnDimension($a)->setAutoSize(true);
+							$active_sheet->getStyle($a.$i)->applyFromArray($headerStyles);
+							$active_sheet->getStyle($a.$i)->getAlignment()->setHorizontal(PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+						}
+						elseif ($a === 'A')
+						{
+							$active_sheet->getStyle($a.$i)->applyFromArray($sideStyles);
+						}
+						elseif ($xls_mode == 1)
+						{
+							$active_sheet->getStyle($a.$i)->applyFromArray($normalStyles);
+						}
 					}
 					$a++;
 				}
@@ -581,7 +609,7 @@ abstract class DemoHelper
 
 		// Redirect output to a client's web browser (Excel5)
 		header('Content-Type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment;filename="'.$fileName.'.xls"');
+		header('Content-Disposition: attachment;filename="' . $fileName . '.' . strtolower($file_type) .'"');
 		header('Cache-Control: max-age=0');
 		// If you're serving to IE 9, then the following may be needed
 		header('Cache-Control: max-age=1');
@@ -592,7 +620,7 @@ abstract class DemoHelper
 		header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
 		header ('Pragma: public'); // HTTP/1.0
 
-		$writer = IOFactory::createWriter($spreadsheet, 'Xls');
+		$writer = IOFactory::createWriter($spreadsheet, $file_type);
 		$writer->save('php://output');
 		jexit();
 	}

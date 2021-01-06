@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		edit.php
@@ -28,8 +28,8 @@ JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.tabstate');
 JHtml::_('behavior.calendar');
-$componentParams = $this->params; // will be removed just use $this->params instead
 ?>
+<div class="demo-look">
 <?php echo $this->toolbar->render(); ?>
 <form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='. (int) $this->item->id . $this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
@@ -63,7 +63,7 @@ $componentParams = $this->params; // will be removed just use $this->params inst
 	<?php $this->tab_name = 'lookTab'; ?>
 	<?php echo JLayoutHelper::render('joomla.edit.params', $this); ?>
 
-	<?php if ($this->canDo->get('look.delete') || $this->canDo->get('look.edit.created_by') || $this->canDo->get('look.edit.state') || $this->canDo->get('look.edit.created')) : ?>
+	<?php if ($this->canDo->get('look.edit.created_by') || $this->canDo->get('look.edit.created') || $this->canDo->get('look.edit.state') || ($this->canDo->get('look.delete') && $this->canDo->get('look.edit.state'))) : ?>
 	<?php echo JHtml::_('bootstrap.addTab', 'lookTab', 'publishing', JText::_('COM_DEMO_LOOK_PUBLISHING', true)); ?>
 		<div class="row-fluid form-horizontal-desktop">
 			<div class="span6">
@@ -106,6 +106,7 @@ $componentParams = $this->params; // will be removed just use $this->params inst
 <div class="clearfix"></div>
 <?php echo JLayoutHelper::render('look.details_under', $this); ?>
 </form>
+</div>
 
 <script type="text/javascript">
 

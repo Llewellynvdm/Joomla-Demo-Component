@@ -2,8 +2,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		submitbutton.js

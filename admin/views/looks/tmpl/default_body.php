@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		default_body.php
@@ -19,7 +19,7 @@
 /------------------------------------------------------------------------------------------------------*/
 
 // No direct access to this file
-defined('_JEXEC') or die('Restricted access'); 
+defined('_JEXEC') or die('Restricted access');
 
 $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 
@@ -34,11 +34,8 @@ $edit = "index.php?option=com_demo&view=looks&task=look.edit";
 		<td class="order nowrap center hidden-phone">
 		<?php if ($canDo->get('look.edit.state')): ?>
 			<?php
-				if ($this->saveOrder)
-				{
-					$iconClass = ' inactive';
-				}
-				else
+				$iconClass = '';
+				if (!$this->saveOrder)
 				{
 					$iconClass = ' inactive tip-top" hasTooltip" title="' . JHtml::tooltipText('JORDERINGDISABLED');
 				}

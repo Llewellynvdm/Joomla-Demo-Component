@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -420,7 +420,7 @@ class DemoModelLook extends JModelAdmin
 	public function validate($form, $data, $group = null)
 	{
 		// check if the not_required field is set
-		if (DemoHelper::checkString($data['not_required']))
+		if (isset($data['not_required']) && DemoHelper::checkString($data['not_required']))
 		{
 			$requiredFields = (array) explode(',',(string) $data['not_required']);
 			$requiredFields = array_unique($requiredFields);

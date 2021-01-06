@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -84,7 +84,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove look add queued success message.
+				// If successfully remove look add queued success message.
 				$app->enqueueMessage(JText::_('The fields with type (com_demo.look) context was removed from the <b>#__fields</b> table'));
 			}
 			// Also Remove look field values
@@ -98,7 +98,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove look add queued success message.
+				// If successfully remove look add queued success message.
 				$app->enqueueMessage(JText::_('The fields values for look was removed from the <b>#__fields_values</b> table'));
 			}
 		}
@@ -128,7 +128,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove look add queued success message.
+				// If successfully remove look add queued success message.
 				$app->enqueueMessage(JText::_('The field groups with type (com_demo.look) context was removed from the <b>#__fields_groups</b> table'));
 			}
 		}
@@ -160,7 +160,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove look add queued success message.
+				// If successfully remove look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__content_type</b> table'));
 			}
 
@@ -175,7 +175,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove look add queued success message.
+				// If successfully remove look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__contentitem_tag_map</b> table'));
 			}
 
@@ -190,7 +190,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove look add queued success message.
+				// If successfully removed look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__ucm_content</b> table'));
 			}
 
@@ -246,7 +246,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove Look add queued success message.
+				// If successfully remove Look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__content_type</b> table'));
 			}
 
@@ -261,7 +261,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove Look add queued success message.
+				// If successfully remove Look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__contentitem_tag_map</b> table'));
 			}
 
@@ -276,7 +276,7 @@ class com_demoInstallerScript
 			$look_done = $db->execute();
 			if ($look_done)
 			{
-				// If succesfully remove Look add queued success message.
+				// If successfully removed Look add queued success message.
 				$app->enqueueMessage(JText::_('The (com_demo.look) type alias was removed from the <b>#__ucm_content</b> table'));
 			}
 
@@ -320,10 +320,31 @@ class com_demoInstallerScript
 		$look_done = $db->execute();
 		if ($look_done)
 		{
-			// If succesfully remove demo add queued success message.
+			// If successfully removed demo add queued success message.
 			$app->enqueueMessage(JText::_('All related items was removed from the <b>#__assets</b> table'));
 		}
 
+		// Get the biggest rule column in the assets table at this point.
+		$get_rule_length = "SELECT CHAR_LENGTH(`rules`) as rule_size FROM #__assets ORDER BY rule_size DESC LIMIT 1";
+		$db->setQuery($get_rule_length);
+		if ($db->execute())
+		{
+			$rule_length = $db->loadResult();
+			// Check the size of the rules column
+			if ($rule_length < 5120)
+			{
+				// Revert the assets table rules column back to the default
+				$revert_rule = "ALTER TABLE `#__assets` CHANGE `rules` `rules` varchar(5120) NOT NULL COMMENT 'JSON encoded access control.';";
+				$db->setQuery($revert_rule);
+				$db->execute();
+				$app->enqueueMessage(JText::_('Reverted the <b>#__assets</b> table rules column back to its default size of varchar(5120)'));
+			}
+			else
+			{
+
+				$app->enqueueMessage(JText::_('Could not revert the <b>#__assets</b> table rules column back to its default size of varchar(5120), since there is still one or more components that still requires the column to be larger.'));
+			}
+		}
 
 		// Set db if not set already.
 		if (!isset($db))
@@ -460,9 +481,9 @@ class com_demoInstallerScript
 			$look->type_title = 'Demo Look';
 			$look->type_alias = 'com_demo.look';
 			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","not_required":"not_required","alias":"alias"}}';
+			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","alias":"alias"}}';
 			$look->router = 'DemoHelperRoute::getLookRoute';
-			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
+			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
 
 			// Set the object into the content types table.
 			$look_Inserted = $db->insertObject('#__content_types', $look);
@@ -500,6 +521,22 @@ class com_demoInstallerScript
 		// Get Application object
 		$app = JFactory::getApplication();
 		$app->enqueueMessage('This is a demo component developed in <a href="http://vdm.bz/component-builder" taget="_balnk" title="Joomla Component Builder">JCB</a>! You can build more components like this with JCB, checkout our page on <a href="https://github.com/vdm-io/Joomla-Component-Builder" taget="_balnk" title="Joomla Component Builder">github</a> for more info. The future of <a href="http://vdm.bz/component-builder" taget="_balnk" title="Joomla Component Builder">Joomla Component Development</a> is Here!', 'Info');
+			// Get the biggest rule column in the assets table at this point.
+			$get_rule_length = "SELECT CHAR_LENGTH(`rules`) as rule_size FROM #__assets ORDER BY rule_size DESC LIMIT 1";
+			$db->setQuery($get_rule_length);
+			if ($db->execute())
+			{
+				$rule_length = $db->loadResult();
+				// Check the size of the rules column
+				if ($rule_length <= 5600)
+				{
+					// Fix the assets table rules column size
+					$fix_rules_size = "ALTER TABLE `#__assets` CHANGE `rules` `rules` TEXT NOT NULL COMMENT 'JSON encoded access control. Enlarged to TEXT by JCB';";
+					$db->setQuery($fix_rules_size);
+					$db->execute();
+					$app->enqueueMessage(JText::_('The <b>#__assets</b> table rules column was resized to the TEXT datatype for the components possible large permission rules.'));
+				}
+			}
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>';
@@ -545,9 +582,9 @@ class com_demoInstallerScript
 			$look->type_title = 'Demo Look';
 			$look->type_alias = 'com_demo.look';
 			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","not_required":"not_required","alias":"alias"}}';
+			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","alias":"alias"}}';
 			$look->router = 'DemoHelperRoute::getLookRoute';
-			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version","not_required"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
+			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
 
 			// Check if look type is already in content_type DB.
 			$look_id = null;
@@ -573,7 +610,7 @@ class com_demoInstallerScript
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>
-				<h3>Upgrade to Version 2.0.2 Was Successful! Let us know if anything is not working as expected.</h3>';
+				<h3>Upgrade to Version 2.0.3 Was Successful! Let us know if anything is not working as expected.</h3>';
 
 			// Set db if not set already.
 			if (!isset($db))

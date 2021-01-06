@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -63,8 +63,8 @@ class DemoModelDemo extends JModelList
 							$viewName 	= $name;
 							$alt 		= $name;
 							$url 		= $url;
-							$image 		= $name.'.'.$type;
-							$name 		= 'COM_DEMO_DASHBOARD_'.DemoHelper::safeString($name,'U');
+							$image 		= $name . '.' . $type;
+							$name 		= 'COM_DEMO_DASHBOARD_' . DemoHelper::safeString($name,'U');
 						}
 					}
 					// internal views
@@ -86,17 +86,27 @@ class DemoModelDemo extends JModelList
 							switch($action)
 							{
 								case 'add':
-									$url 	= 'index.php?option=com_demo&view='.$name.'&layout=edit';
-									$image 	= $name.'_'.$action.'.'.$type;
-									$alt 	= $name.'&nbsp;'.$action;
+									$url	= 'index.php?option=com_demo&view=' . $name . '&layout=edit';
+									$image	= $name . '_' . $action.  '.' . $type;
+									$alt	= $name . '&nbsp;' . $action;
 									$name	= 'COM_DEMO_DASHBOARD_'.DemoHelper::safeString($name,'U').'_ADD';
 									$add	= true;
 								break;
 								default:
-									$url 	= 'index.php?option=com_categories&view=categories&extension=com_demo.'.$name;
-									$image 	= $name.'_'.$action.'.'.$type;
-									$alt 	= $name.'&nbsp;'.$action;
-									$name	= 'COM_DEMO_DASHBOARD_'.DemoHelper::safeString($name,'U').'_'.DemoHelper::safeString($action,'U');
+									// check for new convention (more stable)
+									if (strpos($action, '_qpo0O0oqp_') !== false)
+									{
+										list($action, $extension) = (array) explode('_qpo0O0oqp_', $action);
+										$extension = str_replace('_po0O0oq_', '.', $extension);
+									}
+									else
+									{
+										$extension = 'com_demo.' . $name;
+									}
+									$url	= 'index.php?option=com_categories&view=categories&extension=' . $extension;
+									$image	= $name . '_' . $action . '.' . $type;
+									$alt	= $viewName . '&nbsp;' . $action;
+									$name	= 'COM_DEMO_DASHBOARD_' . DemoHelper::safeString($name,'U') . '_' . DemoHelper::safeString($action,'U');
 								break;
 							}
 						}
@@ -104,9 +114,9 @@ class DemoModelDemo extends JModelList
 						{
 							$viewName 	= $name;
 							$alt 		= $name;
-							$url 		= 'index.php?option=com_demo&view='.$name;
-							$image 		= $name.'.'.$type;
-							$name 		= 'COM_DEMO_DASHBOARD_'.DemoHelper::safeString($name,'U');
+							$url 		= 'index.php?option=com_demo&view=' . $name;
+							$image 		= $name . '.' . $type;
+							$name 		= 'COM_DEMO_DASHBOARD_' . DemoHelper::safeString($name,'U');
 							$hover		= false;
 						}
 					}
@@ -114,8 +124,8 @@ class DemoModelDemo extends JModelList
 					{
 						$viewName 	= $view;
 						$alt 		= $view;
-						$url 		= 'index.php?option=com_demo&view='.$view;
-						$image 		= $view.'.png';
+						$url 		= 'index.php?option=com_demo&view=' . $view;
+						$image 		= $view . '.png';
 						$name 		= ucwords($view).'<br /><br />';
 						$hover		= false;
 					}
@@ -127,7 +137,7 @@ class DemoModelDemo extends JModelList
 						$dashboard_list = false;
 						$accessTo = '';
 						$accessAdd = '';
-						// acces checking start
+						// access checking start
 						$accessCreate = (isset($viewAccess[$viewName.'.create'])) ? DemoHelper::checkString($viewAccess[$viewName.'.create']):false;
 						$accessAccess = (isset($viewAccess[$viewName.'.access'])) ? DemoHelper::checkString($viewAccess[$viewName.'.access']):false;
 						// set main controllers
@@ -142,7 +152,7 @@ class DemoModelDemo extends JModelList
 						{
 							$accessAdd = 'core.create';
 						}
-						// check if acces to view is set
+						// check if access to view is set
 						if ($accessAccess)
 						{
 							$accessTo = $viewAccess[$viewName.'.access'];

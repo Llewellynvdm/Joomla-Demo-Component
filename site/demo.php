@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.2
-	@build			30th May, 2020
+	@version		2.0.3
+	@build			6th January, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -20,6 +20,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
 JHtml::_('behavior.tabstate');
 
 // Set the component css/js
@@ -28,7 +29,7 @@ $document->addStyleSheet('components/com_demo/assets/css/site.css');
 $document->addScript('components/com_demo/assets/js/site.js');
 
 // Require helper files
-JLoader::register('DemoHelper', __DIR__ . '/helpers/demo.php'); 
+JLoader::register('DemoHelper', __DIR__ . '/helpers/demo.php');
 JLoader::register('DemoHelperRoute', __DIR__ . '/helpers/route.php'); 
 
 // Get an instance of the controller prefixed by Demo
