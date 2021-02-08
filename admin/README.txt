@@ -10,7 +10,7 @@ Just a basic demo of the most basic implementations of the [Joomla](http://www.j
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Demo](https://www.vdm.io/)
 + *First Build*: 18th October, 2016
-+ *Last Build*: 6th January, 2021
++ *Last Build*: 8th February, 2021
 + *Version*: 2.0.3
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,11 +23,11 @@ due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **16679**
-+ *File count*: **154**
++ *Line count*: **16831**
++ *File count*: **156**
 + *Folder count*: **57**
 
-**30 Hours** or **4 Eight Hour Days** (the actual time the author spent)
+**31 Hours** or **4 Eight Hour Days** (the actual time the author spent)
 
 > (with the following break down:
 > **debugging @12hours** = codingtime / 4;
@@ -35,7 +35,7 @@ due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder
 > **mapping @5hours** = codingtime / 10;
 > **office @8hours** = codingtime / 6;)
 
-**77 Hours** or **10 Eight Hour Days**
+**78 Hours** or **10 Eight Hour Days**
 (a total of the realistic time frame for this project)
 
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,

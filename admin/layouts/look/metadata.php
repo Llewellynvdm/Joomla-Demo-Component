@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			6th January, 2021
+	@build			8th February, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		metadata.php
