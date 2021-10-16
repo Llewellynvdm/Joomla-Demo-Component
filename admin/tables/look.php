@@ -48,7 +48,7 @@ class DemoTableLook extends JTable
 		parent::__construct('#__demo_look', 'id', $db);
 
 		// Adding History Options
-		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look'));
+//		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look'));
 	}	
  
 	public function bind($array, $ignore = '')
@@ -332,7 +332,7 @@ class DemoTableLook extends JTable
 			$this->alias = $this->name;
 		}
 
-		$this->alias = JApplication::stringURLSafe($this->alias);
+		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 
 		if (trim(str_replace('-', '', $this->alias)) == '')
 		{

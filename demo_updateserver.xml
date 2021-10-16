@@ -33,6 +33,23 @@
 		<maintainerurl>https://www.vdm.io/</maintainerurl>
 		<targetplatform name="joomla" version="3.*"/>
 	</update>
+        	<update>
+		<name>Demo</name>
+		<description>Demo Component</description>
+		<element>com_demo</element>
+		<type>component</type>
+		<version>2.0.3</version>
+		<infourl title="Demo!">https://www.vdm.io/</infourl>
+		<downloads>
+			<downloadurl type="full" format="zip">http://domain.com/demo.zip</downloadurl>
+		</downloads>
+		<tags>
+			<tag>stable</tag>
+		</tags>
+		<maintainer>Llewellyn van der Merwe</maintainer>
+		<maintainerurl>https://www.vdm.io/</maintainerurl>
+		<targetplatform name="joomla" version="3.*" />
+	</update>
 	<update>
 		<name>Demo</name>
 		<description>Demo Component</description>
@@ -48,6 +65,6 @@
 		</tags>
 		<maintainer>Llewellyn van der Merwe</maintainer>
 		<maintainerurl>https://www.vdm.io/</maintainerurl>
-		<targetplatform name="joomla" version="3.*"/>
+		<targetplatform name="joomla" version="4.*" />
 	</update>
 </updates>

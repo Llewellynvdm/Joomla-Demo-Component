@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.2" method="upgrade">
+<extension type="component" version="4.0" method="upgrade">
 	<name>COM_DEMO</name>
 	<creationDate>8th February, 2021</creationDate>
 	<author>Llewellyn van der Merwe</author>

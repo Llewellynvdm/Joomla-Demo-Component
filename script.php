@@ -21,7 +21,17 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-JHTML::_('behavior.modal');
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Installer\Adapter\ComponentAdapter;
+//use Joomla\CMS\Installer\InstallerScript;
+//use Joomla\CMS\Filesystem\File;
+//use Joomla\CMS\Filesystem\Folder;
+//use Joomla\CMS\Installer\InstallerAdapter;
+//use Joomla\CMS\Language\Text;
+//use Joomla\CMS\Table\Table;
+
+HTMLHelper::_('bootstrap.renderModal');
 
 /**
  * Script File of Demo Component
@@ -33,7 +43,7 @@ class com_demoInstallerScript
 	 *
 	 * @param   JAdapterInstance  $parent  The object responsible for running this script
 	 */
-	public function __construct(JAdapterInstance $parent) {}
+	public function __construct(ComponentAdapter $parent) {}
 
 	/**
 	 * Called on installation
@@ -42,20 +52,20 @@ class com_demoInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function install(JAdapterInstance $parent) {}
+	public function install(ComponentAdapter $parent) {}
 
 	/**
 	 * Called on uninstallation
 	 *
 	 * @param   JAdapterInstance  $parent  The object responsible for running this script
 	 */
-	public function uninstall(JAdapterInstance $parent)
+	public function uninstall(ComponentAdapter $parent)
 	{
 		// Get Application object
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get The Database object
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Create a new query object.
 		$query = $db->getQuery(true);
@@ -325,36 +335,36 @@ class com_demoInstallerScript
 		}
 
 		// Get the biggest rule column in the assets table at this point.
-		$get_rule_length = "SELECT CHAR_LENGTH(`rules`) as rule_size FROM #__assets ORDER BY rule_size DESC LIMIT 1";
-		$db->setQuery($get_rule_length);
-		if ($db->execute())
-		{
-			$rule_length = $db->loadResult();
-			// Check the size of the rules column
-			if ($rule_length < 5120)
-			{
-				// Revert the assets table rules column back to the default
-				$revert_rule = "ALTER TABLE `#__assets` CHANGE `rules` `rules` varchar(5120) NOT NULL COMMENT 'JSON encoded access control.';";
-				$db->setQuery($revert_rule);
-				$db->execute();
-				$app->enqueueMessage(JText::_('Reverted the <b>#__assets</b> table rules column back to its default size of varchar(5120)'));
-			}
-			else
-			{
-
-				$app->enqueueMessage(JText::_('Could not revert the <b>#__assets</b> table rules column back to its default size of varchar(5120), since there is still one or more components that still requires the column to be larger.'));
-			}
-		}
+//		$get_rule_length = "SELECT CHAR_LENGTH(`rules`) as rule_size FROM #__assets ORDER BY rule_size DESC LIMIT 1";
+//		$db->setQuery($get_rule_length);
+//		if ($db->execute())
+//		{
+//			$rule_length = $db->loadResult();
+//			// Check the size of the rules column
+//			if ($rule_length < 5120)
+//			{
+//				// Revert the assets table rules column back to the default
+//				$revert_rule = "ALTER TABLE `#__assets` CHANGE `rules` `rules` varchar(5120) NOT NULL COMMENT 'JSON encoded access control.';";
+//				$db->setQuery($revert_rule);
+//				$db->execute();
+//				$app->enqueueMessage(JText::_('Reverted the <b>#__assets</b> table rules column back to its default size of varchar(5120)'));
+//			}
+//			else
+//			{
+//
+//				$app->enqueueMessage(JText::_('Could not revert the <b>#__assets</b> table rules column back to its default size of varchar(5120), since there is still one or more components that still requires the column to be larger.'));
+//			}
+//		}
 
 		// Set db if not set already.
 		if (!isset($db))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 		}
 		// Set app if not set already.
 		if (!isset($app))
 		{
-			$app = JFactory::getApplication();
+			$app = Factory::getApplication();
 		}
 		// Remove Demo from the action_logs_extensions table
 		$demo_action_logs_extensions = array( $db->quoteName('extension') . ' = ' . $db->quote('com_demo') );
@@ -374,12 +384,12 @@ class com_demoInstallerScript
 		// Set db if not set already.
 		if (!isset($db))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 		}
 		// Set app if not set already.
 		if (!isset($app))
 		{
-			$app = JFactory::getApplication();
+			$app = Factory::getApplication();
 		}
 		// Remove Demo Look from the action_log_config table
 		$look_action_log_config = array( $db->quoteName('type_alias') . ' = '. $db->quote('com_demo.look') );
@@ -410,7 +420,7 @@ class com_demoInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function update(JAdapterInstance $parent){}
+	public function update(ComponentAdapter $parent){}
 
 	/**
 	 * Called before any type of action
@@ -420,10 +430,10 @@ class com_demoInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function preflight($type, JAdapterInstance $parent)
+	public function preflight($type, ComponentAdapter $parent)
 	{
 		// get application
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		// is redundant or so it seems ...hmmm let me know if it works again
 		if ($type === 'uninstall')
 		{
@@ -463,10 +473,10 @@ class com_demoInstallerScript
 	 *
 	 * @return  boolean  True on success
 	 */
-	public function postflight($type, JAdapterInstance $parent)
+	public function postflight($type, ComponentAdapter $parent)
 	{
 		// get application
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		// We check if we have dynamic folders to copy
 		$this->setDynamicF0ld3rs($app, $parent);
 		// set the default component settings
@@ -474,34 +484,34 @@ class com_demoInstallerScript
 		{
 
 			// Get The Database object
-			$db = JFactory::getDbo();
-
-			// Create the look content type object.
-			$look = new stdClass();
-			$look->type_title = 'Demo Look';
-			$look->type_alias = 'com_demo.look';
-			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","alias":"alias"}}';
-			$look->router = 'DemoHelperRoute::getLookRoute';
-			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
-
-			// Set the object into the content types table.
-			$look_Inserted = $db->insertObject('#__content_types', $look);
+			$db = Factory::getDbo();
+//
+//			// Create the look content type object.
+//			$look = new stdClass();
+//			$look->type_title = 'Demo Look';
+//			$look->type_alias = 'com_demo.look';
+//			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
+//			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","alias":"alias"}}';
+//			$look->router = 'DemoHelperRoute::getLookRoute';
+//			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
+//
+//			// Set the object into the content types table.
+//			$look_Inserted = $db->insertObject('#__content_types', $look);
 
 
 			// Install the global extenstion assets permission.
-			$query = $db->getQuery(true);
+//			$query = $db->getQuery(true);
 			// Field to update.
-			$fields = array(
-				$db->quoteName('rules') . ' = ' . $db->quote('{"site.looks.access":{"1":1}}'),
-			);
+//			$fields = array(
+//				$db->quoteName('rules') . ' = ' . $db->quote('{"site.looks.access":{"1":1}}'),
+//			);
 			// Condition.
-			$conditions = array(
-				$db->quoteName('name') . ' = ' . $db->quote('com_demo')
-			);
-			$query->update($db->quoteName('#__assets'))->set($fields)->where($conditions);
-			$db->setQuery($query);
-			$allDone = $db->execute();
+//			$conditions = array(
+//				$db->quoteName('name') . ' = ' . $db->quote('com_demo')
+//			);
+//			$query->update($db->quoteName('#__assets'))->set($fields)->where($conditions);
+//			$db->setQuery($query);
+//			$allDone = $db->execute();
 
 			// Install the global extenstion params.
 			$query = $db->getQuery(true);
@@ -519,92 +529,92 @@ class com_demoInstallerScript
 
 
 		// Get Application object
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$app->enqueueMessage('This is a demo component developed in <a href="http://vdm.bz/component-builder" taget="_balnk" title="Joomla Component Builder">JCB</a>! You can build more components like this with JCB, checkout our page on <a href="https://github.com/vdm-io/Joomla-Component-Builder" taget="_balnk" title="Joomla Component Builder">github</a> for more info. The future of <a href="http://vdm.bz/component-builder" taget="_balnk" title="Joomla Component Builder">Joomla Component Development</a> is Here!', 'Info');
-			// Get the biggest rule column in the assets table at this point.
-			$get_rule_length = "SELECT CHAR_LENGTH(`rules`) as rule_size FROM #__assets ORDER BY rule_size DESC LIMIT 1";
-			$db->setQuery($get_rule_length);
-			if ($db->execute())
-			{
-				$rule_length = $db->loadResult();
-				// Check the size of the rules column
-				if ($rule_length <= 5600)
-				{
-					// Fix the assets table rules column size
-					$fix_rules_size = "ALTER TABLE `#__assets` CHANGE `rules` `rules` TEXT NOT NULL COMMENT 'JSON encoded access control. Enlarged to TEXT by JCB';";
-					$db->setQuery($fix_rules_size);
-					$db->execute();
-					$app->enqueueMessage(JText::_('The <b>#__assets</b> table rules column was resized to the TEXT datatype for the components possible large permission rules.'));
-				}
-			}
-			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
-				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
-				</a>';
+//			// Get the biggest rule column in the assets table at this point.
+//			$get_rule_length = "SELECT CHAR_LENGTH(`rules`) as rule_size FROM #__assets ORDER BY rule_size DESC LIMIT 1";
+//			$db->setQuery($get_rule_length);
+//			if ($db->execute())
+//			{
+//				$rule_length = $db->loadResult();
+//				// Check the size of the rules column
+//				if ($rule_length <= 5600)
+//				{
+//					// Fix the assets table rules column size
+//					$fix_rules_size = "ALTER TABLE `#__assets` CHANGE `rules` `rules` TEXT NOT NULL COMMENT 'JSON encoded access control. Enlarged to TEXT by JCB';";
+//					$db->setQuery($fix_rules_size);
+//					$db->execute();
+//					$app->enqueueMessage(JText::_('The <b>#__assets</b> table rules column was resized to the TEXT datatype for the components possible large permission rules.'));
+//				}
+//			}
+//			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
+//				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
+//				</a>';
 
 			// Set db if not set already.
-			if (!isset($db))
-			{
-				$db = JFactory::getDbo();
-			}
-			// Create the demo action logs extensions object.
-			$demo_action_logs_extensions = new stdClass();
-			$demo_action_logs_extensions->extension = 'com_demo';
-
-			// Set the object into the action logs extensions table.
-			$demo_action_logs_extensions_Inserted = $db->insertObject('#__action_logs_extensions', $demo_action_logs_extensions);
-
-			// Set db if not set already.
-			if (!isset($db))
-			{
-				$db = JFactory::getDbo();
-			}
-			// Create the look action log config object.
-			$look_action_log_config = new stdClass();
-			$look_action_log_config->type_title = 'LOOK';
-			$look_action_log_config->type_alias = 'com_demo.look';
-			$look_action_log_config->id_holder = 'id';
-			$look_action_log_config->title_holder = 'name';
-			$look_action_log_config->table_name = '#__demo_look';
-			$look_action_log_config->text_prefix = 'COM_DEMO';
-
-			// Set the object into the action log config table.
-			$look_Inserted = $db->insertObject('#__action_log_config', $look_action_log_config);
+//			if (!isset($db))
+//			{
+//				$db = Factory::getDbo();
+//			}
+//			// Create the demo action logs extensions object.
+//			$demo_action_logs_extensions = new stdClass();
+//			$demo_action_logs_extensions->extension = 'com_demo';
+//
+//			// Set the object into the action logs extensions table.
+//			$demo_action_logs_extensions_Inserted = $db->insertObject('#__action_logs_extensions', $demo_action_logs_extensions);
+//
+//			// Set db if not set already.
+//			if (!isset($db))
+//			{
+//				$db = Factory::getDbo();
+//			}
+//			// Create the look action log config object.
+//			$look_action_log_config = new stdClass();
+//			$look_action_log_config->type_title = 'LOOK';
+//			$look_action_log_config->type_alias = 'com_demo.look';
+//			$look_action_log_config->id_holder = 'id';
+//			$look_action_log_config->title_holder = 'name';
+//			$look_action_log_config->table_name = '#__demo_look';
+//			$look_action_log_config->text_prefix = 'COM_DEMO';
+//
+//			// Set the object into the action log config table.
+//			$look_Inserted = $db->insertObject('#__action_log_config', $look_action_log_config);
 		}
 		// do any updates needed
 		if ($type === 'update')
 		{
 
 			// Get The Database object
-			$db = JFactory::getDbo();
+//			$db = Factory::getDbo();
 
 			// Create the look content type object.
-			$look = new stdClass();
-			$look->type_title = 'Demo Look';
-			$look->type_alias = 'com_demo.look';
-			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
-			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","alias":"alias"}}';
-			$look->router = 'DemoHelperRoute::getLookRoute';
-			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
+//			$look = new stdClass();
+//			$look->type_title = 'Demo Look';
+//			$look->type_alias = 'com_demo.look';
+//			$look->table = '{"special": {"dbtable": "#__demo_look","key": "id","type": "Look","prefix": "demoTable","config": "array()"},"common": {"dbtable": "#__ucm_content","key": "ucm_id","type": "Corecontent","prefix": "JTable","config": "array()"}}';
+//			$look->field_mappings = '{"common": {"core_content_item_id": "id","core_title": "name","core_state": "published","core_alias": "alias","core_created_time": "created","core_modified_time": "modified","core_body": "null","core_hits": "hits","core_publish_up": "null","core_publish_down": "null","core_access": "access","core_params": "params","core_featured": "null","core_metadata": "metadata","core_language": "null","core_images": "null","core_urls": "null","core_version": "version","core_ordering": "ordering","core_metakey": "metakey","core_metadesc": "metadesc","core_catid": "null","core_xreference": "null","asset_id": "asset_id"},"special": {"name":"name","description":"description","website":"website","image":"image","dateofbirth":"dateofbirth","mobile_phone":"mobile_phone","email":"email","add":"add","alias":"alias"}}';
+//			$look->router = 'DemoHelperRoute::getLookRoute';
+//			$look->content_history_options = '{"formFile": "administrator/components/com_demo/models/forms/look.xml","hideFields": ["asset_id","checked_out","checked_out_time","version"],"ignoreChanges": ["modified_by","modified","checked_out","checked_out_time","version","hits"],"convertToInt": ["published","ordering","add"],"displayLookup": [{"sourceColumn": "created_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"},{"sourceColumn": "access","targetTable": "#__viewlevels","targetColumn": "id","displayColumn": "title"},{"sourceColumn": "modified_by","targetTable": "#__users","targetColumn": "id","displayColumn": "name"}]}';
 
 			// Check if look type is already in content_type DB.
-			$look_id = null;
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('type_id')));
-			$query->from($db->quoteName('#__content_types'));
-			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($look->type_alias));
-			$db->setQuery($query);
-			$db->execute();
-
-			// Set the object into the content types table.
-			if ($db->getNumRows())
-			{
-				$look->type_id = $db->loadResult();
-				$look_Updated = $db->updateObject('#__content_types', $look, 'type_id');
-			}
-			else
-			{
-				$look_Inserted = $db->insertObject('#__content_types', $look);
-			}
+//			$look_id = null;
+//			$query = $db->getQuery(true);
+//			$query->select($db->quoteName(array('type_id')));
+//			$query->from($db->quoteName('#__content_types'));
+//			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($look->type_alias));
+//			$db->setQuery($query);
+//			$db->execute();
+//
+//			// Set the object into the content types table.
+//			if ($db->getNumRows())
+//			{
+//				$look->type_id = $db->loadResult();
+//				$look_Updated = $db->updateObject('#__content_types', $look, 'type_id');
+//			}
+//			else
+//			{
+//				$look_Inserted = $db->insertObject('#__content_types', $look);
+//			}
 
 
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
@@ -613,61 +623,61 @@ class com_demoInstallerScript
 				<h3>Upgrade to Version 2.0.3 Was Successful! Let us know if anything is not working as expected.</h3>';
 
 			// Set db if not set already.
-			if (!isset($db))
-			{
-				$db = JFactory::getDbo();
-			}
-			// Create the demo action logs extensions object.
-			$demo_action_logs_extensions = new stdClass();
-			$demo_action_logs_extensions->extension = 'com_demo';
-
-			// Check if demo action log extension is already in action logs extensions DB.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('id')));
-			$query->from($db->quoteName('#__action_logs_extensions'));
-			$query->where($db->quoteName('extension') . ' LIKE '. $db->quote($demo_action_logs_extensions->extension));
-			$db->setQuery($query);
-			$db->execute();
-
-			// Set the object into the action logs extensions table if not found.
-			if (!$db->getNumRows())
-			{
-				$demo_action_logs_extensions_Inserted = $db->insertObject('#__action_logs_extensions', $demo_action_logs_extensions);
-			}
-
-			// Set db if not set already.
-			if (!isset($db))
-			{
-				$db = JFactory::getDbo();
-			}
-			// Create the look action log config object.
-			$look_action_log_config = new stdClass();
-			$look_action_log_config->id = null;
-			$look_action_log_config->type_title = 'LOOK';
-			$look_action_log_config->type_alias = 'com_demo.look';
-			$look_action_log_config->id_holder = 'id';
-			$look_action_log_config->title_holder = 'name';
-			$look_action_log_config->table_name = '#__demo_look';
-			$look_action_log_config->text_prefix = 'COM_DEMO';
-
-			// Check if look action log config is already in action_log_config DB.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('id')));
-			$query->from($db->quoteName('#__action_log_config'));
-			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($look_action_log_config->type_alias));
-			$db->setQuery($query);
-			$db->execute();
-
+//			if (!isset($db))
+//			{
+//				$db = Factory::getDbo();
+//			}
+//			// Create the demo action logs extensions object.
+//			$demo_action_logs_extensions = new stdClass();
+//			$demo_action_logs_extensions->extension = 'com_demo';
+//
+//			// Check if demo action log extension is already in action logs extensions DB.
+//			$query = $db->getQuery(true);
+//			$query->select($db->quoteName(array('id')));
+//			$query->from($db->quoteName('#__action_logs_extensions'));
+//			$query->where($db->quoteName('extension') . ' LIKE '. $db->quote($demo_action_logs_extensions->extension));
+//			$db->setQuery($query);
+//			$db->execute();
+//
+//			// Set the object into the action logs extensions table if not found.
+//			if (!$db->getNumRows())
+//			{
+//				$demo_action_logs_extensions_Inserted = $db->insertObject('#__action_logs_extensions', $demo_action_logs_extensions);
+//			}
+//
+//			// Set db if not set already.
+//			if (!isset($db))
+//			{
+//				$db = Factory::getDbo();
+//			}
+//			// Create the look action log config object.
+//			$look_action_log_config = new stdClass();
+//			$look_action_log_config->id = null;
+//			$look_action_log_config->type_title = 'LOOK';
+//			$look_action_log_config->type_alias = 'com_demo.look';
+//			$look_action_log_config->id_holder = 'id';
+//			$look_action_log_config->title_holder = 'name';
+//			$look_action_log_config->table_name = '#__demo_look';
+//			$look_action_log_config->text_prefix = 'COM_DEMO';
+//
+//			// Check if look action log config is already in action_log_config DB.
+//			$query = $db->getQuery(true);
+//			$query->select($db->quoteName(array('id')));
+//			$query->from($db->quoteName('#__action_log_config'));
+//			$query->where($db->quoteName('type_alias') . ' LIKE '. $db->quote($look_action_log_config->type_alias));
+//			$db->setQuery($query);
+//			$db->execute();
+//
 			// Set the object into the content types table.
-			if ($db->getNumRows())
-			{
-				$look_action_log_config->id = $db->loadResult();
-				$look_action_log_config_Updated = $db->updateObject('#__action_log_config', $look_action_log_config, 'id');
-			}
-			else
-			{
-				$look_action_log_config_Inserted = $db->insertObject('#__action_log_config', $look_action_log_config);
-			}
+//			if ($db->getNumRows())
+//			{
+//				$look_action_log_config->id = $db->loadResult();
+//				$look_action_log_config_Updated = $db->updateObject('#__action_log_config', $look_action_log_config, 'id');
+//			}
+//			else
+//			{
+//				$look_action_log_config_Inserted = $db->insertObject('#__action_log_config', $look_action_log_config);
+//			}
 		}
 		return true;
 	}

@@ -21,239 +21,184 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Component\Router\RouterView;
+use Joomla\CMS\Component\Router\RouterViewConfiguration;
+use Joomla\CMS\Component\Router\Rules\MenuRules;
+use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Component\Router\Rules\NomenuRules;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Menu\SiteMenu;
+
 /**
  * Routing class from com_demo
  *
  * @since  3.3
  */
-class DemoRouter extends JComponentRouterBase
+class DemoRouter extends RouterView
 {	
-	/**
-	 * Build the route for the com_demo component
+    /**
+	 * The database driver
 	 *
-	 * @param   array  &$query  An array of URL arguments
-	 *
-	 * @return  array  The URL arguments to use to assemble the subsequent URL.
-	 *
-	 * @since   3.3
+	 * @var    \JDatabaseDriver
+	 * @since  1.0
 	 */
-	public function build(&$query)
+	protected $db;
+
+	/**
+	 * Search Component router constructor
+	 *
+	 * @param   CMSApplication  $app   The application object
+	 * @param   SiteMenu        $menu  The menu object to work with
+	 */
+	public function __construct($app = null, $menu = null)
 	{
-		$segments = array();
+		$this->db = Factory::getDbo();
 
-		// Get a menu item based on Itemid or currently active
-		$params = JComponentHelper::getParams('com_demo');
-		
-		if (empty($query['Itemid']))
-		{
-			$menuItem = $this->menu->getActive();
-		}
-		else
-		{
-			$menuItem = $this->menu->getItem($query['Itemid']);
-		}
+		$looks = new RouterViewConfiguration('looks');
+		$this->registerView($looks);
 
-		$mView = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
-		$mId = (empty($menuItem->query['id'])) ? null : $menuItem->query['id'];
+		$look = (new RouterViewConfiguration('look'))
+			->setParent($looks)
+			->setKey('id');
+		$this->registerView($look);
 
-		if (isset($query['view']))
-		{
-			$view = $query['view'];
+		$looking = (new RouterViewConfiguration('looking'))
+			->setParent($look, 'id')
+			->setKey('id');
 
-			if (empty($query['Itemid']))
-			{
-				$segments[] = $query['view'];
-			}
+		$this->registerView($looking);
 
-			unset($query['view']);
-		}
-		
-		// Are we dealing with a item that is attached to a menu item?
-		if (isset($view) && ($mView == $view) and (isset($query['id'])) and ($mId == (int) $query['id']))
-		{
-			unset($query['view']);
-			unset($query['catid']);
-			unset($query['id']);
-			return $segments;
-		}
+		$export = (new RouterViewConfiguration('export'))
+			->setKey('cms_version');
+		$this->registerView($export);
 
-		if (isset($view) && isset($query['id']) && ($view === 'look' || $view === 'looks' || $view === 'looking'))
-		{
-			if ($mId != (int) $query['id'] || $mView != $view)
-			{
-				if (($view === 'look' || $view === 'looks' || $view === 'looking'))
-				{
-					$segments[] = $view;
-					$id = explode(':', $query['id']);
-					if (count($id) == 2)
-					{
-						$segments[] = $id[1];
-					}
-					else
-					{
-						$segments[] = $id[0];
-					}
-				}
-			}
-			unset($query['id']);
-		}
-		
-		$total = count($segments);
+		parent::__construct($app, $menu);
 
-		for ($i = 0; $i < $total; $i++)
-		{
-			$segments[$i] = str_replace(':', '-', $segments[$i]);
-		}
-
-		return $segments; 
-		
+		$this->attachRule(new MenuRules($this));
+		$this->attachRule(new StandardRules($this));
+		$this->attachRule(new NomenuRules($this));
 	}
 
 	/**
-	 * Parse the segments of a URL.
+	 * Method to get the segment(s) for looks
 	 *
-	 * @param   array  &$segments  The segments of the URL to parse.
+	 * @param   string  $id     ID of the looks to retrieve the segments for
+	 * @param   array   $query  The request that is built right now
 	 *
-	 * @return  array  The URL attributes to be used by the application.
-	 *
-	 * @since   3.3
+	 * @return  array|string  The segments of this item
 	 */
-	public function parse(&$segments)
-	{		
-		$count = count($segments);
-		$vars = array();
-		
-		//Handle View and Identifier
-		switch($segments[0])
-		{
-			case 'look':
-				$vars['view'] = 'look';
-				if (is_numeric($segments[$count-1]))
-				{
-					$vars['id'] = (int) $segments[$count-1];
-				}
-				break;
-			case 'looks':
-				$vars['view'] = 'looks';
-				if (is_numeric($segments[$count-1]))
-				{
-					$vars['id'] = (int) $segments[$count-1];
-				}
-				elseif ($segments[$count-1])
-				{
-					$id = $this->getVar('look', $segments[$count-1], 'alias', 'id');
-					if($id)
-					{
-						$vars['id'] = $id;
-					}
-				}
-				break;
-			case 'looking':
-				$vars['view'] = 'looking';
-				if (is_numeric($segments[$count-1]))
-				{
-					$vars['id'] = (int) $segments[$count-1];
-				}
-				elseif ($segments[$count-1])
-				{
-					$id = $this->getVar('look', $segments[$count-1], 'alias', 'id');
-					if($id)
-					{
-						$vars['id'] = $id;
-					}
-				}
-				break;
-		}
-
-		return $vars;
-	} 
-
-	protected function getVar($table, $where = null, $whereString = null, $what = null, $category = false, $operator = '=', $main = 'demo')
+	public function getLooksSegment($id, $query)
 	{
-		if(!$where || !$what || !$whereString)
-		{
-			return false;
-		}
-		// Get a db connection.
-		$db = JFactory::getDbo();
-		// Create a new query object.
-		$query = $db->getQuery(true);
-
-		$query->select($db->quoteName(array($what)));
-		if ('categories' == $table || 'category' == $table || $category)
-		{
-			$getTable = '#__categories';
-			$query->from($db->quoteName($getTable));
-			// we need this to target the components categories (TODO will keep an eye on this)
-			$query->where($db->quoteName('extension') . ' LIKE '. $db->quote((string)'com_' . $main . '%'));
-		}
-		else
-		{
-			// we must check if the table exist (TODO not ideal)
-			$tables = $db->getTableList();
-			$app = JFactory::getApplication();
-			$prefix = $app->get('dbprefix');
-			$check = $prefix.$main.'_'.$table;
-			if (in_array($check, $tables))
-			{
-				$getTable = '#__'.$main.'_'.$table;
-				$query->from($db->quoteName($getTable));
-			}
-			else
-			{
-				return false;
-			}
-		}
-		if (is_numeric($where))
-		{
-			return false;
-		}
-		elseif ($this->checkString($where))
-		{
-			// we must first check if this table has the column
-			$columns = $db->getTableColumns($getTable);
-			if (isset($columns[$whereString]))
-			{
-				$query->where($db->quoteName($whereString) . ' '.$operator.' '. $db->quote((string)$where));
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-		$db->setQuery($query);
-		$db->execute();
-		if ($db->getNumRows())
-		{
-			return $db->loadResult();
-		}
-		return false;
+		return $this->getLookSegment($id, $query);
 	}
-	
-	protected function checkString($string)
+
+	/**
+	 * Method to get the segment(s) for  looks
+	 *
+	 * @param   string  $segment  Segment of the contact to retrieve the ID for
+	 * @param   array   $query    The request that is parsed right now
+	 *
+	 * @return  mixed   The id of this item or false
+	 */
+	public function getLooksId($segment, $query)
 	{
-		if (isset($string) && is_string($string) && strlen($string) > 0)
-		{
-			return true;
-		}
-		return false;
+		return $this->getLookId($segment, $query);
 	}
-}
 
-function DemoBuildRoute(&$query)
-{
-	$router = new DemoRouter;
-	
-	return $router->build($query);
-}
+	/**
+	 * Method to get the segment(s) for a look
+	 *
+	 * @param   string  $id     ID of the application to retrieve the segments for
+	 * @param   array   $query  The request that is built right now
+	 *
+	 * @return  array|string  The segments of this item
+	 */
+	public function getLookSegment($id, $query)
+	{
+		if (!strpos($id, ':'))
+		{
+			$dbquery = $this->db->getQuery(true);
+			$dbquery->select($this->db->quoteName('alias'))
+				->from($this->db->quoteName('#__demo_look'))
+				->where('id = ' . $dbquery->q((int) $id));
+			$this->db->setQuery($dbquery);
 
-function DemoParseRoute($segments)
-{
-	$router = new DemoRouter;
+			$id .= ':' . $this->db->loadResult();
+		}
 
-	return $router->parse($segments);
+		list($void, $segment) = explode(':', $id, 2);
+
+		return array($void => $segment);
+	}
+
+	/**
+	 * Method to get the segment(s) for an application
+	 *
+	 * @param   string  $segment  Segment of the application to retrieve the ID for
+	 * @param   array   $query    The request that is parsed right now
+	 *
+	 * @return  mixed   The id of this item or false
+	 */
+	public function getLookId($segment, $query)
+	{
+		$query = $this->db->getQuery(true);
+		$query->select($this->db->quoteName('id'))
+			->from($this->db->quoteName('#__demo_look'))
+			->where('alias = ' . $this->db->quote($segment));
+		$this->db->setQuery($query);
+
+		return (int) $this->db->loadResult();
+	}
+
+        	/**
+	 * Method to get the segment(s) for a looking
+	 *
+	 * @param   string  $id     ID of the looking to retrieve the segments for
+	 * @param   array   $query  The request that is built right now
+	 *
+	 * @return  array|string  The segments of this item
+	 */
+	public function getLookingSegment($id, $query)
+	{
+		if (!strpos($id, ':'))
+		{
+			$dbquery = $this->db->getQuery(true);
+			$dbquery->select($this->db->quoteName('alias'))
+				->from($this->db->quoteName('#__demo_look'))
+				->where('id = ' . $dbquery->q((int) $id));
+			$this->db->setQuery($dbquery);
+
+			$id .= ':' . $this->db->loadResult();
+		}
+
+		list($void, $segment) = explode(':', $id, 2);
+
+		return array($void => $segment);
+	}
+
+	/**
+	 * Method to get the segment(s) for a looking
+	 *
+	 * @param   string  $segment  Segment of the looking to retrieve the ID for
+	 * @param   array   $query    The request that is parsed right now
+	 *
+	 * @return  mixed   The id of this item or false
+	 */
+	public function getLookingId($segment, $query)
+	{
+		$dbQuery = $this->db->getQuery(true);
+		$dbQuery->select($this->db->quoteName('id'))
+			->from($this->db->quoteName('#__demo_look'))
+			->where(
+				[
+					$this->db->quoteName('alias') . ' = ' . $this->db->quote($segment),
+					$this->db->quoteName('id') . ' = ' . (int) $query['id'],
+				]
+			);;
+		$this->db->setQuery($dbQuery);
+
+		return (int) $this->db->loadResult();
+	}
+
 }
