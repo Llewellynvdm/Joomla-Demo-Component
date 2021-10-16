@@ -48,7 +48,7 @@ class DemoTableLook extends JTable
 		parent::__construct('#__demo_look', 'id', $db);
 
 		// Adding History Options
-		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look'));
+//		JTableObserverContenthistory::createObserver($this, array('typeAlias' => 'com_demo.look'));
 	}	
  
 	public function bind($array, $ignore = '')
