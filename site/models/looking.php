@@ -141,8 +141,8 @@ class DemoModelLooking extends JModelItem
 					return false;
 				}
 			// Load the JEvent Dispatcher
-			JPluginHelper::importPlugin('content');
-			$this->_dispatcher = JEventDispatcher::getInstance();
+//			JPluginHelper::importPlugin('content');
+//			$this->_dispatcher = JEventDispatcher::getInstance();
 				// Check if item has params, or pass whole item.
 				$params = (isset($data->params) && DemoHelper::checkJson($data->params)) ? json_decode($data->params) : $data;
 				// Make sure the content prepare plugins fire on description
