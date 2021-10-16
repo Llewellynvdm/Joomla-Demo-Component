@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__demo_look` (
 	`mobile_phone` VARCHAR(64) NOT NULL DEFAULT '',
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
 	`website` VARCHAR(255) NOT NULL DEFAULT '',
-	`params` text NOT NULL,
+	`params` text NULL,
 	`published` TINYINT(3) NOT NULL DEFAULT 1,
 	`created_by` INT(10) unsigned NOT NULL DEFAULT 0,
 	`modified_by` INT(10) unsigned NOT NULL DEFAULT 0,
