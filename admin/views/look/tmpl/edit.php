@@ -22,13 +22,13 @@
 defined('_JEXEC') or die('Restricted access');
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+//JHtml::_('behavior.tooltip');
+JHtml::_('behavior.formvalidator');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
 $componentParams = $this->params; // will be removed just use $this->params instead
 ?>
-<script type="text/javascript">
+<!--<script type="text/javascript">
 	// waiting spinner
 	var outerDiv = jQuery('body');
 	jQuery('<div id="loading"></div>')
@@ -50,7 +50,7 @@ $componentParams = $this->params; // will be removed just use $this->params inst
 		jQuery('#loading').hide();
 	});
 </script>
-<div id="demo_loader" style="display: none;">
+<div id="demo_loader" style="display: none;">-->
 <form action="<?php echo JRoute::_('index.php?option=com_demo&layout=edit&id='. (int) $this->item->id . $this->referral); ?>" method="post" name="adminForm" id="adminForm" class="form-validate" enctype="multipart/form-data">
 
 	<?php echo JLayoutHelper::render('look.details_above', $this); ?>
