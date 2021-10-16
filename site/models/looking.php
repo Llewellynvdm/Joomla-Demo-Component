@@ -149,7 +149,7 @@ class DemoModelLooking extends JModelItem
 				$_description = new stdClass();
 				$_description->text =& $data->description; // value must be in text
 				// Since all values are now in text (Joomla Limitation), we also add the field name (description) to context
-				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looking.description', &$_description, &$params, 0));
+//				$this->_dispatcher->trigger("onContentPrepare", array('com_demo.looking.description', &$_description, &$params, 0));
 				// Checking if description has uikit components that must be loaded.
 				$this->uikitComp = DemoHelper::getUikitComp($data->description,$this->uikitComp);
 
