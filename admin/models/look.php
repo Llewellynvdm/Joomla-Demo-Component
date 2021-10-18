@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -122,12 +122,6 @@ class DemoModelLook extends JModelAdmin
 				$registry = new Registry;
 				$registry->loadString($item->metadata);
 				$item->metadata = $registry->toArray();
-			}
-			
-			if (!empty($item->id))
-			{
-				$item->tags = new JHelperTags;
-				$item->tags->getTagIds($item->id, 'com_demo.look');
 			}
 		}
 
@@ -252,7 +246,7 @@ class DemoModelLook extends JModelAdmin
 	 */
 	public function getScript()
 	{
-		return 'administrator/components/com_demo/models/forms/look.js';
+		return 'media/com_demo/js/look.js';
 	}
     
 	/**

@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		router.php
@@ -60,7 +60,7 @@ class DemoRouter extends JComponentRouterBase
 		{
 			$view = $query['view'];
 
-			if (empty($query['Itemid']))
+			if (empty($query['Itemid']) && !(isset($view) && isset($query['id']) && ($view === 'look' || $view === 'looks' || $view === 'looking')))
 			{
 				$segments[] = $query['view'];
 			}

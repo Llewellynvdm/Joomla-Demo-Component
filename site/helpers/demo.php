@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -21,6 +21,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Language;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
@@ -468,12 +469,12 @@ abstract class DemoHelper
 			$filePath = $path . '/' . $name . '.php';
 			$fullPathModel = $fullPathModels . '/' . $name . '.php';
 			// check if it exists
-			if (JFile::exists($filePath))
+			if (File::exists($filePath))
 			{
 				// get the file
 				require_once $filePath;
 			}
-			elseif (JFile::exists($fullPathModel))
+			elseif (File::exists($fullPathModel))
 			{
 				// get the file
 				require_once $fullPathModel;

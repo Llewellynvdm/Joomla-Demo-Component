@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -21,6 +21,8 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
 JHTML::_('behavior.modal');
 
 /**
@@ -445,12 +447,12 @@ class com_demoInstallerScript
 		{
 		}
 		// check if the PHPExcel stuff is still around
-		if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel.php'))
+		if (File::exists(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel.php'))
 		{
 			// We need to remove this old PHPExcel folder
 			$this->removeFolder(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel');
 			// We need to remove this old PHPExcel file
-			JFile::delete(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel.php');
+			File::delete(JPATH_ADMINISTRATOR . '/components/com_demo/helpers/PHPExcel.php');
 		}
 		return true;
 	}
@@ -683,7 +685,7 @@ class com_demoInstallerScript
 	 */
 	protected function removeFolder($dir, $ignore = false)
 	{
-		if (JFolder::exists($dir))
+		if (Folder::exists($dir))
 		{
 			$it = new RecursiveDirectoryIterator($dir);
 			$it = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
@@ -713,7 +715,7 @@ class com_demoInstallerScript
 					{
 						continue;
 					}
-					JFolder::delete($file_dir);
+					Folder::delete($file_dir);
 				}
 				else
 				{
@@ -732,13 +734,13 @@ class com_demoInstallerScript
 					{
 						continue;
 					}
-					JFile::delete($file_dir);
+					File::delete($file_dir);
 				}
 			}
 			// delete the root folder if not ignore found
 			if (!$this->checkArray($ignore))
 			{
-				return JFolder::delete($dir);
+				return Folder::delete($dir);
 			}
 			return true;
 		}
@@ -784,7 +786,7 @@ class com_demoInstallerScript
 		$installer = $parent->getParent();
 		$installPath = $installer->getPath('source');
 		// get all the folders
-		$folders = JFolder::folders($installPath);
+		$folders = Folder::folders($installPath);
 		// check if we have folders we may want to copy
 		$doNotCopy = array('media','admin','site'); // Joomla already deals with these
 		if (count((array) $folders) > 1)
@@ -799,7 +801,7 @@ class com_demoInstallerScript
 					// set the destination path
 					$dest = JPATH_ROOT.'/'.$folder;
 					// now try to copy the folder
-					if (!JFolder::copy($src, $dest, '', true))
+					if (!Folder::copy($src, $dest, '', true))
 					{
 						$app->enqueueMessage('Could not copy '.$folder.' folder into place, please make sure destination is writable!', 'error');
 					}

@@ -3,7 +3,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		site.js

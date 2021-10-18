@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -125,21 +125,19 @@ class DemoViewLooking extends JViewLegacy
 		$uikitComp = $this->get('UikitComp');
 		if ($uikit != 2 && isset($uikitComp) && DemoHelper::checkArray($uikitComp))
 		{
-			// load just in case.
-			jimport('joomla.filesystem.file');
 			// loading...
 			foreach ($uikitComp as $class)
 			{
 				foreach (DemoHelper::$uk_components[$class] as $name)
 				{
 					// check if the CSS file exists.
-					if (JFile::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css'))
+					if (File::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css'))
 					{
 						// load the css.
 						$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
 					}
 					// check if the JavaScript file exists.
-					if (JFile::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js'))
+					if (File::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js'))
 					{
 						// load the js.
 						$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('type' => 'text/javascript', 'async' => 'async') : true);

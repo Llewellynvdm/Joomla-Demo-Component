@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			8th February, 2021
+	@build			18th October, 2021
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -21,6 +21,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Language\Language;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
@@ -471,7 +472,7 @@ abstract class DemoHelper
 	/**
 	* Prepares the xml document
 	*/
-	public static function xls($rows, $fileName = null, $title = null, $subjectTab = null, $creator = 'Joomla Component Builder', $description = null, $category = null,$keywords = null, $modified = null)
+	public static function xls($rows, $fileName = null, $title = null, $subjectTab = null, $creator = 'Vast Development Method', $description = null, $category = null,$keywords = null, $modified = null)
 	{
 		// set the user
 		$user = JFactory::getUser();
@@ -505,7 +506,7 @@ abstract class DemoHelper
 		// Set document properties
 		$spreadsheet->getProperties()
 			->setCreator($creator)
-			->setCompany('Joomla Component Builder')
+			->setCompany('Vast Development Method')
 			->setLastModifiedBy($modified)
 			->setTitle($title)
 			->setSubject($subjectTab);
@@ -1122,12 +1123,12 @@ abstract class DemoHelper
 			$filePath = $path . '/' . $name . '.php';
 			$fullPathModel = $fullPathModels . '/' . $name . '.php';
 			// check if it exists
-			if (JFile::exists($filePath))
+			if (File::exists($filePath))
 			{
 				// get the file
 				require_once $filePath;
 			}
-			elseif (JFile::exists($fullPathModel))
+			elseif (File::exists($fullPathModel))
 			{
 				// get the file
 				require_once $fullPathModel;
