@@ -32,11 +32,11 @@ class DemoViewLooks extends JViewLegacy
 	 */
 	function display($tpl = null)
 	{
-		if ($this->getLayout() !== 'modal')
-		{
-			// Include helper submenu
-			DemoHelper::addSubmenu('looks');
-		}
+		// if ($this->getLayout() !== 'modal')
+		// {
+		// 	// Include helper submenu
+		// 	DemoHelper::addSubmenu('looks');
+		// }
 
 		// Assign data to the view
 		$this->items = $this->get('Items');
