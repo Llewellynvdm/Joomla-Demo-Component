@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			18th October, 2021
+	@build			3rd March, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		router.php
@@ -123,7 +123,7 @@ class DemoRouter extends JComponentRouterBase
 		$count = count($segments);
 		$vars = array();
 		
-		//Handle View and Identifier
+		// Handle View and Identifier
 		switch($segments[0])
 		{
 			case 'look':

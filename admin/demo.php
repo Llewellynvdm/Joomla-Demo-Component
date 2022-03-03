@@ -4,7 +4,7 @@
 /-------------------------------------------------------------------------------------------------------/
 
 	@version		2.0.3
-	@build			18th October, 2021
+	@build			3rd March, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		demo.php
@@ -21,7 +21,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-JHtml::_('behavior.tabstate');
+
 
 // Access check.
 if (!JFactory::getUser()->authorise('core.manage', 'com_demo'))
@@ -35,8 +35,8 @@ $document->addStyleSheet('components/com_demo/assets/css/admin.css');
 $document->addScript('components/com_demo/assets/js/admin.js');
 
 // require helper files
-JLoader::register('DemoHelper', __DIR__ . '/helpers/demo.php'); 
-JLoader::register('JHtmlBatch_', __DIR__ . '/helpers/html/batch_.php'); 
+JLoader::register('DemoHelper', __DIR__ . '/helpers/demo.php');
+JLoader::register('JHtmlBatch_', __DIR__ . '/helpers/html/batch_.php');
 
 // Get an instance of the controller prefixed by Demo
 $controller = JControllerLegacy::getInstance('Demo');
