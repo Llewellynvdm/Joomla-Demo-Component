@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.3
-	@build			3rd March, 2022
+	@version		2.1.0
+	@build			27th May, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		look.php
@@ -21,6 +21,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
@@ -28,7 +29,7 @@ use Joomla\Utilities\ArrayHelper;
 /**
  * Looks Table class
  */
-class DemoTableLook extends JTable
+class DemoTableLook extends Table
 {
 	/**
 	 * Ensure the params and metadata in json encoded in the bind method

@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.3
-	@build			3rd March, 2022
+	@version		2.1.0
+	@build			27th May, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -21,10 +21,12 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\MVC\View\HtmlView;
+
 /**
- * Demo View class for the Looking
+ * Demo Html View class for the Looking
  */
-class DemoViewLooking extends JViewLegacy
+class DemoViewLooking extends HtmlView
 {
 	// Overwriting JView display method
 	function display($tpl = null)
@@ -113,12 +115,12 @@ class DemoViewLooking extends JViewLegacy
 		// The uikit css.
 		if ((!$HeaderCheck->css_loaded('uikit.min') || $uikit == 1) && $uikit != 2 && $uikit != 3)
 		{
-			$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit-v2/css/uikit'.$style.$size.'.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
+			JHtml::_('stylesheet', 'media/com_demo/uikit-v2/css/uikit'.$style.$size.'.css', ['version' => 'auto']);
 		}
 		// The uikit js.
 		if ((!$HeaderCheck->js_loaded('uikit.min') || $uikit == 1) && $uikit != 2 && $uikit != 3)
 		{
-			$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit-v2/js/uikit'.$size.'.js', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript');
+			JHtml::_('script', 'media/com_demo/uikit-v2/js/uikit'.$size.'.js', ['version' => 'auto']);
 		}
 
 		// Load the needed uikit components in this view.
@@ -134,13 +136,13 @@ class DemoViewLooking extends JViewLegacy
 					if (File::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css'))
 					{
 						// load the css.
-						$this->document->addStyleSheet(JURI::root(true) .'/media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/css');
+						JHtml::_('stylesheet', 'media/com_demo/uikit-v2/css/components/'.$name.$style.$size.'.css', ['version' => 'auto']);
 					}
 					// check if the JavaScript file exists.
 					if (File::exists(JPATH_ROOT.'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js'))
 					{
 						// load the js.
-						$this->document->addScript(JURI::root(true) .'/media/com_demo/uikit-v2/js/components/'.$name.$size.'.js', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('version' => 'auto') : 'text/javascript', (DemoHelper::jVersion()->isCompatible('3.8.0')) ? array('type' => 'text/javascript', 'async' => 'async') : true);
+						JHtml::_('script', 'media/com_demo/uikit-v2/js/components/'.$name.$size.'.js', ['version' => 'auto'], ['type' => 'text/javascript', 'async' => 'async']);
 					}
 				}
 			}

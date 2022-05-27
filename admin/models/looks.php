@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.3
-	@build			3rd March, 2022
+	@version		2.1.0
+	@build			27th May, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		looks.php
@@ -21,12 +21,13 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Utilities\ArrayHelper;
 
 /**
- * Looks Model
+ * Looks List Model
  */
-class DemoModelLooks extends JModelList
+class DemoModelLooks extends ListModel
 {
 	public function __construct($config = array())
 	{

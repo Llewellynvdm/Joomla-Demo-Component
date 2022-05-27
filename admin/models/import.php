@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.3
-	@build			3rd March, 2022
+	@version		2.1.0
+	@build			27th May, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		import.php
@@ -21,15 +21,16 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\Utilities\ArrayHelper;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
- * Demo Import Model
+ * Demo Import Base Database Model
  */
-class DemoModelImport extends JModelLegacy
+class DemoModelImport extends BaseDatabaseModel
 {
 	// set uploading values
 	protected $use_streams = false;

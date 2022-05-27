@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.3
-	@build			3rd March, 2022
+	@version		2.1.0
+	@build			27th May, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		view.html.php
@@ -21,10 +21,12 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\MVC\View\HtmlView;
+
 /**
- * Demo Import View
+ * Demo Import Html View
  */
-class DemoViewImport extends JViewLegacy
+class DemoViewImport extends HtmlView
 {
 	protected $headerList;
 	protected $hasPackage = false;

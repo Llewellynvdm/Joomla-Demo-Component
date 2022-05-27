@@ -1,4 +1,4 @@
-# Demo (2.0.3)
+# Demo (2.1.0)
 
 ![Demo image](https://raw.githubusercontent.com/namibia/demo-joomla-3-component/master/admin/assets/images/vdm-component.jpg "The Demo")
 
@@ -10,8 +10,8 @@ Just a basic demo of the most basic implementations of the [Joomla](http://www.j
 + *Author*: [Llewellyn van der Merwe](mailto:joomla@vdm.io)
 + *Name*: [Demo](https://www.vdm.io/)
 + *First Build*: 18th October, 2016
-+ *Last Build*: 3rd March, 2022
-+ *Version*: 2.0.3
++ *Last Build*: 27th May, 2022
++ *Version*: 2.1.0
 + *Copyright*: Copyright (C) 2015. All Rights Reserved
 + *License*: GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,8 +23,8 @@ due to [Automated Component Builder](https://www.vdm.io/joomla-component-builder
 > (if creating a folder and file took **5 seconds** and writing one line of code took **10 seconds**,
 > never making one mistake or taking any coffee break.)
 
-+ *Line count*: **16821**
-+ *File count*: **156**
++ *Line count*: **16868**
++ *File count*: **157**
 + *Folder count*: **57**
 
 **31 Hours** or **4 Eight Hour Days** (the actual time the author spent)

@@ -3,8 +3,8 @@
 				Vast Development Method 
 /-------------------------------------------------------------------------------------------------------/
 
-	@version		2.0.3
-	@build			3rd March, 2022
+	@version		2.1.0
+	@build			27th May, 2022
 	@created		18th October, 2016
 	@package		Demo
 	@subpackage		script.php
@@ -613,7 +613,7 @@ class com_demoInstallerScript
 			echo '<a target="_blank" href="https://www.vdm.io/" title="Demo">
 				<img src="components/com_demo/assets/images/vdm-component.jpg"/>
 				</a>
-				<h3>Upgrade to Version 2.0.3 Was Successful! Let us know if anything is not working as expected.</h3>';
+				<h3>Upgrade to Version 2.1.0 Was Successful! Let us know if anything is not working as expected.</h3>';
 
 			// Set db if not set already.
 			if (!isset($db))
